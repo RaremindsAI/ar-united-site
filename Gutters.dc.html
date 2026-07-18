@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;} body{margin:0;} a{text-decoration:none;color:inherit;} img{display:block;}</style>
+<script src="assets/fx.js"></script>
+</helmet>
+<div style="font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a; background:#fff; -webkit-font-smoothing:antialiased;">
+  <dc-import name="SiteHeader" active="services" hint-size="100%,140px"></dc-import>
+  <dc-import name="ServiceDetail" d="{{ d }}" hint-size="100%,1400px"></dc-import>
+  <dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals(){
+    return { d: {
+      eyebrow: 'Gutters',
+      title: 'Gutter Systems',
+      hero: 'assets/gutters.jpg',
+      intro: 'Gutters do the quiet, critical work of moving water away from your home. We install seamless gutters and guards that keep your foundation, siding, and landscaping safe from costly water damage.',
+      aboutEyebrow: 'Seamless & Reliable',
+      aboutTitle: 'Water management that just works',
+      aboutP1: 'Our seamless aluminum gutters are formed on site to fit your home exactly, no seams to leak, no gaps to fail. Paired with the right downspouts and pitch, they move water exactly where it should go.',
+      aboutP2: 'Add gutter guards and you\u2019ll spend far less time on a ladder, with debris kept out and flow kept open year-round.',
+      aboutImg: 'assets/gutters.jpg',
+      featuresTitle: 'A drainage system that protects everything below',
+      features: [
+        { h: 'Seamless Gutters', p: 'Custom-formed on site in a range of colors to match your exterior.' },
+        { h: 'Gutter Guards', p: 'Keep leaves and debris out so water keeps flowing freely.' },
+        { h: 'Downspouts & Drainage', p: 'Correctly placed and pitched to carry water away from your foundation.' },
+        { h: 'Fascia Protection', p: 'Proper hangers and flashing to protect your roofline behind the gutter.' },
+        { h: 'Repairs & Re-Hangs', p: 'Fix sagging, leaking, or overflowing gutters before they cause damage.' },
+        { h: 'Color Matching', p: 'Finishes selected to complement your siding, roof, and trim.' },
+      ],
+      g1:'assets/siding-aerial.jpg', g2:'assets/gutters.jpg', g3:'assets/roof-detail.jpg', g4:'assets/siding-gable.jpg', g5:'assets/hero.jpg',
+      ctaTitle: 'Stop water damage before it starts',
+      ctaText: 'Get a free estimate on seamless gutters and guards for your home.',
+    } };
+  }
+}
+</script>
+</body>
+</html>

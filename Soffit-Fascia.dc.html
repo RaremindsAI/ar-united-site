@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;} body{margin:0;} a{text-decoration:none;color:inherit;} img{display:block;}</style>
+<script src="assets/fx.js"></script>
+</helmet>
+<div style="font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a; background:#fff; -webkit-font-smoothing:antialiased;">
+  <dc-import name="SiteHeader" active="services" hint-size="100%,140px"></dc-import>
+  <dc-import name="ServiceDetail" d="{{ d }}" hint-size="100%,1400px"></dc-import>
+  <dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals(){
+    return { d: {
+      eyebrow: 'Soffit & Fascia',
+      title: 'Soffit & Fascia',
+      hero: 'assets/siding-gable.jpg',
+      intro: 'The soffit and fascia frame your roofline and protect everything behind it. Done right, they keep moisture and pests out, let your attic breathe, and give your whole exterior a clean, finished edge.',
+      aboutEyebrow: 'The Finishing Detail',
+      aboutTitle: 'Protect your roofline, finish your look',
+      aboutP1: 'Fascia boards carry your gutters and cap the roof edge; soffit closes in the underside and ventilates your attic. When either fails, you get rot, leaks, and uninvited wildlife.',
+      aboutP2: 'We replace and install low-maintenance aluminum and vinyl soffit and fascia that resist weather, vent properly, and finish your exterior with a crisp, polished line.',
+      aboutImg: 'assets/siding-red.jpg',
+      featuresTitle: 'Everything that keeps your roofline sound',
+      features: [
+        { h: 'Fascia Replacement', p: 'Rotted or damaged fascia replaced with durable, low-maintenance materials.' },
+        { h: 'Vented Soffit', p: 'Proper attic ventilation to fight heat and moisture buildup.' },
+        { h: 'Pest & Moisture Sealing', p: 'Close the gaps that let in water, insects, and small animals.' },
+        { h: 'Aluminum & Vinyl Options', p: 'Color-matched finishes that hold up without painting or upkeep.' },
+        { h: 'Gutter-Ready Fascia', p: 'A solid, level fascia line so your gutters hang and drain correctly.' },
+        { h: 'Clean, Finished Edges', p: 'Tight, even trim work that completes the look of your exterior.' },
+      ],
+      g1:'assets/siding-front.jpg', g2:'assets/siding-sunset.jpg', g3:'assets/roof-detail.jpg', g4:'assets/gutters.jpg', g5:'assets/siding-aerial.jpg',
+      ctaTitle: 'Finish your exterior the right way',
+      ctaText: 'Book a free inspection of your soffit, fascia, and roofline today.',
+    } };
+  }
+}
+</script>
+</body>
+</html>

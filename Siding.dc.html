@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;} body{margin:0;} a{text-decoration:none;color:inherit;} img{display:block;}</style>
+<script src="assets/fx.js"></script>
+</helmet>
+<div style="font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a; background:#fff; -webkit-font-smoothing:antialiased;">
+  <dc-import name="SiteHeader" active="services" hint-size="100%,140px"></dc-import>
+  <dc-import name="ServiceDetail" d="{{ d }}" hint-size="100%,1400px"></dc-import>
+  <dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals(){
+    return { d: {
+      eyebrow: 'Siding',
+      title: 'Siding Installation',
+      hero: 'assets/siding-sunset.jpg',
+      intro: 'New siding is the single biggest upgrade you can make to your home\u2019s curb appeal and protection. We install durable, beautiful siding in a wide range of materials and colors, sealed tight against Kentucky weather.',
+      aboutEyebrow: 'Built For The Tri-State',
+      aboutTitle: 'Siding that looks great and holds up',
+      aboutP1: 'From vinyl and insulated panels to fiber cement and engineered wood, we help you choose the right material for your home, your style, and your budget, then install it with precision.',
+      aboutP2: 'Every job is handled by our own in-house crew with the owner on site, so the details that make siding last for decades never get cut.',
+      aboutImg: 'assets/siding-front.jpg',
+      featuresTitle: 'Everything that goes into a siding job done right',
+      features: [
+        { h: 'Material Selection', p: 'Vinyl, insulated, fiber cement, and engineered wood in dozens of colors and profiles.' },
+        { h: 'Proper Moisture Barrier', p: 'House wrap and flashing installed correctly to keep water out and energy in.' },
+        { h: 'Trim, Corners & Detail', p: 'Clean corner posts, J-channel, and trim work for a crisp, finished look.' },
+        { h: 'Insulation Upgrades', p: 'Optional insulated backing to improve comfort and lower energy bills.' },
+        { h: 'Full Tear-Off & Inspection', p: 'We check the sheathing underneath and address damage before new siding goes on.' },
+        { h: 'Workmanship Warranty', p: 'Backed by manufacturer material warranties and our own workmanship guarantee.' },
+      ],
+      g1:'assets/siding-aerial.jpg', g2:'assets/siding-gable.jpg', g3:'assets/siding-red.jpg', g4:'assets/siding-install.avif', g5:'assets/hero.jpg',
+      ctaTitle: 'Ready to transform your exterior?',
+      ctaText: 'Book a free siding estimate and inspection, no pressure, no obligation.',
+    } };
+  }
+}
+</script>
+</body>
+</html>

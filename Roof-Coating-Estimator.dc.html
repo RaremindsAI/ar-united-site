@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;} body{margin:0;} a{text-decoration:none;color:#2f80bd;} a:hover{color:#236aa0;} img{display:block;}
+input,select,textarea,button{font-family:inherit;}
+input::placeholder,textarea::placeholder{color:#a39e95;}
+@keyframes arUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+</style>
+<script src="assets/fx.js"></script>
+<script src="assets/intake.js"></script>
+</helmet>
+<div style="font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a; background:#fff; -webkit-font-smoothing:antialiased;">
+  <template id="__bundler_thumbnail">
+    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="bgg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f80bd"/><stop offset="1" stop-color="#15161a"/></linearGradient></defs>
+      <rect width="512" height="512" fill="url(#bgg)"/>
+      <g fill="none" stroke="#ffffff" stroke-width="16" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M150 250 L256 168 L362 250"/>
+        <rect x="178" y="250" width="156" height="112"/>
+      </g>
+      <circle cx="330" cy="322" r="44" fill="none" stroke="#5cb3ea" stroke-width="16"/>
+      <line x1="362" y1="354" x2="404" y2="396" stroke="#5cb3ea" stroke-width="20" stroke-linecap="round"/>
+    </svg>
+  </template>
+  <dc-import name="SiteHeader" active="services" hint-size="100%,140px"></dc-import>
+
+  <section style="position:relative; background:#0c0d10; overflow:hidden;">
+    <img src="assets/commercial-metal.avif" alt="Commercial roof coating" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.26;">
+    <div style="position:relative; max-width:1240px; margin:0 auto; padding:74px 40px 78px;">
+      <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(255,255,255,.6); margin-bottom:20px; animation:arUp .6s ease both;">
+        <a href="A%26R%20United%20Construction.dc.html" style="color:rgba(255,255,255,.6);">Home</a><span>/</span>
+        <a href="Roof-Coatings.dc.html" style="color:rgba(255,255,255,.6);">Roof Coatings</a><span>/</span>
+        <span style="color:#5cb3ea;">Instant Estimator</span>
+      </div>
+      <div style="max-width:720px;">
+        <div style="display:inline-flex; align-items:center; gap:9px; background:rgba(92,179,234,.16); border:1px solid rgba(92,179,234,.4); color:#5cb3ea; font-weight:700; font-size:12px; letter-spacing:.12em; text-transform:uppercase; padding:7px 14px; border-radius:100px; margin-bottom:20px; animation:arUp .7s ease both;">&#9202; Ballpark price emailed within 30 minutes</div>
+        <h1 style="font-family:'Archivo'; font-weight:800; font-size:clamp(34px,4.6vw,60px); line-height:1.04; letter-spacing:-.025em; color:#fff; margin:0 0 18px; animation:arUp .8s ease .05s both;">Commercial Roof Coating Estimator</h1>
+        <p style="font-size:18px; line-height:1.65; color:rgba(255,255,255,.85); margin:0; max-width:600px; animation:arUp .8s ease .12s both;">Size your roof from an aerial view and answer a few quick questions. Drop your email and our team sends your ballpark price within 30 minutes, no obligation. Want an exact, itemized number? Schedule a free onsite assessment after your ballpark arrives.</p>
+      </div>
+    </div>
+  </section>
+
+  <section data-reveal="1" style="padding:64px 0 96px; background:#f6f4f1;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="display:grid; grid-template-columns:1.55fr .95fr; gap:34px; align-items:start;">
+
+        <div style="background:#fff; border:1px solid #e7e3dd; border-radius:14px; padding:34px 34px 38px; box-shadow:0 22px 60px rgba(20,22,26,.06);">
+          <div style="display:flex; gap:8px; margin-bottom:30px; flex-wrap:wrap;">
+            <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+              <button onClick="{{ st.go }}" style="{{ st.style }}">
+                <span style="width:22px; height:22px; flex:none; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; background:{{ st.dot }}; color:{{ st.dotColor }};">{{ st.n }}</span>
+                {{ st.label }}
+              </button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="font-family:'Archivo'; font-weight:800; font-size:24px; margin:0 0 6px;">Size your roof</div>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 22px;">Find your building on the satellite map, then click each corner of the roof to measure it, we estimate the area automatically. This is only for a ballpark; our team verifies the exact area onsite.</p>
+
+            <div style="display:flex; gap:10px; margin-bottom:12px;">
+              <input ref="{{ addrInputRef }}" value="{{ addr }}" onChange="{{ setAddr }}" onKeyDown="{{ addrKey }}" placeholder="Enter building address to locate it" style="flex:1; min-width:0; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);">
+              <button onClick="{{ findAddr }}" style="flex:none; background:#15161a; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.04em; padding:0 20px; border-radius:6px;" style-hover="filter:brightness(1.3);">Find</button>
+            </div>
+            <div style="position:relative; margin-bottom:12px;">
+              <div ref="{{ mapRef }}" style="height:380px; border-radius:12px; overflow:hidden; border:1px solid #cfd8e0; background:#e9edf1;"></div>
+              <sc-if value="{{ drawing }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute; top:12px; left:0; right:0; z-index:2; display:flex; justify-content:center; pointer-events:none;">
+                <div style="background:rgba(15,22,26,.88); color:#fff; font-size:13px; font-weight:600; padding:8px 16px; border-radius:100px; box-shadow:0 6px 20px rgba(0,0,0,.35);">Click each corner of your roof &middot; {{ ptCount }} added</div>
+              </div>
+              </sc-if>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+              <button onClick="{{ detectSolar }}" style="{{ solarBtn }}">{{ solarLabel }}</button>
+              <button onClick="{{ drawToggle }}" style="{{ drawBtn }}">{{ drawLabel }}</button>
+              <sc-if value="{{ drawing }}" hint-placeholder-val="{{ false }}"><button onClick="{{ undoPoint }}" style="cursor:pointer; background:#fff; color:#3c4048; border:1.5px solid #d8d4cd; font-weight:700; font-size:13px; padding:11px 16px; border-radius:6px;" style-hover="border-color:#2f80bd; color:#2f80bd;">Undo point</button></sc-if>
+              <button onClick="{{ clearDraw }}" style="cursor:pointer; background:#fff; color:#3c4048; border:1.5px solid #d8d4cd; font-weight:700; font-size:13px; padding:11px 16px; border-radius:6px;" style-hover="border-color:#2f80bd; color:#2f80bd;">Clear</button>
+            </div>
+            <div style="font-size:13px; line-height:1.5; color:#5c616b; margin-bottom:16px;">{{ mapHint }}</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 18px; background:#f0f6fb; border:1px solid #d6e6f2; border-radius:10px;">
+              <span style="font-size:14px; color:#3c4048;">Approximate roof area</span>
+              <span style="font-family:'Archivo'; font-weight:800; font-size:22px; color:#2f80bd;">{{ areaTxt }}</span>
+            </div>
+            <button onClick="{{ toggleManual }}" style="margin-top:16px; background:transparent; border:none; cursor:pointer; font-weight:600; font-size:14px; color:#5c616b; padding:4px 0; text-decoration:underline;" style-hover="color:#2f80bd;">{{ manualLabel }}</button>
+            <sc-if value="{{ showManual }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:14px;">
+              <div style="display:inline-flex; gap:4px; background:#f0eee9; border-radius:8px; padding:4px; margin-bottom:16px;">
+                <button onClick="{{ modeDim }}" style="{{ tabDim }}">By dimensions</button>
+                <button onClick="{{ modeSqft }}" style="{{ tabSqft }}">By square footage</button>
+              </div>
+              <sc-if value="{{ isDim }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Length (ft)</span><input inputmode="numeric" value="{{ length }}" onChange="{{ setLength }}" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
+                <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Width (ft)</span><input inputmode="numeric" value="{{ width }}" onChange="{{ setWidth }}" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
+              </div>
+              </sc-if>
+              <sc-if value="{{ isSqft }}" hint-placeholder-val="{{ false }}">
+              <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Total roof area (sq ft)</span><input inputmode="numeric" value="{{ sqft }}" onChange="{{ setSqft }}" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
+              </sc-if>
+              <div style="font-size:13px; color:#8a8f98; margin-top:10px;">Manual entry overrides the map measurement.</div>
+            </div>
+            </sc-if>
+
+
+            <div style="display:flex; justify-content:flex-end; margin-top:26px;">
+              <button onClick="{{ next }}" style="display:inline-flex; align-items:center; gap:9px; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; padding:15px 26px; border-radius:6px;" style-hover="filter:brightness(1.08);">Next: Roof details &rarr;</button>
+            </div>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <div style="font-family:'Archivo'; font-weight:800; font-size:24px; margin:0 0 6px;">Your roof today</div>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 22px;">The current system and condition tell us how much prep and reinforcement the restoration needs.</p>
+            <div style="margin-bottom:20px;">
+              <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Current roof system</span>
+              <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                <sc-for list="{{ systemOpts }}" as="o" hint-placeholder-count="6"><button onClick="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button></sc-for>
+              </div>
+            </div>
+            <div style="margin-bottom:20px;">
+              <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Current condition</span>
+              <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                <sc-for list="{{ conditionOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button></sc-for>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:26px; align-items:start;">
+              <div>
+                <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Building height / access</span>
+                <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                  <sc-for list="{{ accessOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button></sc-for>
+                </div>
+              </div>
+              <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Rooftop units &amp; penetrations</span><input inputmode="numeric" value="{{ units }}" onChange="{{ setUnits }}" placeholder="e.g. 6" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:11px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:26px;">
+              <button onClick="{{ back }}" style="background:transparent; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#5c616b; padding:15px 8px;" style-hover="color:#15161a;">&larr; Back</button>
+              <button onClick="{{ next }}" style="display:inline-flex; align-items:center; gap:9px; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; padding:15px 26px; border-radius:6px;" style-hover="filter:brightness(1.08);">Next: Coating system &rarr;</button>
+            </div>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <div style="font-family:'Archivo'; font-weight:800; font-size:24px; margin:0 0 6px;">Coating system</div>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 22px;">Not sure? We will recommend the right system in your emailed estimate. Ponding water usually points to silicone.</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+              <button onClick="{{ pickSilicone }}" style="{{ cardSilicone }}">
+                <div style="font-family:'Archivo'; font-weight:800; font-size:18px; margin-bottom:6px;">Silicone</div>
+                <div style="font-size:13.5px; line-height:1.55; color:#5c616b;">Best for ponding water and maximum weatherproofing. Holds up where other coatings fail.</div>
+              </button>
+              <button onClick="{{ pickAcrylic }}" style="{{ cardAcrylic }}">
+                <div style="font-family:'Archivo'; font-weight:800; font-size:18px; margin-bottom:6px;">Acrylic</div>
+                <div style="font-size:13.5px; line-height:1.55; color:#5c616b;">Reflective, flexible, cost-effective. A great cool-roof option for well-draining roofs.</div>
+              </button>
+            </div>
+            <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Warranty term</span>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+              <button onClick="{{ warr10 }}" style="{{ w10 }}">10 years</button>
+              <button onClick="{{ warr15 }}" style="{{ w15 }}">15 years</button>
+              <button onClick="{{ warr20 }}" style="{{ w20 }}">20 years</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:28px;">
+              <button onClick="{{ back }}" style="background:transparent; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#5c616b; padding:15px 8px;" style-hover="color:#15161a;">&larr; Back</button>
+              <button onClick="{{ next }}" style="display:inline-flex; align-items:center; gap:9px; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; padding:15px 26px; border-radius:6px;" style-hover="filter:brightness(1.08);">Next: Get my ballpark &rarr;</button>
+            </div>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="font-family:'Archivo'; font-weight:800; font-size:24px; margin:0 0 6px;">Where do we send it?</div>
+              <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 22px;">Drop your details and our team emails your ballpark price within 30 minutes during business hours. For an exact, itemized estimate, you can schedule a free onsite assessment after it arrives.</p>
+              <form onSubmit="{{ submit }}">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                  <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Name</span><input value="{{ c.name }}" onChange="{{ setName }}" required placeholder="Full name" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
+                  <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Company</span><input value="{{ c.company }}" onChange="{{ setCompany }}" placeholder="Business name" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
+                  <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Email</span><input type="email" value="{{ c.email }}" onChange="{{ setEmail }}" required placeholder="you@company.com" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
+                  <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Phone</span><input type="tel" value="{{ c.phone }}" onChange="{{ setPhone }}" placeholder="(270) 000-0000" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
+                </div>
+                <label style="display:block; margin-top:16px;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Building address</span><input value="{{ c.address }}" onChange="{{ setAddress }}" placeholder="Street, City, State" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
+                <label style="display:block; margin-top:16px;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Anything else? (optional)</span><textarea value="{{ c.notes }}" onChange="{{ setNotes }}" rows="3" placeholder="Timeline, known problem areas, roof age..." style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none; resize:vertical;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></textarea></label>
+                <label style="display:flex; gap:11px; align-items:flex-start; margin-top:16px; padding:14px 16px; background:#faf9f7; border:1px solid #eee9e2; border-radius:8px; cursor:pointer;">
+                  <input type="checkbox" checked="{{ c.consent }}" onChange="{{ setConsent }}" style="margin:3px 0 0; width:16px; height:16px; flex:none; accent-color:#2f80bd; cursor:pointer;">
+                  <span style="font-size:12.5px; line-height:1.6; color:#6b6f78;">I agree to be contacted about my estimate by phone, email, or text. Message &amp; data rates may apply. See our <a href="SMS-Consent.dc.html" style="color:#2f80bd; font-weight:600;">SMS Consent Policy</a>.</span>
+                </label>
+                <button type="submit" style="width:100%; margin-top:18px; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:14px; letter-spacing:.06em; text-transform:uppercase; padding:16px; border-radius:7px;" style-hover="filter:brightness(1.08);">Email me my ballpark</button>
+                <div style="display:flex; justify-content:flex-start; margin-top:14px;">
+                  <button type="button" onClick="{{ back }}" style="background:transparent; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#5c616b; padding:4px;" style-hover="color:#15161a;">&larr; Back</button>
+                </div>
+              </form>
+            </div>
+            </sc-if>
+            <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align:center; padding:38px 16px;">
+              <div style="width:70px; height:70px; margin:0 auto 22px; border-radius:50%; background:rgba(47,128,189,.12); color:#2f80bd; display:flex; align-items:center; justify-content:center; font-size:34px;">&#10003;</div>
+              <h3 style="font-family:'Archivo'; font-weight:800; font-size:26px; margin:0 0 12px;">Your ballpark is on the way</h3>
+              <p style="font-size:16px; line-height:1.65; color:#5c616b; margin:0 auto 12px; max-width:440px;">Thanks, {{ firstName }}. We are preparing a ballpark price for your <strong style="color:#15161a;">{{ areaTxt }}</strong> {{ coatingLabel }} project and will email it to <strong style="color:#15161a;">{{ emailShown }}</strong> within 30 minutes during business hours.</p>
+              <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 auto 24px; max-width:440px;">Once your ballpark arrives, schedule a free onsite assessment and we will turn it into an exact, itemized estimate.</p>
+              <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                <a href="Contact.dc.html" style="display:inline-flex; align-items:center; gap:8px; background:#2f80bd; color:#fff; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; padding:14px 24px; border-radius:6px;" style-hover="filter:brightness(1.08);">Schedule an onsite assessment &rarr;</a>
+                <button onClick="{{ reset }}" style="background:#15161a; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; padding:14px 24px; border-radius:6px;">Start another estimate</button>
+              </div>
+              <p style="font-size:14px; line-height:1.6; color:#8a8f98; margin:20px auto 0; max-width:440px;">Prefer to talk now? Call <a href="tel:2708443355" style="color:#2f80bd; font-weight:700;">(270) 844-3355</a>.</p>
+            </div>
+            </sc-if>
+          </div>
+          </sc-if>
+        </div>
+
+        <div style="position:sticky; top:120px;">
+          <div style="background:#15161a; color:#fff; border-radius:14px; padding:30px 30px 32px; box-shadow:0 22px 60px rgba(20,22,26,.18);">
+            <div style="font-weight:700; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:#5cb3ea; margin-bottom:14px;">Your project summary</div>
+            <div style="font-family:'Archivo'; font-weight:800; font-size:clamp(23px,2.3vw,29px); line-height:1.12; letter-spacing:-.015em;">We&rsquo;ll email your ballpark price</div>
+            <div style="font-size:13.5px; color:#9a9da4; margin-top:8px;">within 30 minutes, based on the details below</div>
+
+            <div style="height:1px; background:#2a2c33; margin:22px 0;"></div>
+            <div style="display:flex; flex-direction:column; gap:11px;">
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Roof area</span><span style="font-weight:600;">{{ areaTxt }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Current system</span><span style="font-weight:600;">{{ systemLabel }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Condition</span><span style="font-weight:600;">{{ conditionLabel }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Coating</span><span style="font-weight:600;">{{ coatingLabel }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Warranty</span><span style="font-weight:600;">{{ warrantyLabel }} years</span></div>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Rooftop units</span><span style="font-weight:600;">{{ units }}</span></div>
+            </div>
+            <div style="margin-top:22px; padding:14px 16px; background:rgba(92,179,234,.1); border:1px solid rgba(92,179,234,.25); border-radius:9px; font-size:12.5px; line-height:1.6; color:#c6d4de;">Your ballpark arrives by email within 30 minutes. For an exact, itemized estimate, schedule a free onsite assessment after you receive it.</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; margin-top:18px; padding:0 4px;">
+            <span style="width:40px; height:40px; flex:none; border-radius:50%; background:#2f80bd; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px;">&#9742;</span>
+            <div style="font-size:13.5px; line-height:1.5; color:#5c616b;">Questions first? Call <a href="tel:2708443355" style="color:#2f80bd; font-weight:700;">(270) 844-3355</a></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+function ringAreaM2(pts) {
+  if (!pts || pts.length < 3) return 0;
+  var R = 6378137, a = 0, n = pts.length, d = Math.PI / 180;
+  for (var i = 0; i < n; i++) {
+    var p1 = pts[i], p2 = pts[(i + 1) % n];
+    a += (p2.lng - p1.lng) * d * (2 + Math.sin(p1.lat * d) + Math.sin(p2.lat * d));
+  }
+  return Math.abs(a * R * R / 2);
+}
+class Component extends DCLogic {
+  state = {
+    step: 1, mode: 'map',
+    addr: '', pts: [], measured: 0, drawing: false, solarBusy: false, solarUsed: false, showManual: false, center: { lat: 37.8361, lng: -87.59 }, zoom: 18, geoErr: '',
+    length: '120', width: '80', sqft: '9600',
+    system: 'TPO', condition: 'weathered', units: '6', access: 'single',
+    coating: 'silicone', warranty: '15',
+    c: { name: '', company: '', email: '', phone: '', address: '', notes: '', consent: true },
+    sent: false
+  };
+  num(k) { return (e) => { const v = e.target.value.replace(/[^0-9.]/g, ''); this.setState({ [k]: v }); }; }
+  val(k) { return (e) => { const v = e.target.value; this.setState({ [k]: v }); }; }
+  cField(k) { return (e) => { const v = e.target.value; this.setState((s) => ({ c: { ...s.c, [k]: v } })); }; }
+  pick(k, v) { return () => this.setState({ [k]: v }); }
+  goStep(n) { return () => this.setState({ step: n }); }
+  componentDidMount() { this.ensureGmaps(); }
+  ensureGmaps() {
+    if (window.google && window.google.maps) return;
+    if (document.getElementById('gmaps-sdk')) return;
+    var s = document.createElement('script');
+    s.id = 'gmaps-sdk'; s.async = true;
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDuCxKIqfCmpJPsiT299jUe-pi3mE5NfnI&libraries=places&loading=async';
+    s.onload = () => { try { this.initMap(); } catch (e) {} };
+    document.head.appendChild(s);
+  }
+  addrInputRef = (el) => { this.addrEl = el; if (el) this.initAutocomplete(); };
+  initAutocomplete() {
+    if (!this.addrEl || this._ac) return;
+    if (!(window.google && window.google.maps && window.google.maps.places)) { this.ensureGmaps(); clearTimeout(this._at); this._at = setTimeout(() => this.initAutocomplete(), 300); return; }
+    var ac = new window.google.maps.places.Autocomplete(this.addrEl, { fields: ['geometry', 'formatted_address'], types: ['geocode'] });
+    this._ac = ac;
+    ac.addListener('place_changed', () => {
+      var p = ac.getPlace();
+      if (p && p.geometry && p.geometry.location && this.map) {
+        this.map.setCenter(p.geometry.location); this.map.setZoom(20);
+        this.setState({ addr: p.formatted_address || this.state.addr, geoErr: '' });
+      }
+    });
+  }
+  mapRef = (el) => { this.mapEl = el; if (el) this.initMap(); else { if (this.poly) { try { this.poly.setMap(null); } catch (e) {} this.poly = null; } (this.markers || []).forEach((m) => { try { m.setMap(null); } catch (e) {} }); this.markers = []; this.map = null; } };
+  initMap() {
+    if (!this.mapEl) return;
+    if (!(window.google && window.google.maps)) { this.ensureGmaps(); clearTimeout(this._lt); this._lt = setTimeout(() => this.initMap(), 250); return; }
+    if (this.map) return;
+    var g = window.google.maps;
+    var c = this._center || this.state.center || { lat: 37.8361, lng: -87.59 };
+    var map = new g.Map(this.mapEl, { center: c, zoom: this._zoom || this.state.zoom || 18, mapTypeId: 'satellite', tilt: 0, streetViewControl: false, fullscreenControl: false, rotateControl: false, mapTypeControl: true });
+    this.map = map; this.markers = [];
+    map.addListener('click', (e) => { if (this.state.drawing && e.latLng) this.addPoint({ lat: e.latLng.lat(), lng: e.latLng.lng() }); });
+    map.addListener('idle', () => { var cc = map.getCenter(); if (cc) { this._center = { lat: cc.lat(), lng: cc.lng() }; this._zoom = map.getZoom(); } });
+    if (this.state.pts && this.state.pts.length) { this.redraw(); if (this.state.pts.length >= 2) { var b = new g.LatLngBounds(); this.state.pts.forEach((p) => b.extend(p)); map.fitBounds(b); } }
+  }
+
+  addPoint(ll) { if (!ll) return; var pts = (this.state.pts || []).concat([{ lat: ll.lat, lng: ll.lng }]); this.setState({ pts: pts, measured: Math.round(ringAreaM2(pts) * 10.7639), mode: 'map' }, () => this.redraw()); }
+  redraw() {
+    if (!this.map || !(window.google && window.google.maps)) return;
+    var g = window.google.maps;
+    if (this.poly) { this.poly.setMap(null); this.poly = null; }
+    (this.markers || []).forEach((m) => m.setMap(null)); this.markers = [];
+    var pts = this.state.pts || []; if (!pts.length) return;
+    if (pts.length >= 2) this.poly = new g.Polygon({ paths: pts, strokeColor: '#2f80bd', strokeWeight: 2, fillColor: '#2f80bd', fillOpacity: 0.3, clickable: false, map: this.map });
+    pts.forEach((p) => this.markers.push(new g.Marker({ position: p, map: this.map, clickable: false, icon: { path: g.SymbolPath.CIRCLE, scale: 5, fillColor: '#2f80bd', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2 } })));
+  }
+
+  drawToggleH = () => {
+    if (!this.map) return;
+    if (this.state.drawing) { this.map.setOptions({ draggable: true, draggableCursor: null, disableDoubleClickZoom: false }); this.setState({ drawing: false }); }
+    else { this.map.setOptions({ draggable: false, draggableCursor: 'crosshair', disableDoubleClickZoom: true }); this.setState({ drawing: true, pts: [], measured: 0, geoErr: '', solarUsed: false }, () => this.redraw()); }
+  };
+  clearDrawH = () => { if (this.map) this.map.setOptions({ draggable: true, draggableCursor: null, disableDoubleClickZoom: false }); this.setState({ pts: [], measured: 0, drawing: false, solarUsed: false }, () => this.redraw()); };
+  undoPointH = () => { var pts = (this.state.pts || []).slice(0, -1); this.setState({ pts: pts, measured: Math.round(ringAreaM2(pts) * 10.7639) }, () => this.redraw()); };
+  detectSolarH = () => {
+    if (!this.map) return;
+    var cc = this.map.getCenter(); if (!cc) return;
+    var lat = cc.lat(), lng = cc.lng();
+    this.setState({ solarBusy: true, geoErr: '' });
+    fetch('https://solar.googleapis.com/v1/buildingInsights:findClosest?location.latitude=' + lat + '&location.longitude=' + lng + '&requiredQuality=LOW&key=AIzaSyDuCxKIqfCmpJPsiT299jUe-pi3mE5NfnI')
+      .then((r) => r.json())
+      .then((d) => {
+        var sp = d && d.solarPotential; var m2 = sp && sp.wholeRoofStats && sp.wholeRoofStats.areaMeters2;
+        if (!m2 && sp && sp.buildingStats && sp.buildingStats.areaMeters2) m2 = sp.buildingStats.areaMeters2;
+        if (m2) {
+          if (d.center) { this.map.setCenter({ lat: d.center.latitude, lng: d.center.longitude }); this.map.setZoom(20); }
+          this.setState({ measured: Math.round(m2 * 10.7639), mode: 'map', pts: [], drawing: false, solarBusy: false, solarUsed: true }, () => this.redraw());
+        } else { this.setState({ solarBusy: false, geoErr: 'No roof data at this spot yet. Draw the roof manually instead.' }); }
+      })
+      .catch(() => this.setState({ solarBusy: false, geoErr: 'Auto-detect is unavailable here. Draw the roof manually instead.' }));
+  };
+  findAddrH = () => {
+    var q = (this.state.addr || '').trim(); if (!q || !this.map || !(window.google && window.google.maps)) return;
+    this.setState({ geoErr: '' });
+    new window.google.maps.Geocoder().geocode({ address: q }, (res, status) => {
+      if (status === 'OK' && res && res[0]) { this.map.setCenter(res[0].geometry.location); this.map.setZoom(20); }
+      else this.setState({ geoErr: 'Address not found. Drag the map to your building.' });
+    });
+  };
+
+  renderVals() {
+    const s = this.state;
+    const L = Number(s.length) || 0, W = Number(s.width) || 0;
+    const area = Math.max(0, Math.round(s.mode === 'map' ? (s.measured || 0) : (s.mode === 'sqft' ? (Number(s.sqft) || 0) : L * W)));
+
+    // footprint overlay (px, aspect-preserving)
+    const m = Math.max(L, W, 1), scale = 200 / m;
+    const rectW = Math.max(24, Math.round((s.mode === 'sqft' ? Math.sqrt(area) : W) * (s.mode === 'sqft' ? 200 / Math.max(Math.sqrt(area), 1) : scale))) + 'px';
+    const rectH = Math.max(24, Math.round((s.mode === 'sqft' ? Math.sqrt(area) : L) * (s.mode === 'sqft' ? 200 / Math.max(Math.sqrt(area), 1) : scale))) + 'px';
+
+    const systemLabels = { TPO: 'TPO', EPDM: 'EPDM', Metal: 'Metal', 'Mod-Bit': 'Modified bitumen', BUR: 'Built-up', Other: 'Not sure' };
+    const condLabels = { good: 'Good, watertight', weathered: 'Weathered', leaking: 'Leaking / ponding' };
+
+    const stepMeta = [
+      { n: 1, label: 'Building' }, { n: 2, label: 'Roof' }, { n: 3, label: 'System' }, { n: 4, label: 'Estimate' }
+    ];
+    const steps = stepMeta.map((st) => {
+      const active = s.step === st.n, done = s.step > st.n;
+      const pill = (on) => 'cursor:pointer; border:1.5px solid ' + (on ? '#2f80bd' : '#d8d4cd') + '; background:' + (on ? '#2f80bd' : '#fff') + '; color:' + (on ? '#fff' : '#3c4048') + '; font-weight:600; font-size:13.5px; padding:10px 16px; border-radius:100px;';
+    const grp = (key, opts) => opts.map((o) => ({ label: o.label, on: this.pick(key, o.v), style: pill(s[key] === o.v) }));
+    const systemOpts = grp('system', [{v:'TPO',label:'TPO'},{v:'EPDM',label:'EPDM'},{v:'Metal',label:'Metal'},{v:'Mod-Bit',label:'Modified bitumen'},{v:'BUR',label:'Built-up'},{v:'Other',label:'Not sure'}]);
+    const conditionOpts = grp('condition', [{v:'good',label:'Good, watertight'},{v:'weathered',label:'Weathered but sound'},{v:'leaking',label:'Leaking / ponding'}]);
+    const accessOpts = grp('access', [{v:'single',label:'Single story'},{v:'mid',label:'2\u20133 stories'},{v:'high',label:'4+ / hard access'}]);
+    return {
+        n: st.n, label: st.label, go: this.goStep(st.n),
+        dot: active ? '#2f80bd' : (done ? '#cfe3f2' : '#e6e2db'),
+        dotColor: active ? '#fff' : (done ? '#2f80bd' : '#8a8f98'),
+        style: 'display:inline-flex; align-items:center; gap:9px; cursor:pointer; border:1px solid ' + (active ? '#2f80bd' : '#e7e3dd') +
+          '; background:' + (active ? '#f0f6fb' : '#fff') + '; color:' + (active ? '#15161a' : '#8a8f98') +
+          '; font-weight:700; font-size:12.5px; padding:9px 14px 9px 9px; border-radius:100px;'
+      };
+    });
+
+    const tab = (on) => 'cursor:pointer; border:none; background:' + (on ? '#fff' : 'transparent') + '; color:' + (on ? '#15161a' : '#6b6f78') +
+      '; font-weight:700; font-size:13px; padding:9px 16px; border-radius:6px; box-shadow:' + (on ? '0 1px 4px rgba(0,0,0,.1)' : 'none') + ';';
+    const coatCard = (on) => 'text-align:left; cursor:pointer; border:2px solid ' + (on ? '#2f80bd' : '#e0dcd4') + '; background:' + (on ? '#f0f6fb' : '#fff') +
+      '; border-radius:11px; padding:20px; transition:border-color .15s, background .15s;';
+    const warBtn = (on) => 'cursor:pointer; border:1.5px solid ' + (on ? '#2f80bd' : '#d8d4cd') + '; background:' + (on ? '#2f80bd' : '#fff') + '; color:' + (on ? '#fff' : '#3c4048') +
+      '; font-weight:700; font-size:14px; padding:13px 0; border-radius:8px;';
+
+    const pill = (on) => 'cursor:pointer; border:1.5px solid ' + (on ? '#2f80bd' : '#d8d4cd') + '; background:' + (on ? '#2f80bd' : '#fff') + '; color:' + (on ? '#fff' : '#3c4048') + '; font-weight:600; font-size:13.5px; padding:10px 16px; border-radius:100px;';
+    const grp = (key, opts) => opts.map((o) => ({ label: o.label, on: this.pick(key, o.v), style: pill(s[key] === o.v) }));
+    const systemOpts = grp('system', [{v:'TPO',label:'TPO'},{v:'EPDM',label:'EPDM'},{v:'Metal',label:'Metal'},{v:'Mod-Bit',label:'Modified bitumen'},{v:'BUR',label:'Built-up'},{v:'Other',label:'Not sure'}]);
+    const conditionOpts = grp('condition', [{v:'good',label:'Good, watertight'},{v:'weathered',label:'Weathered but sound'},{v:'leaking',label:'Leaking / ponding'}]);
+    const accessOpts = grp('access', [{v:'single',label:'Single story'},{v:'mid',label:'2\u20133 stories'},{v:'high',label:'4+ / hard access'}]);
+    return {
+      steps,
+      isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, isStep4: s.step === 4,
+      next: this.goStep(Math.min(4, s.step + 1)),
+      back: this.goStep(Math.max(1, s.step - 1)),
+      isDim: s.mode === 'dim', isSqft: s.mode === 'sqft',
+      modeDim: this.pick('mode', 'dim'), modeSqft: this.pick('mode', 'sqft'),
+      tabDim: tab(s.mode === 'dim'), tabSqft: tab(s.mode === 'sqft'),
+      length: s.length, width: s.width, sqft: s.sqft,
+      setLength: this.num('length'), setWidth: this.num('width'), setSqft: this.num('sqft'),
+      addr: s.addr, setAddr: this.val('addr'), addrKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); this.findAddrH(); } }, findAddr: this.findAddrH,
+      addrInputRef: this.addrInputRef,
+      mapRef: this.mapRef, drawToggle: this.drawToggleH, clearDraw: this.clearDrawH, undoPoint: this.undoPointH, detectSolar: this.detectSolarH,
+      drawing: s.drawing, ptCount: (s.pts || []).length,
+      drawLabel: s.drawing ? 'Finish' : 'Draw manually',
+      drawBtn: 'cursor:pointer; font-weight:700; font-size:13px; padding:11px 18px; border-radius:6px; ' + (s.drawing ? 'background:#15161a; color:#fff; border:none;' : 'background:#fff; color:#2f80bd; border:1.5px solid #2f80bd;'),
+      solarLabel: s.solarBusy ? 'Detecting roof\u2026' : 'Auto-detect roof (recommended)',
+      solarBtn: 'cursor:pointer; border:none; font-weight:700; font-size:13px; padding:11px 18px; border-radius:6px; background:#2f80bd; color:#fff;' + (s.solarBusy ? ' opacity:.7;' : ''),
+      mapHint: s.geoErr ? s.geoErr : (s.solarBusy ? 'Detecting your roof from Google Solar\u2026' : (s.drawing ? 'Click each corner of your roof, then Finish. The area updates live.' : (s.solarUsed && s.measured ? 'Roof detected automatically. Draw manually to override.' : (s.measured ? 'Roof measured. Draw again to redo, or Clear.' : 'Search or drag to your building, then Auto-detect the roof (or Draw manually).')))),
+      toggleManual: () => this.setState((st) => ({ showManual: !st.showManual })), showManual: s.showManual,
+      manualLabel: s.showManual ? 'Hide manual entry' : 'Prefer to enter dimensions manually?',
+      rectW, rectH, widthLabel: (W || Math.round(Math.sqrt(area)) || 0) + ' ft', lengthLabel: (L || Math.round(Math.sqrt(area)) || 0) + ' ft',
+      areaTxt: area.toLocaleString('en-US') + ' sq ft',
+      units: s.units,
+      setUnits: this.num('units'),
+      systemOpts, conditionOpts, accessOpts,
+      pickSilicone: this.pick('coating', 'silicone'), pickAcrylic: this.pick('coating', 'acrylic'),
+      cardSilicone: coatCard(s.coating === 'silicone'), cardAcrylic: coatCard(s.coating === 'acrylic'),
+      warr10: this.pick('warranty', '10'), warr15: this.pick('warranty', '15'), warr20: this.pick('warranty', '20'),
+      w10: warBtn(s.warranty === '10'), w15: warBtn(s.warranty === '15'), w20: warBtn(s.warranty === '20'),
+      systemLabel: systemLabels[s.system] || s.system, conditionLabel: condLabels[s.condition] || s.condition,
+      coatingLabel: s.coating === 'silicone' ? 'Silicone' : 'Acrylic', warrantyLabel: s.warranty,
+      c: s.c,
+      setName: this.cField('name'), setCompany: this.cField('company'), setEmail: this.cField('email'),
+      setPhone: this.cField('phone'), setAddress: this.cField('address'), setNotes: this.cField('notes'),
+      setConsent: (e) => { const v = e.target.checked; this.setState((st) => ({ c: { ...st.c, consent: v } })); },
+      submit: (e) => { e.preventDefault(); const s = this.state, c = s.c; const area = Math.max(0, Math.round(s.mode === 'map' ? (s.measured || 0) : (s.mode === 'sqft' ? (Number(s.sqft) || 0) : (Number(s.length) || 0) * (Number(s.width) || 0)))); if (window.ARIntake) { window.ARIntake.submit({ source: 'Roof Coating Estimator', name: c.name, company: c.company, email: c.email, phone: c.phone, address: c.address, service: 'Commercial Roof Coating', details: c.notes, consent: !!c.consent, roof: { areaSqft: area, system: s.system, condition: s.condition, coating: s.coating, warranty: s.warranty, units: Number(s.units) || 0, access: s.access, method: s.solarUsed ? 'Solar auto-detect' : (s.mode === 'map' ? 'Map measure' : (s.mode === 'sqft' ? 'Manual sq ft' : 'Manual dimensions')) }, submittedAt: new Date().toISOString() }); } this.setState({ sent: true }); },
+      reset: () => this.setState({ step: 1, sent: false }),
+      sent: s.sent, notSent: !s.sent,
+      firstName: (s.c.name || '').trim().split(' ')[0] || 'there',
+      emailShown: s.c.email || 'your inbox'
+    };
+  }
+}
+</script>
+</body>
+</html>

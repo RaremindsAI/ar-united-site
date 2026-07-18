@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+body{margin:0;}
+a{text-decoration:none;color:inherit;}
+input,select,textarea,button{font-family:inherit;}
+input::placeholder,textarea::placeholder{color:#a39e95;}
+img{display:block;}
+section[id],div[id]{scroll-margin-top:120px;}
+@keyframes arUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes arKb{from{transform:scale(1.02)}to{transform:scale(1.1)}}
+@keyframes arFade{from{opacity:0}to{opacity:1}}
+html{scroll-behavior:smooth;}
+</style>
+<script src="assets/fx.js"></script>
+<script src="assets/intake.js"></script>
+</helmet>
+<div ref="{{ setRoot }}" style="--accent: {{ accent }}; font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a; background:#ffffff; -webkit-font-smoothing:antialiased;">
+
+  <dc-import name="SiteHeader" show-top-bar="{{ showTopBar }}" hint-size="100%,140px"></dc-import>
+
+  <section id="top" style="position:relative; min-height:90vh; display:flex; align-items:center; background:#0c0d10; overflow:hidden;">
+    <img src="assets/hero-aerial.jpg" alt="Aerial view of a home with a new roof installed by A&amp;R United Construction" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 42%; animation:arKb 18s ease-out both;">
+    <div style="position:absolute; inset:0; background:linear-gradient(95deg, rgba(8,9,12,.93) 0%, rgba(8,9,12,.80) 36%, rgba(8,9,12,.32) 72%, rgba(8,9,12,.55) 100%);"></div>
+    <div style="position:relative; max-width:1240px; margin:0 auto; padding:0 40px; width:100%;">
+      <div style="max-width:710px; padding:120px 0 112px;">
+        <div style="font-weight:700; font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:#5cb3ea; margin-bottom:24px; animation:arUp .7s cubic-bezier(.16,.84,.44,1) both;">Exterior Contractor &middot; Residential &amp; Commercial</div>
+        <h1 style="font-family:'Archivo'; font-weight:800; font-size:clamp(44px,6.4vw,88px); line-height:1.0; letter-spacing:-.025em; color:#ffffff; margin:0 0 24px; animation:arUp .85s cubic-bezier(.16,.84,.44,1) .1s both;">Crafting <span style="color:var(--accent,#2f80bd);">Durable</span> Exteriors</h1>
+        <p style="font-size:20px; line-height:1.6; color:rgba(255,255,255,.85); margin:0 0 38px; max-width:590px; animation:arUp .85s cubic-bezier(.16,.84,.44,1) .2s both;">Your trusted siding, roofing, and gutter contractor for residential and commercial projects across Henderson, KY and the Tri-State.</p>
+        <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center; animation:arUp .85s cubic-bezier(.16,.84,.44,1) .32s both;">
+          <a href="#contact" data-magnetic="0.28" style="display:inline-flex; align-items:center; gap:10px; background:var(--accent,#2f80bd); color:#fff; font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:18px 30px; border-radius:3px; box-shadow:0 10px 30px rgba(47,128,189,.32);" style-hover="filter:brightness(1.08); transform:translateY(-1px);">Request a Free Estimate &rarr;</a>
+          <a href="tel:2708443355" style="display:inline-flex; align-items:center; gap:10px; border:1.5px solid rgba(255,255,255,.55); color:#fff; font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:16px 28px; border-radius:3px;" style-hover="background:rgba(255,255,255,.1); border-color:#fff;">Call (270) 844-3355</a>
+        </div>
+        <div style="display:flex; gap:28px; flex-wrap:wrap; margin-top:46px; animation:arUp .85s cubic-bezier(.16,.84,.44,1) .46s both;">
+          <span style="display:inline-flex; align-items:center; gap:9px; color:rgba(255,255,255,.82); font-size:14px; font-weight:500;"><span style="color:#5cb3ea; font-weight:700;">&#10003;</span> Family-Owned &amp; Operated</span>
+          <span style="display:inline-flex; align-items:center; gap:9px; color:rgba(255,255,255,.82); font-size:14px; font-weight:500;"><span style="color:#5cb3ea; font-weight:700;">&#10003;</span> Free Estimates &amp; Inspections</span>
+          <span style="display:inline-flex; align-items:center; gap:9px; color:rgba(255,255,255,.82); font-size:14px; font-weight:500;"><span style="color:#5cb3ea; font-weight:700;">&#10003;</span> Material &amp; Workmanship Warranties</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div data-reveal="1" style="background:#15161a;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="display:grid; grid-template-columns:repeat(4,1fr);">
+        <div style="padding:38px 28px; border-right:1px solid #2a2c33;">
+          <div style="font-family:'Archivo'; font-weight:800; font-size:25px; color:#fff;">Family-Owned</div>
+          <div style="color:#9a9da4; font-size:14px; margin-top:6px;">&amp; operated, owner on-site</div>
+        </div>
+        <div style="padding:38px 28px; border-right:1px solid #2a2c33;">
+          <div style="font-family:'Archivo'; font-weight:800; font-size:25px; color:#fff;">In-House Crews</div>
+          <div style="color:#9a9da4; font-size:14px; margin-top:6px;">one dedicated team on every job</div>
+        </div>
+        <div style="padding:38px 28px; border-right:1px solid #2a2c33;">
+          <div style="font-family:'Archivo'; font-weight:800; font-size:25px; color:#fff;">Free</div>
+          <div style="color:#9a9da4; font-size:14px; margin-top:6px;">estimates &amp; inspections</div>
+        </div>
+        <div style="padding:38px 28px;">
+          <div style="font-family:'Archivo'; font-weight:800; font-size:25px; color:#fff;">Warranties</div>
+          <div style="color:#9a9da4; font-size:14px; margin-top:6px;">material &amp; workmanship</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section data-reveal="1" style="padding:52px 0; background:#ffffff; border-bottom:1px solid #eee9e2;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="text-align:center; font-weight:700; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:#8a8f98; margin-bottom:30px;">Certified &amp; Factory-Trained Contractor</div>
+      <div style="display:flex; align-items:center; justify-content:center; gap:56px; flex-wrap:wrap;">
+        <img src="assets/cert-owenscorning.avif" alt="Owens Corning Preferred Contractor" style="height:46px; width:auto; object-fit:contain;">
+        <img src="assets/cert-gaf.avif" alt="GAF Certified Weather Stopper Roofing Contractor" style="height:50px; width:auto; object-fit:contain;">
+        <img src="assets/cert-shinglemaster.avif" alt="CertainTeed ShingleMaster" style="height:66px; width:auto; object-fit:contain;">
+        <img src="assets/cert-systemplus.avif" alt="GAF Weather Stopper System Plus Limited Warranty" style="height:66px; width:auto; object-fit:contain;">
+      </div>
+    </div>
+  </section>
+
+  <section data-reveal="1" id="services" style="padding:104px 0; background:#ffffff;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="max-width:640px; margin-bottom:54px;">
+        <div style="font-weight:700; font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent,#2f80bd); margin-bottom:16px;">What We Do</div>
+        <h2 style="font-family:'Archivo'; font-weight:800; font-size:clamp(30px,3.8vw,48px); line-height:1.05; letter-spacing:-.015em; margin:0 0 18px;">Exterior solutions for every project</h2>
+        <p style="font-size:17px; line-height:1.65; color:#5c616b; margin:0;">A full range of exterior services for residential and commercial properties, delivered with the craftsmanship and accountability that come from a dedicated in-house team.</p>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:26px;">
+
+        <a href="Siding.dc.html" style="display:block; background:#fff; border:1px solid #e7e3dd; border-radius:7px; overflow:hidden; transition:transform .18s ease-out, box-shadow .35s, border-color .25s;" style-hover="border-color:#d8d3cb;" onMouseMove="{{ tiltMove }}" onMouseLeave="{{ tiltLeave }}">
+          <div style="aspect-ratio:16/10; overflow:hidden;"><img src="assets/siding-front.jpg" alt="Siding installation" style="width:100%; height:100%; object-fit:cover;"></div>
+          <div style="padding:26px 26px 28px;">
+            <div style="font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent,#2f80bd); margin-bottom:11px;">Siding</div>
+            <h3 style="font-family:'Archivo'; font-weight:700; font-size:22px; margin:0 0 10px;">Siding Installation</h3>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 16px;">Protect and beautify your home with durable siding in a wide range of materials and styles.</p>
+            <span style="font-weight:700; font-size:14px; color:#15161a;">Learn more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="Roofing.dc.html" style="display:block; background:#fff; border:1px solid #e7e3dd; border-radius:7px; overflow:hidden; transition:transform .18s ease-out, box-shadow .35s, border-color .25s;" style-hover="border-color:#d8d3cb;" onMouseMove="{{ tiltMove }}" onMouseLeave="{{ tiltLeave }}">
+          <div style="aspect-ratio:16/10; overflow:hidden;"><img src="assets/roof-detail.jpg" alt="Roofing solutions" style="width:100%; height:100%; object-fit:cover;"></div>
+          <div style="padding:26px 26px 28px;">
+            <div style="font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent,#2f80bd); margin-bottom:11px;">Roofing</div>
+            <h3 style="font-family:'Archivo'; font-weight:700; font-size:22px; margin:0 0 10px;">Roofing Solutions</h3>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 16px;">Installations and repairs using premium materials and expert craftsmanship built to last.</p>
+            <span style="font-weight:700; font-size:14px; color:#15161a;">Learn more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="Gutters.dc.html" style="display:block; background:#fff; border:1px solid #e7e3dd; border-radius:7px; overflow:hidden; transition:transform .18s ease-out, box-shadow .35s, border-color .25s;" style-hover="border-color:#d8d3cb;" onMouseMove="{{ tiltMove }}" onMouseLeave="{{ tiltLeave }}">
+          <div style="aspect-ratio:16/10; overflow:hidden;"><img src="assets/gutters.jpg" alt="Gutter systems" style="width:100%; height:100%; object-fit:cover;"></div>
+          <div style="padding:26px 26px 28px;">
+            <div style="font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent,#2f80bd); margin-bottom:11px;">Gutters</div>
+            <h3 style="font-family:'Archivo'; font-weight:700; font-size:22px; margin:0 0 10px;">Gutter Systems</h3>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 16px;">Seamless gutters and guards for efficient drainage and lasting protection from water damage.</p>
+            <span style="font-weight:700; font-size:14px; color:#15161a;">Learn more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="Soffit-Fascia.dc.html" style="display:block; background:#fff; border:1px solid #e7e3dd; border-radius:7px; overflow:hidden; transition:transform .18s ease-out, box-shadow .35s, border-color .25s;" style-hover="border-color:#d8d3cb;" onMouseMove="{{ tiltMove }}" onMouseLeave="{{ tiltLeave }}">
+          <div style="aspect-ratio:16/10; overflow:hidden;"><img src="assets/siding-sunset.jpg" alt="Soffit and fascia" style="width:100%; height:100%; object-fit:cover;"></div>
+          <div style="padding:26px 26px 28px;">
+            <div style="font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent,#2f80bd); margin-bottom:11px;">Soffit &amp; Fascia</div>
+            <h3 style="font-family:'Archivo'; font-weight:700; font-size:22px; margin:0 0 10px;">Soffit &amp; Fascia</h3>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 16px;">Expert installation that safeguards your roofline and gives your exterior a clean, finished look.</p>
+            <span style="font-weight:700; font-size:14px; color:#15161a;">Learn more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="Repairs.dc.html" style="display:block; background:#fff; border:1px solid #e7e3dd; border-radius:7px; overflow:hidden; transition:transform .18s ease-out, box-shadow .35s, border-color .25s;" style-hover="border-color:#d8d3cb;" onMouseMove="{{ tiltMove }}" onMouseLeave="{{ tiltLeave }}">
+          <div style="aspect-ratio:16/10; overflow:hidden;"><img src="assets/repairs.jpg" alt="Repairs and restorations" style="width:100%; height:100%; object-fit:cover;"></div>
+          <div style="padding:26px 26px 28px;">
+            <div style="font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent,#2f80bd); margin-bottom:11px;">Repairs</div>
+            <h3 style="font-family:'Archivo'; font-weight:700; font-size:22px; margin:0 0 10px;">Repairs &amp; Restorations</h3>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 16px;">From storm damage to everyday wear, we restore the beauty and function of your exterior.</p>
+            <span style="font-weight:700; font-size:14px; color:#15161a;">Learn more &rarr;</span>
+          </div>
+        </a>
+
+        <a href="Insurance.dc.html" style="display:block; background:#fff; border:1px solid #e7e3dd; border-radius:7px; overflow:hidden; transition:transform .18s ease-out, box-shadow .35s, border-color .25s;" style-hover="border-color:#d8d3cb;" onMouseMove="{{ tiltMove }}" onMouseLeave="{{ tiltLeave }}">
+          <div style="aspect-ratio:16/10; overflow:hidden;"><img src="assets/roof-brick.jpg" alt="Insurance claims" style="width:100%; height:100%; object-fit:cover;"></div>
+          <div style="padding:26px 26px 28px;">
+            <div style="font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent,#2f80bd); margin-bottom:11px;">Insurance</div>
+            <h3 style="font-family:'Archivo'; font-weight:700; font-size:22px; margin:0 0 10px;">Insurance Claims</h3>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 16px;">We represent homeowners through the entire claims process, from inspection to approval.</p>
+            <span style="font-weight:700; font-size:14px; color:#15161a;">Learn more &rarr;</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section data-reveal="1" style="padding:96px 0; background:#f6f4f1;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:28px;">
+        <div style="position:relative; border-radius:8px; overflow:hidden; min-height:400px;">
+          <img src="assets/siding-aerial.jpg" alt="Residential exterior project" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(10,11,14,.88) 0%, rgba(10,11,14,.18) 55%, rgba(10,11,14,0) 100%);"></div>
+          <div style="position:absolute; left:0; right:0; bottom:0; padding:36px;">
+            <div style="font-weight:700; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:#5cb3ea; margin-bottom:10px;">Residential</div>
+            <h3 style="font-family:'Archivo'; font-weight:800; font-size:28px; color:#fff; margin:0 0 10px;">For your home</h3>
+            <p style="color:rgba(255,255,255,.85); font-size:15px; line-height:1.6; margin:0;">Comprehensive siding, roofing, and gutter services designed to enhance the curb appeal and durability of your home for years to come.</p>
+          </div>
+        </div>
+        <div style="position:relative; border-radius:8px; overflow:hidden; min-height:400px;">
+          <img src="assets/commercial-storage.avif" alt="Commercial exterior project" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(10,11,14,.88) 0%, rgba(10,11,14,.18) 55%, rgba(10,11,14,0) 100%);"></div>
+          <div style="position:absolute; left:0; right:0; bottom:0; padding:36px;">
+            <div style="font-weight:700; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:#5cb3ea; margin-bottom:10px;">Commercial</div>
+            <h3 style="font-family:'Archivo'; font-weight:800; font-size:28px; color:#fff; margin:0 0 10px;">For your business</h3>
+            <p style="color:rgba(255,255,255,.85); font-size:15px; line-height:1.6; margin:0;">Top-notch siding, roofing, and repair services engineered for the unique demands of commercial properties.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-reveal="1" id="commercial" style="padding:104px 0; background:#ffffff; border-top:1px solid #eee9e2;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="display:grid; grid-template-columns:.95fr 1.05fr; gap:64px; align-items:center;">
+        <div style="position:relative;">
+          <img src="assets/commercial-metal.avif" alt="Commercial roof coating and restoration project" style="width:100%; height:540px; object-fit:cover; border-radius:8px;">
+          <div style="position:absolute; right:-18px; bottom:34px; background:#15161a; color:#fff; border-radius:8px; padding:26px 30px; box-shadow:0 24px 60px rgba(0,0,0,.25); max-width:250px;">
+            <div style="font-family:'Archivo'; font-weight:800; font-size:44px; line-height:1; color:#fff;">10<span style="color:#5cb3ea;">&ndash;</span>20<span style="color:#5cb3ea; font-size:24px; font-weight:800;"> yrs</span></div>
+            <div style="font-size:14px; line-height:1.5; color:#b9bcc2; margin-top:8px;">of added service life, without a full tear-off</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-weight:700; font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent,#2f80bd); margin-bottom:16px;">Commercial Roof Coatings &amp; Restoration</div>
+          <h2 style="font-family:'Archivo'; font-weight:800; font-size:clamp(30px,3.8vw,46px); line-height:1.06; letter-spacing:-.015em; margin:0 0 20px;">Restore your roof. Skip the tear-off.</h2>
+          <p style="font-size:17px; line-height:1.7; color:#5c616b; margin:0 0 30px; max-width:560px;">A full replacement is not always the right answer. When a metal, TPO, EPDM, or modified bitumen roof is structurally sound, a fluid-applied coating system can seal leaks, renew the membrane, and add years of service life at a fraction of replacement cost, without interrupting your operations.</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px 30px; margin-bottom:36px;">
+            <div>
+              <div style="font-family:'Archivo'; font-weight:700; font-size:16px; margin-bottom:6px;">Seamless, fluid-applied systems</div>
+              <p style="font-size:14.5px; line-height:1.6; color:#5c616b; margin:0;">Silicone and acrylic elastomeric coatings cure into one monolithic waterproof membrane with no seams to fail.</p>
+            </div>
+            <div>
+              <div style="font-family:'Archivo'; font-weight:700; font-size:16px; margin-bottom:6px;">Engineered for your roof</div>
+              <p style="font-size:14.5px; line-height:1.6; color:#5c616b; margin:0;">We evaluate the substrate, moisture, and drainage first, then spec the right system for your specific roof, never one-size-fits-all.</p>
+            </div>
+            <div>
+              <div style="font-family:'Archivo'; font-weight:700; font-size:16px; margin-bottom:6px;">Cool-roof energy savings</div>
+              <p style="font-size:14.5px; line-height:1.6; color:#5c616b; margin:0;">Highly reflective coatings lower rooftop temperatures and reduce summer cooling loads on your building.</p>
+            </div>
+            <div>
+              <div style="font-family:'Archivo'; font-weight:700; font-size:16px; margin-bottom:6px;">Zero business disruption</div>
+              <p style="font-size:14.5px; line-height:1.6; color:#5c616b; margin:0;">No tear-off means no debris, no noise, and no downtime. Your business keeps running while we work overhead.</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+            <a href="Roof-Coating-Estimator.dc.html" style="display:inline-flex; align-items:center; gap:10px; background:var(--accent,#2f80bd); color:#fff; font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:16px 28px; border-radius:3px;" style-hover="filter:brightness(1.08);">Get an Instant Estimate &rarr;</a>
+            <a href="#contact" style="display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:#15161a; border-bottom:2px solid var(--accent,#2f80bd); padding-bottom:6px;" style-hover="gap:12px;">Schedule an Assessment &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-reveal="1" id="about" style="padding:104px 0; background:#15161a; color:#fff;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="display:grid; grid-template-columns:1.05fr .95fr; gap:64px; align-items:center;">
+        <div>
+          <div style="font-weight:700; font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:#5cb3ea; margin-bottom:16px;">Why A&amp;R United</div>
+          <h2 style="font-family:'Archivo'; font-weight:800; font-size:clamp(30px,3.8vw,46px); line-height:1.06; letter-spacing:-.015em; margin:0 0 20px;">A family business that stands behind every job</h2>
+          <p style="font-size:17px; line-height:1.7; color:#b9bcc2; margin:0 0 32px; max-width:560px;">As a family-owned and operated company, our estimator, who is also the owner, is present at 90% of our job sites, personally overseeing the work with our skilled in-house crew. That hands-on approach is why our quality and craftsmanship are unmatched.</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px 30px; margin-bottom:36px;">
+            <div style="display:flex; gap:12px; align-items:flex-start;"><span style="color:var(--accent,#2f80bd); font-weight:800; font-size:18px; line-height:1.2;">&#10003;</span><span style="font-size:15px; color:#e3e4e7; line-height:1.5;">Same in-house crew from start to finish</span></div>
+            <div style="display:flex; gap:12px; align-items:flex-start;"><span style="color:var(--accent,#2f80bd); font-weight:800; font-size:18px; line-height:1.2;">&#10003;</span><span style="font-size:15px; color:#e3e4e7; line-height:1.5;">Owner on-site at 90% of projects</span></div>
+            <div style="display:flex; gap:12px; align-items:flex-start;"><span style="color:var(--accent,#2f80bd); font-weight:800; font-size:18px; line-height:1.2;">&#10003;</span><span style="font-size:15px; color:#e3e4e7; line-height:1.5;">Honest inspections &amp; assessments</span></div>
+            <div style="display:flex; gap:12px; align-items:flex-start;"><span style="color:var(--accent,#2f80bd); font-weight:800; font-size:18px; line-height:1.2;">&#10003;</span><span style="font-size:15px; color:#e3e4e7; line-height:1.5;">We advocate for you on insurance claims</span></div>
+          </div>
+          <a href="#contact" style="display:inline-flex; align-items:center; gap:10px; background:var(--accent,#2f80bd); color:#fff; font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:16px 28px; border-radius:3px;" style-hover="filter:brightness(1.08);">Get Your Free Estimate &rarr;</a>
+        </div>
+        <div style="position:relative;">
+          <div style="position:absolute; left:-14px; top:-14px; width:120px; height:120px; border-top:4px solid var(--accent,#2f80bd); border-left:4px solid var(--accent,#2f80bd); border-radius:8px 0 0 0;"></div>
+          <img src="assets/team.jpg" alt="A&amp;R United Construction crew at work" style="position:relative; width:100%; height:520px; object-fit:cover; border-radius:8px;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <sc-if value="{{ showProjects }}" hint-placeholder-val="{{ true }}">
+  <section data-reveal="1" id="projects" style="padding:104px 0; background:#ffffff;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:30px; flex-wrap:wrap; margin-bottom:48px;">
+        <div style="max-width:620px;">
+          <div style="font-weight:700; font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent,#2f80bd); margin-bottom:16px;">Our Work</div>
+          <h2 style="font-family:'Archivo'; font-weight:800; font-size:clamp(30px,3.8vw,48px); line-height:1.05; letter-spacing:-.015em; margin:0;">A few of our projects</h2>
+        </div>
+        <a href="#contact" style="display:inline-flex; align-items:center; gap:10px; font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:#15161a; border-bottom:2px solid var(--accent,#2f80bd); padding-bottom:6px;" style-hover="gap:14px;">Start Your Project &rarr;</a>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:240px; gap:18px;">
+        <div data-lb-tag="Siding &amp; Gutters" data-lb-title="Craftsman Exterior" data-lb-loc="Henderson, KY" onClick="{{ openLb }}" style="grid-row:span 2; position:relative; border-radius:8px; overflow:hidden; cursor:zoom-in;">
+          <img src="assets/hero.jpg" alt="Siding and seamless gutter project" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s;" style-hover="transform:scale(1.05);">
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(8,9,12,.82), rgba(8,9,12,0) 50%);"></div>
+          <div style="position:absolute; left:0; bottom:0; padding:26px;"><div style="color:#5cb3ea; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:6px;">Siding &amp; Gutters</div><div style="color:#fff; font-family:'Archivo'; font-weight:700; font-size:20px;">Craftsman Exterior</div><div style="color:rgba(255,255,255,.7); font-size:13px; margin-top:3px;">Henderson, KY</div></div>
+        </div>
+        <div data-lb-tag="Roof &amp; Siding" data-lb-title="Full Exterior Replacement" data-lb-loc="Newburgh, IN" onClick="{{ openLb }}" style="position:relative; border-radius:8px; overflow:hidden; cursor:zoom-in;">
+          <img src="assets/siding-aerial.jpg" alt="Roof and siding replacement" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s;" style-hover="transform:scale(1.05);">
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(8,9,12,.82), rgba(8,9,12,0) 55%);"></div>
+          <div style="position:absolute; left:0; bottom:0; padding:22px;"><div style="color:#5cb3ea; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:5px;">Roof &amp; Siding</div><div style="color:#fff; font-family:'Archivo'; font-weight:700; font-size:18px;">Full Exterior Replacement</div></div>
+        </div>
+        <div data-lb-tag="Roofing" data-lb-title="Architectural Shingles" data-lb-loc="Henderson, KY" onClick="{{ openLb }}" style="position:relative; border-radius:8px; overflow:hidden; cursor:zoom-in;">
+          <img src="assets/roof-detail.jpg" alt="Architectural shingle roof" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s;" style-hover="transform:scale(1.05);">
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(8,9,12,.82), rgba(8,9,12,0) 55%);"></div>
+          <div style="position:absolute; left:0; bottom:0; padding:22px;"><div style="color:#5cb3ea; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:5px;">Roofing</div><div style="color:#fff; font-family:'Archivo'; font-weight:700; font-size:18px;">Architectural Shingles</div></div>
+        </div>
+        <div data-lb-tag="Roofing" data-lb-title="Full Roof Replacement" data-lb-loc="Evansville, IN" onClick="{{ openLb }}" style="position:relative; border-radius:8px; overflow:hidden; cursor:zoom-in;">
+          <img src="assets/roof-truck.jpg" alt="Roof replacement project" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s;" style-hover="transform:scale(1.05);">
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(8,9,12,.82), rgba(8,9,12,0) 55%);"></div>
+          <div style="position:absolute; left:0; bottom:0; padding:22px;"><div style="color:#5cb3ea; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:5px;">Roofing</div><div style="color:#fff; font-family:'Archivo'; font-weight:700; font-size:18px;">Full Roof Replacement</div></div>
+        </div>
+        <div data-lb-tag="Siding" data-lb-title="Exterior Remodel" data-lb-loc="Henderson, KY" onClick="{{ openLb }}" style="position:relative; border-radius:8px; overflow:hidden; cursor:zoom-in;">
+          <img src="assets/siding-sunset.jpg" alt="Exterior remodel" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s;" style-hover="transform:scale(1.05);">
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(8,9,12,.82), rgba(8,9,12,0) 55%);"></div>
+          <div style="position:absolute; left:0; bottom:0; padding:22px;"><div style="color:#5cb3ea; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:5px;">Siding</div><div style="color:#fff; font-family:'Archivo'; font-weight:700; font-size:18px;">Exterior Remodel</div></div>
+        </div>
+        <div data-lb-tag="Commercial" data-lb-title="Commercial Metal Roof" data-lb-loc="Tri-State" onClick="{{ openLb }}" style="position:relative; border-radius:8px; overflow:hidden; cursor:zoom-in;">
+          <img src="assets/commercial-metal.avif" alt="Commercial metal roof" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s;" style-hover="transform:scale(1.05);">
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(8,9,12,.82), rgba(8,9,12,0) 55%);"></div>
+          <div style="position:absolute; left:0; bottom:0; padding:22px;"><div style="color:#5cb3ea; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:5px;">Commercial</div><div style="color:#fff; font-family:'Archivo'; font-weight:700; font-size:18px;">Commercial Metal Roof</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <sc-if value="{{ showInsurance }}" hint-placeholder-val="{{ true }}">
+  <section data-reveal="1" style="position:relative; background:#0c0d10;">
+    <img src="assets/roof-ranch.jpg" alt="Storm-damaged roof restoration" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.28;">
+    <div style="position:relative; max-width:1240px; margin:0 auto; padding:88px 40px;">
+      <div style="max-width:680px;">
+        <div style="font-weight:700; font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:#5cb3ea; margin-bottom:16px;">Insurance Claims</div>
+        <h2 style="font-family:'Archivo'; font-weight:800; font-size:clamp(28px,3.6vw,44px); line-height:1.08; letter-spacing:-.015em; color:#fff; margin:0 0 18px;">Storm damage? We handle the insurance process for you.</h2>
+        <p style="font-size:17px; line-height:1.7; color:rgba(255,255,255,.82); margin:0 0 32px;">Navigating a claim is challenging. Our specialists represent homeowners every step of the way, from the initial inspection to final approval, making sure every detail is covered and nothing is left behind.</p>
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <a href="#contact" style="display:inline-flex; align-items:center; gap:10px; background:var(--accent,#2f80bd); color:#fff; font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:17px 28px; border-radius:3px;" style-hover="filter:brightness(1.08);">Talk to a Claims Specialist</a>
+          <a href="tel:2708443355" style="display:inline-flex; align-items:center; gap:10px; border:1.5px solid rgba(255,255,255,.5); color:#fff; font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:15px 26px; border-radius:3px;" style-hover="background:rgba(255,255,255,.1);">Call (270) 844-3355</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <section data-reveal="1" id="contact" style="padding:104px 0; background:#f6f4f1;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="display:grid; grid-template-columns:1fr 1.05fr; gap:64px; align-items:start;">
+        <div>
+          <div style="font-weight:700; font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent,#2f80bd); margin-bottom:16px;">Get in Touch</div>
+          <h2 style="font-family:'Archivo'; font-weight:800; font-size:clamp(30px,3.8vw,46px); line-height:1.05; letter-spacing:-.015em; margin:0 0 18px;">Request your free estimate</h2>
+          <p style="font-size:17px; line-height:1.65; color:#5c616b; margin:0 0 36px; max-width:480px;">Tell us about your project and we&rsquo;ll get back to you to schedule a free inspection. Prefer to talk now? Give us a call, we&rsquo;re glad to help.</p>
+
+          <div style="display:flex; flex-direction:column; gap:22px; margin-bottom:34px;">
+            <a href="tel:2708443355" style="display:flex; align-items:center; gap:16px;">
+              <span style="width:46px; height:46px; flex:none; border-radius:50%; background:var(--accent,#2f80bd); color:#fff; display:flex; align-items:center; justify-content:center; font-size:19px;">&#9742;</span>
+              <span><span style="display:block; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:#8a8f98;">Call</span><span style="font-family:'Archivo'; font-weight:700; font-size:19px; color:#15161a;">(270) 844-3355</span></span>
+            </a>
+            <a href="mailto:AR@arunitedconstruction.com" style="display:flex; align-items:center; gap:16px;">
+              <span style="width:46px; height:46px; flex:none; border-radius:50%; background:#15161a; color:#fff; display:flex; align-items:center; justify-content:center; font-size:17px;">&#9993;</span>
+              <span><span style="display:block; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:#8a8f98;">Email</span><span style="font-weight:600; font-size:16px; color:#15161a;">AR@arunitedconstruction.com</span></span>
+            </a>
+            <div style="display:flex; align-items:center; gap:16px;">
+              <span style="width:46px; height:46px; flex:none; border-radius:50%; background:#15161a; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px;">&#9737;</span>
+              <span><span style="display:block; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:#8a8f98;">Head Office</span><span style="font-weight:600; font-size:16px; color:#15161a;">1970 Barret Ct. Suite 123, Henderson, KY 42420</span></span>
+            </div>
+          </div>
+
+          <div style="padding:22px 24px; background:#fff; border:1px solid #e7e3dd; border-radius:8px; margin-bottom:26px;">
+            <div style="font-weight:700; font-size:13px; letter-spacing:.04em; margin-bottom:12px; color:#15161a;">Office Hours &middot; Booking &amp; Response</div>
+            <div style="display:flex; justify-content:space-between; font-size:15px; color:#5c616b; padding:5px 0;"><span>Monday to Friday</span><span style="color:#15161a; font-weight:600;">9:00am to 5:00pm</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:15px; color:#5c616b; padding:5px 0; border-top:1px solid #eee9e2;"><span>Saturday</span><span style="color:#15161a; font-weight:600;">9:00am to 2:00pm</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:15px; color:#5c616b; padding:5px 0; border-top:1px solid #eee9e2;"><span>Response</span><span style="color:#15161a; font-weight:600;">All week, incl. weekends</span></div>
+          </div>
+
+          <a href="https://forms.clickup.com/9011758070/f/8cj90zp-13191/QJ6HUY1MZHX4YS7M6A?Task%20Name=xxxxx" target="_blank" style="display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:15px; color:#5c616b;" style-hover="color:#15161a;">Prefer our full quote form? Open it here &rarr;</a>
+        </div>
+
+        <div style="background:#fff; border:1px solid #e7e3dd; border-radius:10px; padding:38px; box-shadow:0 24px 60px rgba(0,0,0,.07);">
+          <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ submit }}">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+              <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">First name</span><input value="{{ f.first }}" onChange="{{ setFirst }}" required placeholder="Jane" style="width:100%; border:1px solid #d8d4cd; border-radius:5px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:var(--accent,#2f80bd); box-shadow:0 0 0 3px rgba(47,128,189,.12);"></label>
+              <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Last name</span><input value="{{ f.last }}" onChange="{{ setLast }}" required placeholder="Doe" style="width:100%; border:1px solid #d8d4cd; border-radius:5px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:var(--accent,#2f80bd); box-shadow:0 0 0 3px rgba(47,128,189,.12);"></label>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+              <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Email</span><input type="email" value="{{ f.email }}" onChange="{{ setEmail }}" required placeholder="you@email.com" style="width:100%; border:1px solid #d8d4cd; border-radius:5px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:var(--accent,#2f80bd); box-shadow:0 0 0 3px rgba(47,128,189,.12);"></label>
+              <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Phone</span><input type="tel" value="{{ f.phone }}" onChange="{{ setPhone }}" required placeholder="(270) 000-0000" style="width:100%; border:1px solid #d8d4cd; border-radius:5px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:var(--accent,#2f80bd); box-shadow:0 0 0 3px rgba(47,128,189,.12);"></label>
+            </div>
+            <div style="margin-top:16px;">
+              <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Are you a new or existing client?</span>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <label style="display:flex; align-items:center; gap:10px; border:1px solid #d8d4cd; border-radius:5px; padding:12px 14px; font-size:15px; color:#15161a; cursor:pointer; background:#fff;" style-hover="border-color:var(--accent,#2f80bd);"><input type="radio" name="clientType" checked="{{ isNewClient }}" onChange="{{ setNewClient }}" style="width:16px; height:16px; margin:0; accent-color:var(--accent,#2f80bd); cursor:pointer;">New client</label>
+                <label style="display:flex; align-items:center; gap:10px; border:1px solid #d8d4cd; border-radius:5px; padding:12px 14px; font-size:15px; color:#15161a; cursor:pointer; background:#fff;" style-hover="border-color:var(--accent,#2f80bd);"><input type="radio" name="clientType" checked="{{ isExistingClient }}" onChange="{{ setExistingClient }}" style="width:16px; height:16px; margin:0; accent-color:var(--accent,#2f80bd); cursor:pointer;">Existing client</label>
+              </div>
+            </div>
+            <label style="display:block; margin-top:16px;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Property address</span><input value="{{ f.address }}" onChange="{{ setAddress }}" placeholder="Street, City, KY" style="width:100%; border:1px solid #d8d4cd; border-radius:5px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:var(--accent,#2f80bd); box-shadow:0 0 0 3px rgba(47,128,189,.12);"></label>
+            <label style="display:block; margin-top:16px;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">What do you need?</span>
+              <select value="{{ f.service }}" onChange="{{ setService }}" style="width:100%; border:1px solid #d8d4cd; border-radius:5px; padding:12px 14px; font-size:15px; color:#15161a; outline:none; background:#fff;" style-focus="border-color:var(--accent,#2f80bd); box-shadow:0 0 0 3px rgba(47,128,189,.12);">
+                <option>Siding</option>
+                <option>Roofing</option>
+                <option>Gutter Systems</option>
+                <option>Soffit &amp; Fascia</option>
+                <option>Repairs &amp; Restorations</option>
+                <option>Insurance Claim</option>
+                <option>Commercial Roof Coating</option>
+                <option>Commercial Project</option>
+                <option>Other / Not sure</option>
+              </select>
+            </label>
+            <label style="display:block; margin-top:16px;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Project details</span><textarea value="{{ f.message }}" onChange="{{ setMessage }}" rows="4" placeholder="Tell us a little about your project..." style="width:100%; border:1px solid #d8d4cd; border-radius:5px; padding:12px 14px; font-size:15px; color:#15161a; outline:none; resize:vertical; font-family:inherit;" style-focus="border-color:var(--accent,#2f80bd); box-shadow:0 0 0 3px rgba(47,128,189,.12);"></textarea></label>
+            <label style="display:flex; gap:11px; align-items:flex-start; margin-top:18px; padding:14px 16px; background:#faf9f7; border:1px solid #eee9e2; border-radius:6px; cursor:pointer;">
+              <input type="checkbox" checked="{{ f.smsConsent }}" onChange="{{ setSmsConsent }}" style="margin:3px 0 0; width:16px; height:16px; flex:none; accent-color:var(--accent,#2f80bd); cursor:pointer;">
+              <span style="font-size:12.5px; line-height:1.6; color:#6b6f78;">I agree to receive SMS text messages from A&amp;R United Construction, LLC about my estimate, appointments, and project updates. Message frequency varies; message &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of purchase. See our <a href="SMS-Consent.dc.html" style="color:var(--accent,#2f80bd); font-weight:600;">SMS Consent Policy</a>.</span>
+            </label>
+            <button type="submit" style="width:100%; margin-top:18px; background:var(--accent,#2f80bd); color:#fff; border:none; cursor:pointer; font-weight:700; font-size:14px; letter-spacing:.08em; text-transform:uppercase; padding:17px; border-radius:5px;" style-hover="filter:brightness(1.08);">Request My Free Estimate</button>
+            <p style="font-size:12.5px; color:#9a958c; text-align:center; margin:14px 0 0;">By submitting, you agree to our <a href="Terms.dc.html" style="color:#6b6f78; font-weight:600; text-decoration:underline;">Terms</a> and <a href="Privacy.dc.html" style="color:#6b6f78; font-weight:600; text-decoration:underline;">Privacy Policy</a>.</p>
+          </form>
+          </sc-if>
+          <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center; padding:50px 16px;">
+            <div style="width:68px; height:68px; margin:0 auto 22px; border-radius:50%; background:rgba(47,128,189,.1); color:var(--accent,#2f80bd); display:flex; align-items:center; justify-content:center; font-size:32px;">&#10003;</div>
+            <h3 style="font-family:'Archivo'; font-weight:800; font-size:26px; margin:0 0 12px;">Thanks for reaching out!</h3>
+            <p style="font-size:16px; line-height:1.6; color:#5c616b; margin:0 0 26px; max-width:360px; margin-left:auto; margin-right:auto;">We&rsquo;ve received your request and will be in touch shortly to schedule your free inspection. Need us sooner? Call <a href="tel:2708443355" style="color:var(--accent,#2f80bd); font-weight:600;">(270) 844-3355</a>.</p>
+            <button onClick="{{ again }}" style="background:#15161a; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; padding:14px 26px; border-radius:5px;">Submit Another Request</button>
+          </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+
+  <sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ lbClose }}" style="position:fixed; inset:0; z-index:200; background:rgba(8,9,12,.93); display:flex; align-items:center; justify-content:center; padding:44px; animation:arFade .22s ease both; cursor:zoom-out;">
+    <div onClick="{{ lbStop }}" style="position:relative; max-width:1060px; width:100%; cursor:default;">
+      <div role="img" aria-label="{{ lbTitle }}" style="width:100%; aspect-ratio:3/2; max-height:74vh; background-image:url('{{ lbImg }}'); background-size:cover; background-position:center; border-radius:10px; box-shadow:0 40px 120px rgba(0,0,0,.55);"></div>
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-top:18px;">
+        <div>
+          <div style="color:#5cb3ea; font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;">{{ lbTag }}</div>
+          <div style="color:#fff; font-family:'Archivo'; font-weight:700; font-size:24px; margin-top:5px;">{{ lbTitle }}</div>
+          <div style="color:rgba(255,255,255,.65); font-size:14px; margin-top:3px;">{{ lbLoc }}</div>
+        </div>
+        <button onClick="{{ lbClose }}" aria-label="Close" style="flex:none; width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,.35); background:transparent; color:#fff; font-size:16px; cursor:pointer;" style-hover="background:rgba(255,255,255,.12);">&#10005;</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#2f80bd&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#2f80bd&quot;, &quot;#0f4c81&quot;, &quot;#1f6f54&quot;, &quot;#b45309&quot;] },
+  &quot;showTopBar&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot; },
+  &quot;showProjects&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot; },
+  &quot;showInsurance&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot; }
+}">
+class Component extends DCLogic {
+  state = { sent:false, lb:null, form:{ first:'', last:'', email:'', phone:'', address:'', service:'Siding', message:'', smsConsent:false, clientType:'new' } };
+  setRoot = (el)=>{ this.rootEl = el; };
+  componentDidMount(){
+    this._key = (e)=>{ if(e.key==='Escape' && this.state.lb) this.setState({ lb:null }); };
+    window.addEventListener('keydown', this._key);
+    const root = this.rootEl; if(!root) return;
+    const els = Array.prototype.slice.call(root.querySelectorAll('[data-reveal]')).filter(el=>!el.dataset.arDone);
+    if(!els.length) return;
+    const reveal = (el)=>{ el.dataset.arDone='1'; el.style.opacity='1'; el.style.transform='none'; };
+    els.forEach(el=>{ el.style.opacity='0'; el.style.transform='translateY(26px)'; el.style.transition='opacity .8s cubic-bezier(.16,.84,.44,1), transform .8s cubic-bezier(.16,.84,.44,1)'; });
+    if('IntersectionObserver' in window){
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{ if(e.isIntersecting){ reveal(e.target); io.unobserve(e.target); } });
+      }, { threshold:0.12, rootMargin:'0px 0px -7% 0px' });
+      els.forEach(el=>io.observe(el));
+    }
+    // Safety net deliberately NOT cleared on unmount: it must survive logic-instance teardown/hot-swap.
+    setTimeout(()=>{ els.forEach(reveal); }, 2000);
+  }
+  componentWillUnmount(){ if(this._key) window.removeEventListener('keydown', this._key); }
+  set(k){ return (e)=>{ const v = e.target.value; this.setState(s=>({ form:{ ...s.form, [k]:v } })); }; }
+  renderVals(){
+    return {
+      setRoot: this.setRoot,
+      tiltMove: (e)=>{ const el=e.currentTarget; const r=el.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5; const y=(e.clientY-r.top)/r.height-.5; el.style.transform='perspective(900px) rotateX('+(-y*5).toFixed(2)+'deg) rotateY('+(x*7).toFixed(2)+'deg) translateY(-4px)'; el.style.boxShadow='0 26px 54px rgba(0,0,0,.14)'; },
+      tiltLeave: (e)=>{ const el=e.currentTarget; el.style.transform=''; el.style.boxShadow=''; },
+      openLb: (e)=>{ const el=e.currentTarget; const img=el.querySelector('img'); this.setState({ lb:{ img: img?img.getAttribute('src'):'', tag: el.dataset.lbTag||'', title: el.dataset.lbTitle||'', loc: el.dataset.lbLoc||'' } }); },
+      lbClose: ()=> this.setState({ lb:null }),
+      lbStop: (e)=> e.stopPropagation(),
+      lbOpen: !!this.state.lb,
+      lbImg: this.state.lb ? this.state.lb.img : '',
+      lbTag: this.state.lb ? this.state.lb.tag : '',
+      lbTitle: this.state.lb ? this.state.lb.title : '',
+      lbLoc: this.state.lb ? this.state.lb.loc : '',
+      accent: this.props.accent ?? '#2f80bd',
+      showTopBar: this.props.showTopBar ?? true,
+      showProjects: this.props.showProjects ?? true,
+      showInsurance: this.props.showInsurance ?? true,
+      sent: this.state.sent,
+      notSent: !this.state.sent,
+      f: this.state.form,
+      setFirst: this.set('first'),
+      setLast: this.set('last'),
+      setEmail: this.set('email'),
+      setPhone: this.set('phone'),
+      setAddress: this.set('address'),
+      setService: this.set('service'),
+      setMessage: this.set('message'),
+      setSmsConsent: (e)=>{ const v = e.target.checked; this.setState(s=>({ form:{ ...s.form, smsConsent:v } })); },
+      isNewClient: this.state.form.clientType === 'new',
+      isExistingClient: this.state.form.clientType === 'existing',
+      setNewClient: ()=> this.setState(s=>({ form:{ ...s.form, clientType:'new' } })),
+      setExistingClient: ()=> this.setState(s=>({ form:{ ...s.form, clientType:'existing' } })),
+      submit: (e)=>{ e.preventDefault(); const f=this.state.form; if(window.ARIntake){ window.ARIntake.submit({ source:'Homepage estimate form', name:(f.first+' '+f.last).trim(), email:f.email, phone:f.phone, address:f.address, service:f.service, clientType:f.clientType, details:f.message, smsConsent:!!f.smsConsent, submittedAt:new Date().toISOString() }); } this.setState({ sent:true }); },
+      again: ()=> this.setState({ sent:false, form:{ first:'', last:'', email:'', phone:'', address:'', service:'Siding', message:'', smsConsent:false, clientType:'new' } }),
+    };
+  }
+}
+</script>
+</body>
+</html>

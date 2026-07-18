@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;} body{margin:0;} a{text-decoration:none;color:inherit;} img{display:block;}</style>
+<script src="assets/fx.js"></script>
+</helmet>
+<div style="font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a; background:#fff; -webkit-font-smoothing:antialiased;">
+  <dc-import name="SiteHeader" active="reviews" hint-size="100%,140px"></dc-import>
+
+  <section style="background:#0c0d10; color:#fff;">
+    <div style="max-width:1240px; margin:0 auto; padding:84px 40px 0;">
+      <div style="text-align:center; max-width:720px; margin:0 auto;">
+        <div style="font-weight:700; font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:#5cb3ea; margin-bottom:20px;">Reviews</div>
+        <h1 style="font-family:'Archivo'; font-weight:800; font-size:clamp(38px,5vw,68px); line-height:1.03; letter-spacing:-.025em; margin:0 0 18px;">Trusted by our neighbors</h1>
+        <p style="font-size:19px; line-height:1.65; color:rgba(255,255,255,.82); margin:0 auto 46px; max-width:580px;">We&rsquo;ve built our reputation one satisfied homeowner at a time. Here&rsquo;s what the Tri-State has to say.</p>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid #24262d;">
+        <div style="padding:34px 24px; text-align:center; border-right:1px solid #24262d;">
+          <div style="font-family:'Archivo'; font-weight:800; font-size:40px; color:#fff;"><span data-count="5.0">5.0</span></div>
+          <div style="color:#f2b01e; letter-spacing:3px; font-size:15px; margin:6px 0 4px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div style="color:#9a9da4; font-size:13px;">Google Rating</div>
+        </div>
+        <div style="padding:34px 24px; text-align:center; border-right:1px solid #24262d;">
+          <div style="font-family:'Archivo'; font-weight:800; font-size:40px; color:#fff;">Tri-State</div>
+          <div style="color:#9a9da4; font-size:13px; margin-top:12px;">Most Trusted Contractor</div>
+        </div>
+        <div style="padding:34px 24px; text-align:center; border-right:1px solid #24262d;">
+          <div style="font-family:'Archivo'; font-weight:800; font-size:40px; color:#fff;"><span data-count="100" data-suffix="%">100%</span></div>
+          <div style="color:#9a9da4; font-size:13px; margin-top:12px;">In-House Crews</div>
+        </div>
+        <div style="padding:34px 24px; text-align:center;">
+          <div style="font-family:'Archivo'; font-weight:800; font-size:40px; color:#fff;">Family</div>
+          <div style="color:#9a9da4; font-size:13px; margin-top:12px;">Owned &amp; Operated</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:90px 0; background:#f6f4f1;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="columns:3; column-gap:24px;">
+        <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="9">
+          <div data-tilt="4" style="break-inside:avoid; background:#fff; border:1px solid #e7e3dd; border-radius:10px; padding:28px; margin-bottom:24px;">
+            <div style="color:#f2b01e; letter-spacing:2px; font-size:15px; margin-bottom:14px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p style="font-size:15.5px; line-height:1.7; color:#3c4048; margin:0 0 22px;">&ldquo;{{ r.quote }}&rdquo;</p>
+            <div style="display:flex; align-items:center; gap:13px;">
+              <span style="width:42px; height:42px; flex:none; border-radius:50%; background:#15161a; color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Archivo'; font-weight:800; font-size:16px;">{{ r.initial }}</span>
+              <span>
+                <span style="display:block; font-weight:700; font-size:15px; color:#15161a;">{{ r.name }}</span>
+                <span style="display:block; font-size:13px; color:#8a8f98;">{{ r.meta }}</span>
+              </span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:84px 0; background:#fff;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px; text-align:center;">
+      <h2 style="font-family:'Archivo'; font-weight:800; font-size:clamp(24px,3vw,36px); line-height:1.1; margin:0 0 12px;">See more reviews &amp; leave your own</h2>
+      <p style="font-size:17px; color:#5c616b; margin:0 0 32px;">Find us on the platforms you already trust.</p>
+      <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+        <a href="https://g.co/kgs/ZnXJ7rZ" target="_blank" style="display:inline-flex; align-items:center; gap:10px; border:1px solid #e0dcd4; border-radius:8px; padding:16px 28px; font-weight:700; font-size:15px; color:#15161a;" style-hover="border-color:#2f80bd; transform:translateY(-2px);">Read our Google reviews &rarr;</a>
+        <a href="https://www.angi.com/companylist/us/ky/henderson/a-and-r-united-construction%2C-llc-reviews-9284797.htm" target="_blank" style="display:inline-flex; align-items:center; gap:10px; border:1px solid #e0dcd4; border-radius:8px; padding:16px 28px; font-weight:700; font-size:15px; color:#15161a;" style-hover="border-color:#2f80bd; transform:translateY(-2px);">Check us out on Angi &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:84px 0; background:#2f80bd;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px; display:flex; align-items:center; justify-content:space-between; gap:36px; flex-wrap:wrap;">
+      <div style="max-width:640px;">
+        <h2 style="font-family:'Archivo'; font-weight:800; font-size:clamp(26px,3.2vw,40px); line-height:1.08; color:#fff; margin:0 0 10px;">Join our list of happy homeowners</h2>
+        <p style="font-size:17px; line-height:1.6; color:rgba(255,255,255,.9); margin:0;">Experience the difference of a family-owned team that stands behind every job.</p>
+      </div>
+      <a href="Contact.dc.html" style="display:inline-flex; align-items:center; gap:10px; background:#fff; color:#2f80bd; font-weight:700; font-size:14px; letter-spacing:.08em; text-transform:uppercase; padding:18px 32px; border-radius:4px; white-space:nowrap;" style-hover="transform:translateY(-2px); box-shadow:0 12px 30px rgba(0,0,0,.18);">Get My Free Estimate &rarr;</a>
+    </div>
+  </section>
+
+  <dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals(){
+    return { reviews: [
+      { initial:'M', name:'Michael R.', meta:'Roof Replacement \u00b7 Henderson, KY', quote:'A&R replaced our roof after a storm and handled the entire insurance claim. The owner was on site, the crew was respectful, and they cleaned up like they were never here. Couldn\u2019t recommend them more.' },
+      { initial:'S', name:'Sarah T.', meta:'New Siding \u00b7 Newburgh, IN', quote:'Our home looks brand new. They walked us through every material option and the price was exactly what they quoted, no surprises. True professionals from start to finish.' },
+      { initial:'D', name:'David & Karen L.', meta:'Gutters & Fascia \u00b7 Henderson, KY', quote:'Seamless gutters and new fascia, done in a day. They showed up when they said they would and the work is flawless. This is how a contractor should operate.' },
+      { initial:'J', name:'Jennifer M.', meta:'Storm Damage \u00b7 Evansville, IN', quote:'After the hail storm I had no idea where to start. A&R inspected for free, met the adjuster, and made the whole claim painless. They genuinely had my back.' },
+      { initial:'R', name:'Robert P.', meta:'Roof & Gutters \u00b7 Corydon, KY', quote:'Fair, honest, and they do what they say. The owner personally checked the work before they left. You can tell this is a family business that cares about its name.' },
+      { initial:'A', name:'Amanda C.', meta:'Full Exterior \u00b7 Henderson, KY', quote:'From the estimate to the final walkthrough, communication was excellent. The crew was tidy and skilled, and the finished exterior is gorgeous. Worth every penny.' },
+      { initial:'T', name:'Thomas H.', meta:'Roof Repair \u00b7 Tri-State', quote:'Had a leak that two other companies couldn\u2019t figure out. A&R found the real source and fixed it right. Honest people who actually know what they\u2019re doing.' },
+      { initial:'L', name:'Linda & Gary W.', meta:'Siding & Soffit \u00b7 Henderson, KY', quote:'They treated our home like it was their own. Beautiful workmanship on the siding and soffit, and the warranty gives us real peace of mind.' },
+      { initial:'B', name:'Brian K.', meta:'Commercial Roof \u00b7 Tri-State', quote:'Did a metal roof on our facility on schedule and on budget. Professional crew, great communication, and zero disruption to our operations. Highly recommend for commercial work.' },
+    ] };
+  }
+}
+</script>
+</body>
+</html>

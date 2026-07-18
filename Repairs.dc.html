@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;} body{margin:0;} a{text-decoration:none;color:inherit;} img{display:block;}</style>
+<script src="assets/fx.js"></script>
+</helmet>
+<div style="font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a; background:#fff; -webkit-font-smoothing:antialiased;">
+  <dc-import name="SiteHeader" active="services" hint-size="100%,140px"></dc-import>
+  <dc-import name="ServiceDetail" d="{{ d }}" hint-size="100%,1400px"></dc-import>
+  <dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals(){
+    return { d: {
+      eyebrow: 'Repairs',
+      title: 'Repairs & Restorations',
+      hero: 'assets/repairs.jpg',
+      intro: 'Storm damage, age, or everyday wear: when your exterior takes a hit, we restore both its function and its looks. Fast, honest repairs that solve the real problem instead of just covering it up.',
+      aboutEyebrow: 'Honest Assessments',
+      aboutTitle: 'An honest answer, backed by photos',
+      aboutP1: 'Every repair starts with an honest assessment. We inspect the damage, tell you plainly whether a repair is actually needed, and if it isn\u2019t, we\u2019ll tell you that too. When a repair is needed, we document our inspection with photos so you can see exactly what we found and why we recommend the fix.',
+      aboutP2: 'We diagnose the source of the damage, not just the symptom, and make repairs that hold. And if the damage came from a storm, we can walk you straight into the insurance claims process and advocate on your behalf.',
+      aboutImg: 'assets/roof-ranch.jpg',
+      featuresTitle: 'Repairs that fix the cause, not just the symptom',
+      features: [
+        { h: 'Honest Assessments', p: 'If a repair isn\u2019t needed, we tell you, no upselling, ever.' },
+        { h: 'Photo-Documented Inspections', p: 'Pictures from your inspection show exactly what we found.' },
+        { h: 'Storm Damage Repair', p: 'Wind, hail, and water damage assessed and restored quickly.' },
+        { h: 'Leak Diagnosis', p: 'We track leaks to their real source before sealing them up.' },
+        { h: 'Shingle & Siding Repair', p: 'Damaged sections replaced with matching materials and finishes.' },
+        { h: 'Emergency Response', p: 'Temporary protection to stop further damage while we plan the fix.' },
+        { h: 'Insurance Coordination', p: 'We document damage and represent you through the claim.' },
+        { h: 'Preventive Tune-Ups', p: 'Catch small issues before they become expensive replacements.' },
+      ],
+      g1:'assets/roof-truck.jpg', g2:'assets/repairs.jpg', g3:'assets/roof-brick.jpg', g4:'assets/siding-install.avif', g5:'assets/roof-detail.jpg',
+      ctaTitle: 'Damage to your exterior? Let\u2019s fix it.',
+      ctaText: 'Get a free inspection, photos of what we find, and a clear, honest repair plan, fast.',
+    } };
+  }
+}
+</script>
+</body>
+</html>
