@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- seo:start -->
 <title>Contact Us — Free Estimate | A&amp;R United Construction — Henderson, KY</title>
-<meta name="description" content="Request a free estimate from A&amp;R United Construction. Call (270) 577-0542, email office@arunitedconstruction.com, or send the quote form.">
+<meta name="description" content="Request a free estimate from A&amp;R United Construction. Call (270) 844-3355, email office@arunitedconstruction.com, or send the quote form.">
 <link rel="canonical" href="https://www.arunitedconstruction.com/contact">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="A&amp;R United Construction">
 <meta property="og:title" content="Contact Us — Free Estimate | A&amp;R United Construction — Henderson, KY">
-<meta property="og:description" content="Request a free estimate from A&amp;R United Construction. Call (270) 577-0542, email office@arunitedconstruction.com, or send the quote form.">
+<meta property="og:description" content="Request a free estimate from A&amp;R United Construction. Call (270) 844-3355, email office@arunitedconstruction.com, or send the quote form.">
 <meta property="og:url" content="https://www.arunitedconstruction.com/contact">
 <meta property="og:image" content="https://www.arunitedconstruction.com/assets/hero-aerial.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -78,10 +78,14 @@
           </div>
         </div>
 
-        <div style="background:#fff; border:1px solid #e7e3dd; border-radius:10px; padding:34px 34px 30px; box-shadow:0 24px 60px rgba(0,0,0,.07);">
+        <div style="background:#fff; border:1px solid #dfe9f2; border-top:5px solid #2f80bd; border-radius:12px; padding:30px 34px 30px; box-shadow:0 30px 80px rgba(21,42,60,.16);">
           <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
           <form onSubmit="{{ submit }}">
-            <h3 style="font-family:'Archivo'; font-weight:800; font-size:22px; margin:0 0 8px;">&#128227; New Request &ndash; Estimates &amp; Questions &#128227;</h3>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 12px;">
+              <span style="display:inline-flex; align-items:center; gap:7px; background:rgba(47,128,189,.1); color:#1d5f92; font-weight:800; font-size:11px; letter-spacing:.12em; text-transform:uppercase; padding:7px 12px; border-radius:100px;"><span style="width:7px; height:7px; border-radius:50%; background:#2f80bd;"></span>Free Estimate</span>
+              <span style="font-size:12px; font-weight:600; color:#8a8f98;">Takes about 60 seconds</span>
+            </div>
+            <h3 style="font-family:'Archivo'; font-weight:800; font-size:26px; letter-spacing:-.01em; margin:0 0 8px;">New Request &ndash; Estimates &amp; Questions</h3>
             <p style="font-size:13.5px; line-height:1.6; color:#6b6f78; margin:0 0 20px;">Have a project in mind or a question about our services? Whether you&rsquo;re dealing with an urgent repair, exploring options for a replacement, or simply gathering quotes, your answers help us tailor our estimate and service approach to fit your goals, timeline, and budget.</p>
 
             <div style="display:flex; align-items:center; gap:18px; margin-bottom:10px;">
@@ -138,7 +142,7 @@
             <div style="margin:0 0 6px;">
               <div style="display:flex; align-items:center; gap:10px;">
                 <span style="width:22px; height:3px; background:#2f80bd; border-radius:2px;"></span>
-                <span style="font-family:'Archivo'; font-weight:800; font-size:16px;">Service Details &ndash; &#128269; How Can We Help?</span>
+                <span style="font-family:'Archivo'; font-weight:800; font-size:16px;">Service Details &ndash; How Can We Help?</span>
               </div>
               <p style="font-size:13px; line-height:1.55; color:#8a8f98; margin:6px 0 0;">The more we know, the better we can reach out with the right support. Check all that apply and we&rsquo;ll take it from there!</p>
             </div>
@@ -187,7 +191,7 @@
                   <button type="button" onClick="{{ p.toggle }}" style="{{ p.style }}"><span>{{ p.label }}</span><span style="color:#2f80bd; font-weight:800;">{{ p.mark }}</span></button>
                 </sc-for>
               </div>
-              <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:16px 0 8px;">&#128197; Project timeline</span>
+              <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:16px 0 8px;">Project timeline</span>
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                 <sc-for list="{{ timelineOpts }}" as="t" hint-placeholder-count="4">
                   <button type="button" onClick="{{ t.pick }}" style="{{ t.style }}"><span>{{ t.label }}</span><span style="color:#2f80bd; font-weight:800;">{{ t.mark }}</span></button>
@@ -199,7 +203,7 @@
                   <button type="button" onClick="{{ a.toggle }}" style="{{ a.style }}"><span>{{ a.label }}</span><span style="color:#2f80bd; font-weight:800;">{{ a.mark }}</span></button>
                 </sc-for>
               </div>
-              <label style="display:block; margin-top:14px;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">&#128227; How did you hear about us?</span>
+              <label style="display:block; margin-top:14px;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">How did you hear about us?</span>
                 <select value="{{ f.heardFrom }}" onChange="{{ setHeardFrom }}" style="width:100%; border:1px solid #d8d4cd; border-radius:5px; padding:10px 12px; font-size:14.5px; color:#15161a; outline:none; background:#fff;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.12);">
                   <option value="">Select one&hellip;</option>
                   <option>Google Search</option>
@@ -211,7 +215,7 @@
                   <option>Other</option>
                 </select>
               </label>
-              <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:16px 0 6px;">&#128247; Upload image regarding request <span style="color:#9a958c; font-weight:500;">(Optional)</span></span>
+              <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:16px 0 6px;">Upload image regarding request <span style="color:#9a958c; font-weight:500;">(Optional)</span></span>
               <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ true }}">
               <label style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; border:1.5px dashed #c9c4bb; border-radius:6px; padding:20px 14px; cursor:pointer; background:#faf9f7; text-align:center;" style-hover="border-color:#2f80bd; background:#f2f7fb;">
                 <span style="font-size:13.5px; font-weight:600; color:#3c4048;">Choose a photo of the issue or area</span>

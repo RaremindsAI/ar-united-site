@@ -29,6 +29,7 @@
 input,select,textarea,button{font-family:inherit;}
 input::placeholder,textarea::placeholder{color:#a39e95;}
 @keyframes arUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes arStepIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 </style>
 <script src="assets/fx.js"></script>
 <script src="assets/intake.js"></script>
@@ -70,7 +71,7 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
 
         <div style="background:#fff; border:1px solid #e7e3dd; border-radius:14px; padding:34px 34px 38px; box-shadow:0 22px 60px rgba(20,22,26,.06);">
           <div style="display:flex; gap:8px; margin-bottom:30px; flex-wrap:wrap;">
-            <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+            <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
               <button onClick="{{ st.go }}" style="{{ st.style }}">
                 <span style="width:22px; height:22px; flex:none; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; background:{{ st.dot }}; color:{{ st.dotColor }};">{{ st.n }}</span>
                 {{ st.label }}
@@ -126,21 +127,46 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
             </div>
             </sc-if>
 
-
             <div style="display:flex; justify-content:flex-end; margin-top:26px;">
-              <button onClick="{{ next }}" style="display:inline-flex; align-items:center; gap:9px; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; padding:15px 26px; border-radius:6px;" style-hover="filter:brightness(1.08);">Next: Roof details &rarr;</button>
+              <button onClick="{{ next }}" style="display:inline-flex; align-items:center; gap:9px; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; padding:15px 26px; border-radius:6px;" style-hover="filter:brightness(1.08);">Next: Your roof &rarr;</button>
             </div>
           </div>
           </sc-if>
 
+          <sc-if value="{{ notStep1 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; align-items:center; gap:16px; padding:12px; border:1px solid #d6e6f2; background:#f0f6fb; border-radius:11px; margin-bottom:24px; animation:arStepIn .3s ease both;">
+            <sc-if value="{{ snapImgOk }}" hint-placeholder-val="{{ false }}">
+              <img ref="{{ snapImgRef }}" alt="Aerial view of your measured roof" style="width:138px; height:92px; object-fit:cover; border-radius:8px; flex:none; border:1px solid #b9d2e6;">
+            </sc-if>
+            <sc-if value="{{ snapSvgOk }}" hint-placeholder-val="{{ false }}">
+              <svg viewBox="0 0 138 92" style="width:138px; height:92px; border-radius:8px; flex:none; border:1px solid #b9d2e6; background:#10161b;"><polygon points="{{ snapPoly }}" fill="rgba(92,179,234,.3)" stroke="#5cb3ea" stroke-width="2" stroke-linejoin="round"></polygon></svg>
+            </sc-if>
+            <sc-if value="{{ snapNone }}" hint-placeholder-val="{{ false }}">
+              <div style="width:138px; height:92px; border-radius:8px; flex:none; border:1px solid #b9d2e6; background:#10161b; display:flex; align-items:center; justify-content:center;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5cb3ea" stroke-width="1.6" stroke-linejoin="round"><path d="M3 10 L12 4 L21 10"></path><rect x="5.5" y="10" width="13" height="9"></rect></svg></div>
+            </sc-if>
+            <div style="flex:1; min-width:0;">
+              <div style="font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#2f80bd; margin-bottom:3px;">Your roof</div>
+              <div style="font-family:'Archivo'; font-weight:800; font-size:20px;">{{ areaTxt }}</div>
+              <div style="font-size:12.5px; color:#6b7683; margin-top:2px;">{{ snapCaption }}</div>
+            </div>
+            <button onClick="{{ goMeasure }}" style="flex:none; cursor:pointer; background:#fff; color:#2f80bd; border:1.5px solid #9cc3e0; font-weight:700; font-size:12.5px; padding:9px 15px; border-radius:6px;" style-hover="border-color:#2f80bd; background:#f0f6fb;">Adjust</button>
+          </div>
+          </sc-if>
+
           <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
-          <div>
+          <div style="animation:arStepIn .3s ease both;">
             <div style="font-family:'Archivo'; font-weight:800; font-size:24px; margin:0 0 6px;">Your roof today</div>
-            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 22px;">The current system and condition tell us how much prep and reinforcement the restoration needs.</p>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 22px;">The current system and its history tell us how much prep and reinforcement the restoration needs.</p>
             <div style="margin-bottom:20px;">
               <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Current roof system</span>
               <div style="display:flex; flex-wrap:wrap; gap:10px;">
                 <sc-for list="{{ systemOpts }}" as="o" hint-placeholder-count="6"><button onClick="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button></sc-for>
+              </div>
+            </div>
+            <div style="margin-bottom:20px;">
+              <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Has it been coated before?</span>
+              <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                <sc-for list="{{ coatedOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button></sc-for>
               </div>
             </div>
             <div style="margin-bottom:20px;">
@@ -149,14 +175,45 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
                 <sc-for list="{{ conditionOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button></sc-for>
               </div>
             </div>
-            <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:26px; align-items:start;">
+            <sc-if value="{{ isMetal }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-bottom:20px; animation:arStepIn .25s ease both;">
+              <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Any rust on the metal panels?</span>
+              <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                <sc-for list="{{ rustOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button></sc-for>
+              </div>
+            </div>
+            </sc-if>
+            <div style="display:flex; justify-content:space-between; margin-top:26px;">
+              <button onClick="{{ back }}" style="background:transparent; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#5c616b; padding:15px 8px;" style-hover="color:#15161a;">&larr; Back</button>
+              <button onClick="{{ next }}" style="display:inline-flex; align-items:center; gap:9px; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; padding:15px 26px; border-radius:6px;" style-hover="filter:brightness(1.08);">Next: Roof details &rarr;</button>
+            </div>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+          <div style="animation:arStepIn .3s ease both;">
+            <div style="font-family:'Archivo'; font-weight:800; font-size:24px; margin:0 0 6px;">Leaks, rooftop units &amp; goals</div>
+            <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 22px;">Leaks and penetrations get extra reinforcement, and your goals help us recommend the right system.</p>
+            <div style="margin-bottom:20px;">
+              <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Any active leaks right now?</span>
+              <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                <sc-for list="{{ leaksOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button></sc-for>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:26px; align-items:start; margin-bottom:20px;">
               <div>
                 <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Building height / access</span>
                 <div style="display:flex; flex-wrap:wrap; gap:10px;">
                   <sc-for list="{{ accessOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button></sc-for>
                 </div>
               </div>
-              <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Rooftop units &amp; penetrations</span><input inputmode="numeric" value="{{ units }}" onChange="{{ setUnits }}" placeholder="e.g. 6" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:11px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
+              <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">AC units &amp; penetrations</span><input inputmode="numeric" value="{{ units }}" onChange="{{ setUnits }}" placeholder="e.g. 6" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:11px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"><span style="display:block; font-size:12px; color:#8a8f98; margin-top:6px;">HVAC units, vents, pipes, skylights</span></label>
+            </div>
+            <div>
+              <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">What matters most to you? <span style="color:#9a958c; font-weight:500;">(select all that apply)</span></span>
+              <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                <sc-for list="{{ goalOpts }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button></sc-for>
+              </div>
             </div>
             <div style="display:flex; justify-content:space-between; margin-top:26px;">
               <button onClick="{{ back }}" style="background:transparent; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#5c616b; padding:15px 8px;" style-hover="color:#15161a;">&larr; Back</button>
@@ -165,8 +222,8 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
           </div>
           </sc-if>
 
-          <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
-          <div>
+          <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ false }}">
+          <div style="animation:arStepIn .3s ease both;">
             <div style="font-family:'Archivo'; font-weight:800; font-size:24px; margin:0 0 6px;">Coating system</div>
             <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 22px;">Not sure? We will recommend the right system in your emailed estimate. Ponding water usually points to silicone.</p>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
@@ -179,12 +236,6 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
                 <div style="font-size:13.5px; line-height:1.55; color:#5c616b;">Reflective, flexible, cost-effective. A great cool-roof option for well-draining roofs.</div>
               </button>
             </div>
-            <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Warranty term</span>
-            <div class="ar-keep3" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
-              <button onClick="{{ warr10 }}" style="{{ w10 }}">10 years</button>
-              <button onClick="{{ warr15 }}" style="{{ w15 }}">15 years</button>
-              <button onClick="{{ warr20 }}" style="{{ w20 }}">20 years</button>
-            </div>
             <div style="display:flex; justify-content:space-between; margin-top:28px;">
               <button onClick="{{ back }}" style="background:transparent; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#5c616b; padding:15px 8px;" style-hover="color:#15161a;">&larr; Back</button>
               <button onClick="{{ next }}" style="display:inline-flex; align-items:center; gap:9px; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; padding:15px 26px; border-radius:6px;" style-hover="filter:brightness(1.08);">Next: Get my ballpark &rarr;</button>
@@ -192,10 +243,10 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
           </div>
           </sc-if>
 
-          <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ isStep5 }}" hint-placeholder-val="{{ false }}">
           <div>
             <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
-            <div>
+            <div style="animation:arStepIn .3s ease both;">
               <div style="font-family:'Archivo'; font-weight:800; font-size:24px; margin:0 0 6px;">Where do we send it?</div>
               <p style="font-size:15px; line-height:1.6; color:#5c616b; margin:0 0 22px;">Drop your details and our team emails your ballpark price within 30 minutes during business hours. For an exact, itemized estimate, you can schedule a free onsite assessment after it arrives.</p>
               <form onSubmit="{{ submit }}">
@@ -236,7 +287,14 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
         </div>
 
         <div style="position:sticky; top:120px;">
-          <div style="background:#15161a; color:#fff; border-radius:14px; padding:30px 30px 32px; box-shadow:0 22px 60px rgba(20,22,26,.18);">
+          <div style="background:#15161a; color:#fff; border-radius:14px; overflow:hidden; box-shadow:0 22px 60px rgba(20,22,26,.18);">
+            <sc-if value="{{ snapImgOk }}" hint-placeholder-val="{{ false }}">
+              <div style="position:relative;">
+                <img ref="{{ snapImgRef }}" alt="Aerial view of your measured roof" style="width:100%; height:170px; object-fit:cover;">
+                <div style="position:absolute; left:12px; bottom:12px; background:rgba(12,13,16,.82); border:1px solid rgba(92,179,234,.4); color:#fff; font-weight:700; font-size:13px; padding:7px 13px; border-radius:100px;">{{ areaTxt }}</div>
+              </div>
+            </sc-if>
+            <div style="padding:30px 30px 32px;">
             <div style="font-weight:700; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:#5cb3ea; margin-bottom:14px;">Your project summary</div>
             <div style="font-family:'Archivo'; font-weight:800; font-size:clamp(23px,2.3vw,29px); line-height:1.12; letter-spacing:-.015em;">We&rsquo;ll email your ballpark price</div>
             <div style="font-size:13.5px; color:#9a9da4; margin-top:8px;">within 30 minutes, based on the details below</div>
@@ -245,12 +303,18 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
             <div style="display:flex; flex-direction:column; gap:11px;">
               <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Roof area</span><span style="font-weight:600;">{{ areaTxt }}</span></div>
               <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Current system</span><span style="font-weight:600;">{{ systemLabel }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Coated before</span><span style="font-weight:600;">{{ coatedLabel }}</span></div>
               <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Condition</span><span style="font-weight:600;">{{ conditionLabel }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Active leaks</span><span style="font-weight:600;">{{ leaksLabel }}</span></div>
+              <sc-if value="{{ isMetal }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Rust</span><span style="font-weight:600;">{{ rustLabel }}</span></div>
+              </sc-if>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Units &amp; penetrations</span><span style="font-weight:600;">{{ units }}</span></div>
               <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Coating</span><span style="font-weight:600;">{{ coatingLabel }}</span></div>
-              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Warranty</span><span style="font-weight:600;">{{ warrantyLabel }} years</span></div>
-              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px;"><span style="color:#9a9da4;">Rooftop units</span><span style="font-weight:600;">{{ units }}</span></div>
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:14px; align-items:flex-start;"><span style="color:#9a9da4; flex:none;">Main goals</span><span style="font-weight:600; text-align:right;">{{ goalsLabel }}</span></div>
             </div>
             <div style="margin-top:22px; padding:14px 16px; background:rgba(92,179,234,.1); border:1px solid rgba(92,179,234,.25); border-radius:9px; font-size:12.5px; line-height:1.6; color:#c6d4de;">Your ballpark arrives by email within 30 minutes. For an exact, itemized estimate, schedule a free onsite assessment after you receive it.</div>
+            </div>
           </div>
           <div style="display:flex; align-items:center; gap:12px; margin-top:18px; padding:0 4px;">
             <span style="width:40px; height:40px; flex:none; border-radius:50%; background:#2f80bd; color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px;">&#9742;</span>
@@ -275,13 +339,15 @@ function ringAreaM2(pts) {
   }
   return Math.abs(a * R * R / 2);
 }
+var GKEY = 'AIzaSyDuCxKIqfCmpJPsiT299jUe-pi3mE5NfnI';
 class Component extends DCLogic {
   state = {
     step: 1, mode: 'map',
-    addr: '', pts: [], measured: 0, drawing: false, solarBusy: false, solarUsed: false, showManual: false, center: { lat: 37.8361, lng: -87.59 }, zoom: 18, geoErr: '',
+    addr: '', pts: [], measured: 0, drawing: false, solarBusy: false, solarUsed: false, showManual: false, center: { lat: 37.8361, lng: -87.59 }, zoom: 18, geoErr: '', snapBroken: false, snapReady: '',
     length: '120', width: '80', sqft: '9600',
     system: 'TPO', condition: 'weathered', units: '6', access: 'single',
-    coating: 'silicone', warranty: '15',
+    coatedBefore: 'never', leaks: 'none', rust: 'none', goals: [],
+    coating: 'silicone',
     c: { name: '', company: '', email: '', phone: '', address: '', notes: '', consent: true },
     sent: false
   };
@@ -289,14 +355,24 @@ class Component extends DCLogic {
   val(k) { return (e) => { const v = e.target.value; this.setState({ [k]: v }); }; }
   cField(k) { return (e) => { const v = e.target.value; this.setState((s) => ({ c: { ...s.c, [k]: v } })); }; }
   pick(k, v) { return () => this.setState({ [k]: v }); }
-  goStep(n) { return () => this.setState({ step: n }); }
-  componentDidMount() { this.ensureGmaps(); }
+  goStep(n) { return () => this.setState((s) => ({ step: n, c: (n === 5 && !s.c.address.trim() && s.addr.trim()) ? { ...s.c, address: s.addr.trim() } : s.c })); }
+  componentDidMount() { this.ensureGmaps(); this.probeSnap(); }
+  componentDidUpdate() { this.probeSnap(); this.syncSnapEls(); }
+  probeSnap() {
+    const url = this.snapshotUrl();
+    if (!url || url === this._probedUrl) return;
+    this._probedUrl = url;
+    const im = new Image();
+    im.onload = () => { if (this._probedUrl === url) this.setState({ snapReady: url, snapBroken: false }); };
+    im.onerror = () => { if (this._probedUrl === url) this.setState({ snapReady: '', snapBroken: true }); };
+    im.src = url;
+  }
   ensureGmaps() {
     if (window.google && window.google.maps) return;
     if (document.getElementById('gmaps-sdk')) return;
     var s = document.createElement('script');
     s.id = 'gmaps-sdk'; s.async = true;
-    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDuCxKIqfCmpJPsiT299jUe-pi3mE5NfnI&libraries=places&loading=async';
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=' + GKEY + '&libraries=places&loading=async';
     s.onload = () => { try { this.initMap(); } catch (e) {} };
     document.head.appendChild(s);
   }
@@ -314,7 +390,7 @@ class Component extends DCLogic {
       }
     });
   }
-  mapRef = (el) => { this.mapEl = el; if (el) this.initMap(); else { if (this.poly) { try { this.poly.setMap(null); } catch (e) {} this.poly = null; } (this.markers || []).forEach((m) => { try { m.setMap(null); } catch (e) {} }); this.markers = []; this.map = null; } };
+  mapRef = (el) => { this.mapEl = el; if (el) this.initMap(); else { if (this.poly) { try { this.poly.setMap(null); } catch (e) {} this.poly = null; } (this.markers || []).forEach((m) => { try { m.setMap(null); } catch (e) {} }); this.markers = []; this.map = null; this._ac = null; } };
   initMap() {
     if (!this.mapEl) return;
     if (!(window.google && window.google.maps)) { this.ensureGmaps(); clearTimeout(this._lt); this._lt = setTimeout(() => this.initMap(), 250); return; }
@@ -327,8 +403,7 @@ class Component extends DCLogic {
     map.addListener('idle', () => { var cc = map.getCenter(); if (cc) { this._center = { lat: cc.lat(), lng: cc.lng() }; this._zoom = map.getZoom(); } });
     if (this.state.pts && this.state.pts.length) { this.redraw(); if (this.state.pts.length >= 2) { var b = new g.LatLngBounds(); this.state.pts.forEach((p) => b.extend(p)); map.fitBounds(b); } }
   }
-
-  addPoint(ll) { if (!ll) return; var pts = (this.state.pts || []).concat([{ lat: ll.lat, lng: ll.lng }]); this.setState({ pts: pts, measured: Math.round(ringAreaM2(pts) * 10.7639), mode: 'map' }, () => this.redraw()); }
+  addPoint(ll) { if (!ll) return; var pts = (this.state.pts || []).concat([{ lat: ll.lat, lng: ll.lng }]); this.setState({ pts: pts, measured: Math.round(ringAreaM2(pts) * 10.7639), mode: 'map', snapBroken: false }, () => this.redraw()); }
   redraw() {
     if (!this.map || !(window.google && window.google.maps)) return;
     var g = window.google.maps;
@@ -338,7 +413,6 @@ class Component extends DCLogic {
     if (pts.length >= 2) this.poly = new g.Polygon({ paths: pts, strokeColor: '#2f80bd', strokeWeight: 2, fillColor: '#2f80bd', fillOpacity: 0.3, clickable: false, map: this.map });
     pts.forEach((p) => this.markers.push(new g.Marker({ position: p, map: this.map, clickable: false, icon: { path: g.SymbolPath.CIRCLE, scale: 5, fillColor: '#2f80bd', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2 } })));
   }
-
   drawToggleH = () => {
     if (!this.map) return;
     if (this.state.drawing) { this.map.setOptions({ draggable: true, draggableCursor: null, disableDoubleClickZoom: false }); this.setState({ drawing: false }); }
@@ -351,14 +425,14 @@ class Component extends DCLogic {
     var cc = this.map.getCenter(); if (!cc) return;
     var lat = cc.lat(), lng = cc.lng();
     this.setState({ solarBusy: true, geoErr: '' });
-    fetch('https://solar.googleapis.com/v1/buildingInsights:findClosest?location.latitude=' + lat + '&location.longitude=' + lng + '&requiredQuality=LOW&key=AIzaSyDuCxKIqfCmpJPsiT299jUe-pi3mE5NfnI')
+    fetch('https://solar.googleapis.com/v1/buildingInsights:findClosest?location.latitude=' + lat + '&location.longitude=' + lng + '&requiredQuality=LOW&key=' + GKEY)
       .then((r) => r.json())
       .then((d) => {
         var sp = d && d.solarPotential; var m2 = sp && sp.wholeRoofStats && sp.wholeRoofStats.areaMeters2;
         if (!m2 && sp && sp.buildingStats && sp.buildingStats.areaMeters2) m2 = sp.buildingStats.areaMeters2;
         if (m2) {
-          if (d.center) { this.map.setCenter({ lat: d.center.latitude, lng: d.center.longitude }); this.map.setZoom(20); }
-          this.setState({ measured: Math.round(m2 * 10.7639), mode: 'map', pts: [], drawing: false, solarBusy: false, solarUsed: true }, () => this.redraw());
+          if (d.center) { this.map.setCenter({ lat: d.center.latitude, lng: d.center.longitude }); this.map.setZoom(20); this._center = { lat: d.center.latitude, lng: d.center.longitude }; this._zoom = 20; }
+          this.setState({ measured: Math.round(m2 * 10.7639), mode: 'map', pts: [], drawing: false, solarBusy: false, solarUsed: true, snapBroken: false }, () => this.redraw());
         } else { this.setState({ solarBusy: false, geoErr: 'No roof data at this spot yet. Draw the roof manually instead.' }); }
       })
       .catch(() => this.setState({ solarBusy: false, geoErr: 'Auto-detect is unavailable here. Draw the roof manually instead.' }));
@@ -371,31 +445,52 @@ class Component extends DCLogic {
       else this.setState({ geoErr: 'Address not found. Drag the map to your building.' });
     });
   };
-
+  _snapEls = [];
+  snapImgRef = (el) => {
+    this._snapEls = this._snapEls.filter((e) => e !== el && e.isConnected);
+    if (el) { this._snapEls.push(el); const u = this.snapshotUrl(); if (u && el.src !== u) el.src = u; }
+  };
+  syncSnapEls() { const u = this.snapshotUrl(); if (!u) return; this._snapEls.forEach((el) => { if (el.isConnected && el.src !== u) el.src = u; }); }
+  snapshotUrl() {
+    const s = this.state;
+    if (s.mode !== 'map') return '';
+    const pts = s.pts || [];
+    if (pts.length >= 3) {
+      const ring = pts.concat([pts[0]]).map((p) => p.lat.toFixed(6) + ',' + p.lng.toFixed(6)).join('|');
+      return 'https://maps.googleapis.com/maps/api/staticmap?maptype=satellite&scale=2&size=640x400&path=color:0x2f80bdff|weight:3|fillcolor:0x2f80bd55|' + ring + '&key=' + GKEY;
+    }
+    if (s.solarUsed && s.measured && this._center) {
+      return 'https://maps.googleapis.com/maps/api/staticmap?maptype=satellite&scale=2&size=640x400&center=' + this._center.lat.toFixed(6) + ',' + this._center.lng.toFixed(6) + '&zoom=19&key=' + GKEY;
+    }
+    return '';
+  }
+  snapPolyPts() {
+    const pts = this.state.pts || [];
+    if (pts.length < 3) return '';
+    const lats = pts.map((p) => p.lat), lngs = pts.map((p) => p.lng);
+    const minLa = Math.min.apply(null, lats), maxLa = Math.max.apply(null, lats);
+    const minLo = Math.min.apply(null, lngs), maxLo = Math.max.apply(null, lngs);
+    const spanLa = (maxLa - minLa) || 1e-9, spanLo = (maxLo - minLo) || 1e-9;
+    const W = 138, H = 92, pad = 12;
+    const k = Math.min((W - pad * 2) / spanLo, (H - pad * 2) / spanLa);
+    const ox = (W - spanLo * k) / 2, oy = (H - spanLa * k) / 2;
+    return pts.map((p) => (ox + (p.lng - minLo) * k).toFixed(1) + ',' + (oy + (maxLa - p.lat) * k).toFixed(1)).join(' ');
+  }
   renderVals() {
     const s = this.state;
     const L = Number(s.length) || 0, W = Number(s.width) || 0;
     const area = Math.max(0, Math.round(s.mode === 'map' ? (s.measured || 0) : (s.mode === 'sqft' ? (Number(s.sqft) || 0) : L * W)));
-
-    // footprint overlay (px, aspect-preserving)
-    const m = Math.max(L, W, 1), scale = 200 / m;
-    const rectW = Math.max(24, Math.round((s.mode === 'sqft' ? Math.sqrt(area) : W) * (s.mode === 'sqft' ? 200 / Math.max(Math.sqrt(area), 1) : scale))) + 'px';
-    const rectH = Math.max(24, Math.round((s.mode === 'sqft' ? Math.sqrt(area) : L) * (s.mode === 'sqft' ? 200 / Math.max(Math.sqrt(area), 1) : scale))) + 'px';
-
     const systemLabels = { TPO: 'TPO', EPDM: 'EPDM', Metal: 'Metal', 'Mod-Bit': 'Modified bitumen', BUR: 'Built-up', Other: 'Not sure' };
     const condLabels = { good: 'Good, watertight', weathered: 'Weathered', leaking: 'Leaking / ponding' };
+    const coatedLabels = { never: 'Never', before: 'Yes, coated before', unsure: 'Not sure' };
+    const leakLabels = { none: 'None', minor: 'A few minor', major: 'Multiple / major' };
+    const rustLabels = { none: 'None', some: 'Some surface rust', heavy: 'Heavy rust' };
+    const goalLabels = { waterproof: 'Stop leaks / waterproof', energy: 'Energy savings', extend: 'Extend roof life', appearance: 'Appearance' };
 
-    const stepMeta = [
-      { n: 1, label: 'Building' }, { n: 2, label: 'Roof' }, { n: 3, label: 'System' }, { n: 4, label: 'Estimate' }
-    ];
+    const stepMeta = [ { n: 1, label: 'Building' }, { n: 2, label: 'Roof' }, { n: 3, label: 'Details' }, { n: 4, label: 'System' }, { n: 5, label: 'Estimate' } ];
     const steps = stepMeta.map((st) => {
       const active = s.step === st.n, done = s.step > st.n;
-      const pill = (on) => 'cursor:pointer; border:1.5px solid ' + (on ? '#2f80bd' : '#d8d4cd') + '; background:' + (on ? '#2f80bd' : '#fff') + '; color:' + (on ? '#fff' : '#3c4048') + '; font-weight:600; font-size:13.5px; padding:10px 16px; border-radius:100px;';
-    const grp = (key, opts) => opts.map((o) => ({ label: o.label, on: this.pick(key, o.v), style: pill(s[key] === o.v) }));
-    const systemOpts = grp('system', [{v:'TPO',label:'TPO'},{v:'EPDM',label:'EPDM'},{v:'Metal',label:'Metal'},{v:'Mod-Bit',label:'Modified bitumen'},{v:'BUR',label:'Built-up'},{v:'Other',label:'Not sure'}]);
-    const conditionOpts = grp('condition', [{v:'good',label:'Good, watertight'},{v:'weathered',label:'Weathered but sound'},{v:'leaking',label:'Leaking / ponding'}]);
-    const accessOpts = grp('access', [{v:'single',label:'Single story'},{v:'mid',label:'2\u20133 stories'},{v:'high',label:'4+ / hard access'}]);
-    return {
+      return {
         n: st.n, label: st.label, go: this.goStep(st.n),
         dot: active ? '#2f80bd' : (done ? '#cfe3f2' : '#e6e2db'),
         dotColor: active ? '#fff' : (done ? '#2f80bd' : '#8a8f98'),
@@ -409,19 +504,32 @@ class Component extends DCLogic {
       '; font-weight:700; font-size:13px; padding:9px 16px; border-radius:6px; box-shadow:' + (on ? '0 1px 4px rgba(0,0,0,.1)' : 'none') + ';';
     const coatCard = (on) => 'text-align:left; cursor:pointer; border:2px solid ' + (on ? '#2f80bd' : '#e0dcd4') + '; background:' + (on ? '#f0f6fb' : '#fff') +
       '; border-radius:11px; padding:20px; transition:border-color .15s, background .15s;';
-    const warBtn = (on) => 'cursor:pointer; border:1.5px solid ' + (on ? '#2f80bd' : '#d8d4cd') + '; background:' + (on ? '#2f80bd' : '#fff') + '; color:' + (on ? '#fff' : '#3c4048') +
-      '; font-weight:700; font-size:14px; padding:13px 0; border-radius:8px;';
-
-    const pill = (on) => 'cursor:pointer; border:1.5px solid ' + (on ? '#2f80bd' : '#d8d4cd') + '; background:' + (on ? '#2f80bd' : '#fff') + '; color:' + (on ? '#fff' : '#3c4048') + '; font-weight:600; font-size:13.5px; padding:10px 16px; border-radius:100px;';
+    const pill = (on) => 'cursor:pointer; border:1.5px solid ' + (on ? '#2f80bd' : '#d8d4cd') + '; background:' + (on ? '#2f80bd' : '#fff') + '; color:' + (on ? '#fff' : '#3c4048') + '; font-weight:600; font-size:13.5px; padding:10px 16px; border-radius:100px; transition:border-color .15s, background .15s, color .15s;';
     const grp = (key, opts) => opts.map((o) => ({ label: o.label, on: this.pick(key, o.v), style: pill(s[key] === o.v) }));
     const systemOpts = grp('system', [{v:'TPO',label:'TPO'},{v:'EPDM',label:'EPDM'},{v:'Metal',label:'Metal'},{v:'Mod-Bit',label:'Modified bitumen'},{v:'BUR',label:'Built-up'},{v:'Other',label:'Not sure'}]);
     const conditionOpts = grp('condition', [{v:'good',label:'Good, watertight'},{v:'weathered',label:'Weathered but sound'},{v:'leaking',label:'Leaking / ponding'}]);
     const accessOpts = grp('access', [{v:'single',label:'Single story'},{v:'mid',label:'2\u20133 stories'},{v:'high',label:'4+ / hard access'}]);
+    const coatedOpts = grp('coatedBefore', [{v:'never',label:'Never coated'},{v:'before',label:'Yes, coated before'},{v:'unsure',label:'Not sure'}]);
+    const leaksOpts = grp('leaks', [{v:'none',label:'No active leaks'},{v:'minor',label:'A few minor leaks'},{v:'major',label:'Multiple / major leaks'}]);
+    const rustOpts = grp('rust', [{v:'none',label:'No rust'},{v:'some',label:'Some surface rust'},{v:'heavy',label:'Heavy rust'}]);
+    const goalOpts = [{v:'waterproof',label:'Stop leaks / waterproofing'},{v:'energy',label:'Energy savings / cool roof'},{v:'extend',label:'Extend roof life'},{v:'appearance',label:'Appearance / aesthetics'}].map((o) => {
+      const on = s.goals.includes(o.v);
+      return { label: (on ? '\u2713 ' : '') + o.label, style: pill(on),
+        on: () => this.setState({ goals: on ? s.goals.filter((g) => g !== o.v) : s.goals.concat([o.v]) }) };
+    });
+
+    const snapUrl = this.snapshotUrl();
+    const snapImgOk = !!snapUrl && s.snapReady === snapUrl;
+    const snapSvgOk = !snapImgOk && (s.pts || []).length >= 3;
+    const snapCaption = s.solarUsed && !(s.pts || []).length ? 'Detected automatically from satellite data' : ((s.pts || []).length >= 3 ? 'Measured from your outline on the map' : (s.mode === 'sqft' ? 'Entered as total square footage' : (s.mode === 'dim' ? 'Entered as ' + L + ' \u00d7 ' + W + ' ft' : 'Measured on the map')));
+
     return {
       steps,
-      isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, isStep4: s.step === 4,
-      next: this.goStep(Math.min(4, s.step + 1)),
+      isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, isStep4: s.step === 4, isStep5: s.step === 5,
+      notStep1: s.step > 1 && !s.sent,
+      next: this.goStep(Math.min(5, s.step + 1)),
       back: this.goStep(Math.max(1, s.step - 1)),
+      goMeasure: this.goStep(1),
       isDim: s.mode === 'dim', isSqft: s.mode === 'sqft',
       modeDim: this.pick('mode', 'dim'), modeSqft: this.pick('mode', 'sqft'),
       tabDim: tab(s.mode === 'dim'), tabSqft: tab(s.mode === 'sqft'),
@@ -438,22 +546,44 @@ class Component extends DCLogic {
       mapHint: s.geoErr ? s.geoErr : (s.solarBusy ? 'Detecting your roof from Google Solar\u2026' : (s.drawing ? 'Click each corner of your roof, then Finish. The area updates live.' : (s.solarUsed && s.measured ? 'Roof detected automatically. Draw manually to override.' : (s.measured ? 'Roof measured. Draw again to redo, or Clear.' : 'Search or drag to your building, then Auto-detect the roof (or Draw manually).')))),
       toggleManual: () => this.setState((st) => ({ showManual: !st.showManual })), showManual: s.showManual,
       manualLabel: s.showManual ? 'Hide manual entry' : 'Prefer to enter dimensions manually?',
-      rectW, rectH, widthLabel: (W || Math.round(Math.sqrt(area)) || 0) + ' ft', lengthLabel: (L || Math.round(Math.sqrt(area)) || 0) + ' ft',
       areaTxt: area.toLocaleString('en-US') + ' sq ft',
-      units: s.units,
-      setUnits: this.num('units'),
-      systemOpts, conditionOpts, accessOpts,
+      snapUrl, snapImgOk, snapSvgOk, snapNone: !snapImgOk && !snapSvgOk, snapPoly: this.snapPolyPts(), snapCaption,
+      units: s.units, setUnits: this.num('units'),
+      systemOpts, conditionOpts, accessOpts, coatedOpts, leaksOpts, rustOpts, goalOpts,
+      isMetal: s.system === 'Metal',
       pickSilicone: this.pick('coating', 'silicone'), pickAcrylic: this.pick('coating', 'acrylic'),
       cardSilicone: coatCard(s.coating === 'silicone'), cardAcrylic: coatCard(s.coating === 'acrylic'),
-      warr10: this.pick('warranty', '10'), warr15: this.pick('warranty', '15'), warr20: this.pick('warranty', '20'),
-      w10: warBtn(s.warranty === '10'), w15: warBtn(s.warranty === '15'), w20: warBtn(s.warranty === '20'),
       systemLabel: systemLabels[s.system] || s.system, conditionLabel: condLabels[s.condition] || s.condition,
-      coatingLabel: s.coating === 'silicone' ? 'Silicone' : 'Acrylic', warrantyLabel: s.warranty,
+      coatedLabel: coatedLabels[s.coatedBefore], leaksLabel: leakLabels[s.leaks], rustLabel: rustLabels[s.rust],
+      goalsLabel: s.goals.length ? s.goals.map((g) => goalLabels[g]).join(', ') : 'Open to recommendation',
+      coatingLabel: s.coating === 'silicone' ? 'Silicone' : 'Acrylic',
       c: s.c,
       setName: this.cField('name'), setCompany: this.cField('company'), setEmail: this.cField('email'),
       setPhone: this.cField('phone'), setAddress: this.cField('address'), setNotes: this.cField('notes'),
       setConsent: (e) => { const v = e.target.checked; this.setState((st) => ({ c: { ...st.c, consent: v } })); },
-      submit: (e) => { e.preventDefault(); const s = this.state, c = s.c; const area = Math.max(0, Math.round(s.mode === 'map' ? (s.measured || 0) : (s.mode === 'sqft' ? (Number(s.sqft) || 0) : (Number(s.length) || 0) * (Number(s.width) || 0)))); if (window.ARIntake) { window.ARIntake.submit({ source: 'Roof Coating Estimator', name: c.name, company: c.company, email: c.email, phone: c.phone, address: c.address, service: 'Commercial Roof Coating', details: c.notes, consent: !!c.consent, roof: { areaSqft: area, system: s.system, condition: s.condition, coating: s.coating, warranty: s.warranty, units: Number(s.units) || 0, access: s.access, method: s.solarUsed ? 'Solar auto-detect' : (s.mode === 'map' ? 'Map measure' : (s.mode === 'sqft' ? 'Manual sq ft' : 'Manual dimensions')) }, submittedAt: new Date().toISOString() }); } this.setState({ sent: true }); },
+      submit: (e) => {
+        e.preventDefault();
+        const st = this.state, c = st.c;
+        const areaNow = Math.max(0, Math.round(st.mode === 'map' ? (st.measured || 0) : (st.mode === 'sqft' ? (Number(st.sqft) || 0) : (Number(st.length) || 0) * (Number(st.width) || 0))));
+        const gl = { waterproof: 'Stop leaks / waterproofing', energy: 'Energy savings / cool roof', extend: 'Extend roof life', appearance: 'Appearance / aesthetics' };
+        if (window.ARIntake) {
+          window.ARIntake.submit({
+            source: 'Roof Coating Estimator', name: c.name, company: c.company, email: c.email, phone: c.phone, address: c.address,
+            service: 'Commercial Roof Coating', details: c.notes, consent: !!c.consent,
+            roof: {
+              areaSqft: areaNow, system: st.system, condition: st.condition, coating: st.coating,
+              units: Number(st.units) || 0, access: st.access,
+              coatedBefore: { never: 'Never', before: 'Yes', unsure: 'Not sure' }[st.coatedBefore],
+              leaks: { none: 'None', minor: 'A few minor', major: 'Multiple / major' }[st.leaks],
+              rust: st.system === 'Metal' ? ({ none: 'None', some: 'Some surface rust', heavy: 'Heavy rust' }[st.rust]) : undefined,
+              goals: st.goals.map((g) => gl[g]).join(', ') || undefined,
+              method: st.solarUsed ? 'Solar auto-detect' : (st.mode === 'map' ? 'Map measure' : (st.mode === 'sqft' ? 'Manual sq ft' : 'Manual dimensions'))
+            },
+            submittedAt: new Date().toISOString()
+          });
+        }
+        this.setState({ sent: true });
+      },
       reset: () => this.setState({ step: 1, sent: false }),
       sent: s.sent, notSent: !s.sent,
       firstName: (s.c.name || '').trim().split(' ')[0] || 'there',

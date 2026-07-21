@@ -35,6 +35,9 @@ function ballpark(roof) {
   if (roof.system === 'Metal') { lo += 0.3; hi += 0.5; }
   if (roof.system === 'BUR') { lo += 0.15; hi += 0.3; }
   const cond = { good: 1.0, weathered: 1.12, leaking: 1.3 }[roof.condition] || 1;
+  if (/major/i.test(roof.leaks || '')) { lo += 0.1; hi += 0.15; }
+  if (/heavy/i.test(roof.rust || '')) { lo += 0.15; hi += 0.25; }
+  else if (/surface/i.test(roof.rust || '')) { lo += 0.05; hi += 0.1; }
   const warr = { '10': 1.0, '15': 1.15, '20': 1.32 }[String(roof.warranty)] || 1;
   const acc = { single: 1.0, mid: 1.05, high: 1.12 }[roof.access] || 1;
   const units = Number(roof.units) || 0;
@@ -93,7 +96,9 @@ export default async function handler(req, res) {
     row('Roof area (sq ft)', roof.areaSqft) + row('Roof system', roof.system) +
     row('Condition', roof.condition) + row('Coating', roof.coating) +
     row('Warranty (yr)', roof.warranty) + row('Access', roof.access) +
-    row('Rooftop units', roof.units) + row('Measured by', roof.method) +
+    row('Coated before', roof.coatedBefore) + row('Active leaks', roof.leaks) +
+    row('Rust', roof.rust) + row('Main goals', roof.goals) +
+    row('Rooftop units / penetrations', roof.units) + row('Measured by', roof.method) +
     (bp ? row('Ballpark', bp.text) : '') +
     row('SMS consent', d.smsConsent) + row('Details', d.details) + row('Submitted', d.submittedAt);
 
