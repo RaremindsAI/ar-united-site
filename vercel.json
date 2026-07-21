@@ -1,0 +1,85 @@
+{
+  "cleanUrls": false,
+  "rewrites": [
+    {
+      "source": "/roofing",
+      "destination": "/Roofing.dc.html"
+    },
+    {
+      "source": "/roof-coatings",
+      "destination": "/Roof-Coatings.dc.html"
+    },
+    {
+      "source": "/estimator",
+      "destination": "/Roof-Coating-Estimator.dc.html"
+    },
+    {
+      "source": "/repairs",
+      "destination": "/Repairs.dc.html"
+    },
+    {
+      "source": "/siding",
+      "destination": "/Siding.dc.html"
+    },
+    {
+      "source": "/gutters",
+      "destination": "/Gutters.dc.html"
+    },
+    {
+      "source": "/soffit-fascia",
+      "destination": "/Soffit-Fascia.dc.html"
+    },
+    {
+      "source": "/services",
+      "destination": "/Services.dc.html"
+    },
+    {
+      "source": "/projects",
+      "destination": "/Projects.dc.html"
+    },
+    {
+      "source": "/reviews",
+      "destination": "/Reviews.dc.html"
+    },
+    {
+      "source": "/financing",
+      "destination": "/Financing.dc.html"
+    },
+    {
+      "source": "/insurance",
+      "destination": "/Insurance.dc.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/Contact.dc.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/Privacy.dc.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/Terms.dc.html"
+    },
+    {
+      "source": "/sms-consent",
+      "destination": "/SMS-Consent.dc.html"
+    },
+    {
+      "source": "/service-detail",
+      "destination": "/ServiceDetail.dc.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/A&R United Construction.dc.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
+}
