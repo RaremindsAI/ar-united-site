@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;} body{margin:0;} a{text-decoration:none;color:inherit;} img{display:block;}</style>
+<script src="assets/fx.js"></script>
+</helmet>
+<div style="font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a; background:#fff; -webkit-font-smoothing:antialiased;">
+  <dc-import name="SiteHeader" active="services" hint-size="100%,140px"></dc-import>
+  <dc-import name="ServiceDetail" d="{{ d }}" hint-size="100%,1400px"></dc-import>
+  <dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals(){
+    return { d: {
+      eyebrow: 'Roofing',
+      title: 'Roofing Solutions',
+      hero: 'assets/roof-detail.jpg',
+      intro: 'Your roof is your home\u2019s first line of defense. We install and repair roofs using premium, factory-certified materials and the kind of craftsmanship that holds up storm after storm, season after season.',
+      aboutEyebrow: 'Certified & Factory-Trained',
+      aboutTitle: 'A roof done right, the first time',
+      aboutP1: 'As an Owens Corning Preferred and GAF/CertainTeed certified contractor, we install architectural shingles, metal, and complete roofing systems, not just the shingles, but the underlayment, ventilation, and flashing that make them last.',
+      aboutP2: 'Whether it\u2019s a full replacement or a targeted repair, our in-house crews do the work with the owner on site, so quality never gets handed off.',
+      aboutImg: 'assets/roof-shingle.jpg',
+      featuresTitle: 'A complete roofing system, not just shingles',
+      features: [
+        { h: 'Architectural Shingles', p: 'Premium dimensional shingles from Owens Corning, GAF, and CertainTeed.' },
+        { h: 'Metal Roofing', p: 'Standing-seam and metal panel systems for residential and commercial properties.' },
+        { h: 'Proper Ventilation', p: 'Ridge and soffit ventilation to protect your deck and extend roof life.' },
+        { h: 'Ice & Water Shield', p: 'Leak barriers at valleys and eaves where water damage starts.' },
+        { h: 'Flashing & Detailing', p: 'Chimneys, valleys, and penetrations sealed and flashed correctly.' },
+        { h: 'Manufacturer Warranties', p: 'System-Plus and extended warranties only certified contractors can offer.' },
+      ],
+      g1:'assets/roof-aerial.jpg', g2:'assets/roof-truck.jpg', g3:'assets/roof-ranch.jpg', g4:'assets/roof-brick.jpg', g5:'assets/hero-aerial.jpg',
+      ctaTitle: 'Protect your home from the top down',
+      ctaText: 'Schedule a free roof inspection, we\u2019ll give you an honest assessment, never a hard sell.',
+    } };
+  }
+}
+</script>
+</body>
+</html>

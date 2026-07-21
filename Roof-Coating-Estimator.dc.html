@@ -39,7 +39,7 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
     <img src="assets/commercial-metal.avif" alt="Commercial roof coating" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.26;">
     <div style="position:relative; max-width:1240px; margin:0 auto; padding:74px 40px 78px;">
       <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(255,255,255,.6); margin-bottom:20px; animation:arUp .6s ease both;">
-        <a href="A%26R%20United%20Construction.dc.html" style="color:rgba(255,255,255,.6);">Home</a><span>/</span>
+        <a href="index.html" style="color:rgba(255,255,255,.6);">Home</a><span>/</span>
         <a href="Roof-Coatings.dc.html" style="color:rgba(255,255,255,.6);">Roof Coatings</a><span>/</span>
         <span style="color:#5cb3ea;">Instant Estimator</span>
       </div>
@@ -101,7 +101,7 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
                 <button onClick="{{ modeSqft }}" style="{{ tabSqft }}">By square footage</button>
               </div>
               <sc-if value="{{ isDim }}" hint-placeholder-val="{{ false }}">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+              <div class="ar-keep2" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
                 <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Length (ft)</span><input inputmode="numeric" value="{{ length }}" onChange="{{ setLength }}" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
                 <label style="display:block;"><span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:7px;">Width (ft)</span><input inputmode="numeric" value="{{ width }}" onChange="{{ setWidth }}" style="width:100%; border:1px solid #d8d4cd; border-radius:6px; padding:12px 14px; font-size:15px; color:#15161a; outline:none;" style-focus="border-color:#2f80bd; box-shadow:0 0 0 3px rgba(47,128,189,.14);"></label>
               </div>
@@ -167,7 +167,7 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
               </button>
             </div>
             <span style="display:block; font-size:13px; font-weight:600; color:#3c4048; margin-bottom:10px;">Warranty term</span>
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+            <div class="ar-keep3" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
               <button onClick="{{ warr10 }}" style="{{ w10 }}">10 years</button>
               <button onClick="{{ warr15 }}" style="{{ w15 }}">15 years</button>
               <button onClick="{{ warr20 }}" style="{{ w20 }}">20 years</button>
