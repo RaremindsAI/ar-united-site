@@ -18,7 +18,8 @@
         body: JSON.stringify(payload),
         keepalive: true
       })
-        .then(function (r) { return r.json().then(function (j) { console.log('[ARIntake] result', j); return Object.assign({ ok: r.ok, status: r.status }, j); }).catch(function () { console.log('[ARIntake] HTTP', r.status); return { ok: r.ok, status: r.status }; }); })
+        .then(function (r) { try { if (r.ok && window.gtag) gtag('event', 'generate_lead', { event_category: 'form', event_label: payload.source || 'unknown' }); } catch (e) {}
+        return r.json().then(function (j) { console.log('[ARIntake] result', j); return Object.assign({ ok: r.ok, status: r.status }, j); }).catch(function () { console.log('[ARIntake] HTTP', r.status); return { ok: r.ok, status: r.status }; }); })
         .catch(function (e) { console.warn('[ARIntake] send failed', e); return { ok: false, error: String(e) }; });
     }
   };
