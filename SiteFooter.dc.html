@@ -21,8 +21,21 @@
   .ar-keep3[style*="grid-template-columns"]{ grid-template-columns:repeat(3,1fr) !important; }
   [style*="gap: 64px"], [style*="gap: 60px"], [style*="gap: 56px"], [style*="gap: 44px"]{ gap:36px !important; }
 }
+@media (max-width:900px){
+  html, body{ overflow-x:clip; }
+  [style*="right: -18px"]{ right:12px !important; }
+  [style*="38px 28px"]{ border-right:none !important; }
+}
 @media (max-width:760px){
   [style*="px 40px"], [style*="0 40px"]{ padding-left:20px !important; padding-right:20px !important; }
+  input, select, textarea{ font-size:16px !important; } /* stops iOS auto-zoom on focus */
+  [style*="left: -14px"]{ display:none !important; }
+  [style*="height: 540px"], [style*="height: 520px"]{ height:320px !important; }
+  [style*="104px 0px"], [style*="96px 0px"]{ padding-top:64px !important; padding-bottom:64px !important; }
+  [style*="px 112px"]{ padding-top:72px !important; padding-bottom:60px !important; }
+  [style*="88px 40px"]{ padding-top:56px !important; padding-bottom:56px !important; }
+  [style*="padding: 44px"]{ padding:16px !important; }
+  [style*="grid-auto-rows: 240px"]{ grid-auto-rows:210px !important; }
 }</style>
 </helmet>
 <footer class="arfoot" style="background:#0c0d10; color:#9a9da4; padding:70px 0 0; font-family:'IBM Plex Sans',system-ui,sans-serif;">
@@ -55,7 +68,7 @@
         <div>
           <div style="color:#fff; font-weight:700; font-size:13px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:18px;">Company</div>
           <div style="display:flex; flex-direction:column; gap:11px; font-size:14.5px;">
-            <a href="index.html#about" style="color:#9a9da4;" style-hover="color:#fff;">About Us</a>
+            <a href="A%26R%20United%20Construction.dc.html#about" style="color:#9a9da4;" style-hover="color:#fff;">About Us</a>
             <a href="Projects.dc.html" style="color:#9a9da4;" style-hover="color:#fff;">Projects</a>
             <a href="Reviews.dc.html" style="color:#9a9da4;" style-hover="color:#fff;">Reviews</a>
             <a href="Insurance.dc.html" style="color:#9a9da4;" style-hover="color:#fff;">Insurance Claims</a>
