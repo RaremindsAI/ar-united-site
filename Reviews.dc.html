@@ -39,9 +39,9 @@
       </div>
       <div style="display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid #24262d;">
         <div style="padding:34px 24px; text-align:center; border-right:1px solid #24262d;">
-          <div style="font-family:'Archivo'; font-weight:800; font-size:40px; color:#fff;"><span data-count="5.0">5.0</span></div>
-          <div style="color:#f2b01e; letter-spacing:3px; font-size:15px; margin:6px 0 4px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <div style="color:#9a9da4; font-size:13px;">Google Rating</div>
+          <div style="font-family:'Archivo'; font-weight:800; font-size:40px; color:#fff;">{{ gRating }}</div>
+          <div style="color:#f2b01e; letter-spacing:3px; font-size:15px; margin:6px 0 4px;">{{ gStars }}</div>
+          <div style="color:#9a9da4; font-size:13px;">{{ gRatingCaption }}</div>
         </div>
         <div style="padding:34px 24px; text-align:center; border-right:1px solid #24262d;">
           <div style="font-family:'Archivo'; font-weight:800; font-size:40px; color:#fff;">Tri-State</div>
@@ -58,6 +58,39 @@
       </div>
     </div>
   </section>
+
+  <sc-if value="{{ gOk }}" hint-placeholder-val="{{ false }}">
+  <section style="padding:80px 0 0; background:#f6f4f1;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:26px;">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <span style="width:48px; height:48px; flex:none; border-radius:10px; background:#fff; border:1px solid #e7e3dd; display:flex; align-items:center; justify-content:center; font-family:'Archivo'; font-weight:800; font-size:24px; color:#4285F4;">G</span>
+          <div>
+            <div style="font-family:'Archivo'; font-weight:800; font-size:22px;">Latest Google reviews</div>
+            <div style="display:flex; align-items:center; gap:8px; font-size:14px; color:#5c616b;"><span style="color:#f2b01e; letter-spacing:2px; font-size:15px;">{{ gStars }}</span><span style="font-weight:700; color:#15161a;">{{ gRating }}</span><span>{{ gTotalTxt }}</span></div>
+          </div>
+        </div>
+        <a href="https://g.co/kgs/ZnXJ7rZ" target="_blank" style="display:inline-flex; align-items:center; gap:9px; background:#2f80bd; color:#fff; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; padding:13px 22px; border-radius:6px;" style-hover="filter:brightness(1.08);">Write a review &rarr;</a>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px;">
+        <sc-for list="{{ gReviews }}" as="r" hint-placeholder-count="3">
+          <div style="background:#fff; border:1px solid #e7e3dd; border-radius:10px; padding:24px; display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="width:40px; height:40px; flex:none; border-radius:50%; background:#4285F4; color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Archivo'; font-weight:800; font-size:15px;">{{ r.initial }}</span>
+              <span style="flex:1; min-width:0;">
+                <span style="display:block; font-weight:700; font-size:14.5px; color:#15161a; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.name }}</span>
+                <span style="display:block; font-size:12.5px; color:#8a8f98;">{{ r.time }}</span>
+              </span>
+            </div>
+            <div style="color:#f2b01e; letter-spacing:2px; font-size:14px;">{{ r.stars }}</div>
+            <p style="font-size:14.5px; line-height:1.65; color:#3c4048; margin:0; display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden;">{{ r.text }}</p>
+          </div>
+        </sc-for>
+      </div>
+      <div style="font-size:12.5px; color:#9a958c; margin-top:14px;">Pulled live from our Google Business Profile.</div>
+    </div>
+  </section>
+  </sc-if>
 
   <section style="padding:90px 0; background:#f6f4f1;">
     <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
@@ -105,7 +138,53 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
+  state = { g: null };
+  componentDidMount(){
+    if (window.google && window.google.maps && window.google.maps.places) return this.fetchG();
+    if (!document.getElementById('gmaps-sdk')) {
+      const s = document.createElement('script');
+      s.id = 'gmaps-sdk'; s.async = true;
+      s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDuCxKIqfCmpJPsiT299jUe-pi3mE5NfnI&libraries=places&loading=async';
+      document.head.appendChild(s);
+    }
+    this._poll = setInterval(()=>{ if (window.google && google.maps && google.maps.places) { clearInterval(this._poll); this.fetchG(); } }, 300);
+    setTimeout(()=>clearInterval(this._poll), 15000);
+  }
+  componentWillUnmount(){ clearInterval(this._poll); }
+  fetchG(){
+    try {
+      const svc = new google.maps.places.PlacesService(document.createElement('div'));
+      svc.findPlaceFromQuery({ query: 'A&R United Construction Henderson KY', fields: ['place_id'], locationBias: new google.maps.LatLng(37.8361, -87.59) }, (res, status) => {
+        if (status !== 'OK' || !res || !res[0]) return;
+        svc.getDetails({ placeId: res[0].place_id, fields: ['reviews', 'rating', 'user_ratings_total'] }, (place, st2) => {
+          if (st2 !== 'OK' || !place) return;
+          const revs = (place.reviews || []).filter(r => r.text && r.rating >= 4).slice(0, 6);
+          if (!revs.length && !place.rating) return;
+          this.setState({ g: { rating: place.rating || 5, total: place.user_ratings_total || 0, reviews: revs } });
+        });
+      });
+    } catch (e) {}
+  }
   renderVals(){
+    const g = this.state.g;
+    const star = (n) => '\u2605'.repeat(Math.max(1, Math.round(n)));
+    const gVals = {
+      gOk: !!(g && g.reviews.length),
+      gRating: g ? (Math.round(g.rating * 10) / 10).toFixed(1) : '5.0',
+      gStars: g ? star(g.rating) : '\u2605\u2605\u2605\u2605\u2605',
+      gTotalTxt: g && g.total ? 'from ' + g.total + ' Google reviews' : 'Google rating',
+      gRatingCaption: g && g.total ? 'Google Rating \u00b7 ' + g.total + ' reviews' : 'Google Rating',
+      gReviews: g ? g.reviews.map(r => ({
+        name: r.author_name || 'Google user',
+        initial: (r.author_name || 'G').trim().charAt(0).toUpperCase(),
+        time: r.relative_time_description || '',
+        stars: star(r.rating || 5),
+        text: (r.text || '').trim()
+      })) : []
+    };
+    return Object.assign(gVals, this.staticVals());
+  }
+  staticVals(){
     return { reviews: [
       { initial:'M', name:'Michael R.', meta:'Roof Replacement \u00b7 Henderson, KY', quote:'A&R replaced our roof after a storm and handled the entire insurance claim. The owner was on site, the crew was respectful, and they cleaned up like they were never here. Couldn\u2019t recommend them more.' },
       { initial:'S', name:'Sarah T.', meta:'New Siding \u00b7 Newburgh, IN', quote:'Our home looks brand new. They walked us through every material option and the price was exactly what they quoted, no surprises. True professionals from start to finish.' },
