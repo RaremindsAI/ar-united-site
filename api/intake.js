@@ -5,15 +5,14 @@
  * so assets/intake.js is already set to POST to "/api/intake".
  *
  * WHAT IT DOES for every form (Contact, homepage, estimator):
- *   1) creates a task in ClickUp  (CRM space -> Bids list)
+ *   1) forwards the form data to the lead webhook (which creates the ClickUp task)
  *   2) emails the lead to your team (office@arunitedconstruction.com)
  *   3) for the estimator, computes a ballpark and emails it to the customer.
  *
  * SETUP — Vercel -> Project -> Settings -> Environment Variables, add:
- *     CLICKUP_TOKEN    ClickUp API token  (ClickUp -> Settings -> Apps -> Generate)   [required]
  *     RESEND_API_KEY   Resend API key from resend.com  (free tier)                    [required for email]
  *   Optional overrides (defaults baked in below):
- *     CLICKUP_LIST_ID, NOTIFY_EMAIL, FROM_EMAIL
+ *     LEAD_WEBHOOK_URL, NOTIFY_EMAIL, FROM_EMAIL
  *   Then redeploy. No npm packages needed — this uses plain fetch.
  *
  * EMAIL: uses Resend. In Resend, verify your sending domain and use a FROM_EMAIL on it
@@ -21,7 +20,7 @@
  */
 
 const DEFAULTS = {
-  CLICKUP_LIST_ID: '901114146582',                 // CRM > Bids
+  LEAD_WEBHOOK_URL: 'https://rareminds-webhooks.vercel.app/api/ar-lead',
   NOTIFY_EMAIL: 'office@arunitedconstruction.com',
   FROM_EMAIL: 'office@arunitedconstruction.com'
 };
@@ -38,12 +37,11 @@ function ballpark(roof) {
   if (/major/i.test(roof.leaks || '')) { lo += 0.1; hi += 0.15; }
   if (/heavy/i.test(roof.rust || '')) { lo += 0.15; hi += 0.25; }
   else if (/surface/i.test(roof.rust || '')) { lo += 0.05; hi += 0.1; }
-  const warr = { '10': 1.0, '15': 1.15, '20': 1.32 }[String(roof.warranty)] || 1;
   const acc = { single: 1.0, mid: 1.05, high: 1.12 }[roof.access] || 1;
   const units = Number(roof.units) || 0;
   const r = (n) => Math.round(n / 100) * 100;
-  let low = r(area * lo * cond * warr * acc + units * 35);
-  let high = r(area * hi * cond * warr * acc + units * 70);
+  let low = r(area * lo * cond * acc + units * 35);
+  let high = r(area * hi * cond * acc + units * 70);
   if (high <= low) high = low + 100;
   const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
   return { low, high, text: money(low) + ' \u2013 ' + money(high) };
@@ -71,11 +69,19 @@ export default async function handler(req, res) {
 
   let d = {};
   try { d = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {}); } catch (e) {}
+  // normalize text: collapse repeated spaces, trim (keeps line breaks in free-text details)
+  for (const k of Object.keys(d)) {
+    if (typeof d[k] !== 'string') continue;
+    d[k] = k === 'details' ? d[k].replace(/[ \t]+/g, ' ').replace(/ *\n */g, '\n').trim() : d[k].replace(/\s+/g, ' ').trim();
+  }
+  if (typeof d.email === 'string') d.email = d.email.replace(/ /g, '').toLowerCase();
+  d.smsConsent = !!d.smsConsent;
+  const photoList = (Array.isArray(d.photos) ? d.photos : (d.photo ? [d.photo] : [])).filter(p => p && p.content).slice(0, 4);
+  d.smsConsentText = d.smsConsent ? 'Yes \u2014 opted in to SMS texts' : 'No \u2014 did not opt in to SMS texts';
 
   const cfg = {
-    CLICKUP_TOKEN: process.env.CLICKUP_TOKEN,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
-    CLICKUP_LIST_ID: process.env.CLICKUP_LIST_ID || DEFAULTS.CLICKUP_LIST_ID,
+    LEAD_WEBHOOK_URL: process.env.LEAD_WEBHOOK_URL || DEFAULTS.LEAD_WEBHOOK_URL,
     NOTIFY_EMAIL: process.env.NOTIFY_EMAIL || DEFAULTS.NOTIFY_EMAIL,
     FROM_EMAIL: process.env.FROM_EMAIL || DEFAULTS.FROM_EMAIL
   };
@@ -87,38 +93,38 @@ export default async function handler(req, res) {
   const details =
     row('Source', d.source) + row('Name', d.name) + row('Company', d.company) +
     row('Email', d.email) + row('Phone', d.phone) + row('Address', d.address) +
-    row('Client type', d.clientType) + row('Business/LLC', d.business) + row('Service', d.service) +
+    row('Client type', d.clientType) + row('Business/LLC', d.business) + row('Property type', d.propertyType) + row('Occupancy', d.occupancy) + row('Property owner', d.ownerName) + row('Service', d.service) +
     row('Scope of work', d.scope) + row('Project needs', d.projectNeeds) +
     row('Preferences', d.preferences) + row('Timeline', d.timeline) +
     row('Preferred estimate day', d.preferredDay) + row('Alternate day', d.altDay) +
     row('Arrival window', d.arrival) + row('Heard about us via', d.heardFrom) +
-    row('Photo attached', d.photo && d.photo.content ? d.photo.name || 'yes' : '') +
+    row('Photos attached', photoList.length ? photoList.length + ' (' + photoList.map(p => p.name).join(', ') + ')' : '') +
     row('Roof area (sq ft)', roof.areaSqft) + row('Roof system', roof.system) +
     row('Condition', roof.condition) + row('Coating', roof.coating) +
-    row('Warranty (yr)', roof.warranty) + row('Access', roof.access) +
+    row('Access', roof.access) +
     row('Coated before', roof.coatedBefore) + row('Active leaks', roof.leaks) +
     row('Rust', roof.rust) + row('Main goals', roof.goals) +
     row('Rooftop units / penetrations', roof.units) + row('Measured by', roof.method) +
     (bp ? row('Ballpark', bp.text) : '') +
-    row('SMS consent', d.smsConsent) + row('Details', d.details) + row('Submitted', d.submittedAt);
+    row('SMS consent', d.smsConsentText) + row('Details', d.details) + row('Submitted', d.submittedAt);
 
-  const result = { clickup: 'skipped', teamEmail: 'skipped', customerEmail: 'skipped' };
+  const result = { webhook: 'skipped', teamEmail: 'skipped', customerEmail: 'skipped' };
 
-  // 1) ClickUp task in CRM > Bids
-  if (cfg.CLICKUP_TOKEN && cfg.CLICKUP_LIST_ID) {
+  // 1) Forward form data to the lead webhook (handles ClickUp)
+  if (cfg.LEAD_WEBHOOK_URL) {
     try {
-      const r = await fetch(`https://api.clickup.com/api/v2/list/${cfg.CLICKUP_LIST_ID}/task`, {
+      const r = await fetch(cfg.LEAD_WEBHOOK_URL, {
         method: 'POST',
-        headers: { 'Authorization': cfg.CLICKUP_TOKEN, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: title, markdown_description: details.replace(/\n/g, '  \n') })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...d, title, summary: details, ballpark: bp ? bp.text : undefined })
       });
-      result.clickup = r.status;
-    } catch (e) { result.clickup = 'error:' + e; }
+      result.webhook = r.status;
+    } catch (e) { result.webhook = 'error:' + e; }
   }
 
   // 2) Team notification email (with customer photo attached, if provided)
   try {
-    const atts = (d.photo && d.photo.content) ? [{ filename: d.photo.name || 'photo.jpg', content: d.photo.content }] : null;
+    const atts = photoList.length ? photoList.map((p, i) => ({ filename: p.name || ('photo-' + (i + 1) + '.jpg'), content: p.content })) : null;
     result.teamEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, cfg.NOTIFY_EMAIL, title, details, d.email || null, atts);
   } catch (e) { result.teamEmail = 'error:' + e; }
 
