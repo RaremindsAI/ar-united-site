@@ -8,6 +8,7 @@
     endpoint: ENDPOINT,
     submit: function (payload) {
       try { payload = Object.assign({ site: 'arunitedconstruction.com' }, payload || {}); } catch (e) {}
+      try { Object.keys(payload).forEach(function (k) { var v = payload[k]; if (typeof v === 'string' && k !== 'details') payload[k] = v.replace(/\s+/g, ' ').trim(); /* collapse extra spaces */ }); } catch (e) {}
       if (!this.endpoint) {
         console.warn('[ARIntake] No endpoint configured yet — lead captured but not sent:', payload);
         return Promise.resolve({ ok: false, skipped: true });

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex; gap:32px; align-items:flex-start;">
+<form onSubmit="{{ submit }}" style="flex:1; min-width:0; font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a;">
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 12px;">
+    <span style="display:inline-flex; align-items:center; gap:7px; background:rgba(47,128,189,.1); color:#1d5f92; font-weight:800; font-size:11px; letter-spacing:.12em; text-transform:uppercase; padding:7px 12px; border-radius:100px;"><span style="width:7px; height:7px; border-radius:50%; background:#2f80bd;"></span>Free Estimate</span>
+    <span style="font-size:12px; font-weight:600; color:#8a8f98;">Takes about 60 seconds</span>
+  </div>
+  <h3 style="font-family:'Archivo'; font-weight:800; font-size:26px; letter-spacing:-.01em; margin:0 0 8px;">New Request &ndash; Estimates &amp; Questions</h3>
+  <p style="font-size:13.5px; line-height:1.6; color:#6b6f78; margin:0 0 20px;">Have a project in mind or a question about our services? Whether you&rsquo;re dealing with an urgent repair, exploring options for a replacement, or simply gathering quotes, your answers help us tailor our estimate and service approach to fit your goals, timeline, and budget.</p>
+
+  <div style="display:flex; align-items:center; gap:18px; margin-bottom:10px; flex-wrap:wrap;">
+    <sc-for list="{{ steps }}" as="st" hint-placeholder-count="3">
+      <div onClick="{{ st.go }}" style="{{ st.wrapStyle }}">
+        <span style="{{ st.dotStyle }}">{{ st.n }}</span>
+        <span style="{{ st.labelStyle }}">{{ st.label }}</span>
+      </div>
+    </sc-for>
+  </div>
+  <div style="height:4px; background:#e3eff9; border-radius:99px; margin-bottom:24px; overflow:hidden;"><div style="{{ progStyle }}"></div></div>
+
+  <sc-if value="{{ onStep1 }}" hint-placeholder-val="{{ true }}">
+  <div style="animation:arStepIn .3s ease both;">
+    <div style="display:flex; gap:14px;">
+      <div style="flex:none; width:32px; display:flex; flex-direction:column; align-items:center;"><span style="{{ b1 }}">1</span><span style="flex:1; width:2px; background:#cfe1f0; margin-top:6px;"></span></div>
+      <div style="flex:1; min-width:0; background:#dcebf7; border:1px solid #c3d9ec; border-radius:10px; padding:16px 16px 18px; margin-bottom:14px;">
+        <div style="font-weight:700; font-size:15.5px; margin-bottom:12px;">What&rsquo;s your name?</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <label style="display:block;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">First name</span><input value="{{ f.first }}" onChange="{{ setFirst }}" onBlur="{{ tb.first }}" placeholder="Jane" autoComplete="given-name" style="{{ fs.first }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);"></label>
+          <label style="display:block;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">Last name</span><input value="{{ f.last }}" onBlur="{{ tb.last }}" onChange="{{ setLast }}" placeholder="Doe" autoComplete="family-name" style="{{ fs.last }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);"></label>
+        </div>
+        <sc-if value="{{ hasGreeting }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px; display:inline-flex; background:#2f80bd; color:#fff; font-size:13.5px; font-weight:600; padding:6px 13px; border-radius:999px; animation:arStepIn .25s ease both;">{{ greeting }}</div></sc-if>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:14px;">
+      <div style="flex:none; width:32px; display:flex; flex-direction:column; align-items:center;"><span style="{{ b2 }}">2</span><span style="flex:1; width:2px; background:#cfe1f0; margin-top:6px;"></span></div>
+      <div style="flex:1; min-width:0; background:#dcebf7; border:1px solid #c3d9ec; border-radius:10px; padding:16px 16px 18px; margin-bottom:14px;">
+        <div style="font-weight:700; font-size:15.5px; margin-bottom:12px;">How can we reach you?</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <label style="display:block;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">Email</span><input type="email" inputMode="email" autoComplete="email" value="{{ f.email }}" onBlur="{{ tb.email }}" onChange="{{ setEmail }}" placeholder="you@email.com" style="{{ fs.email }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);"></label>
+          <label style="display:block;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">Phone</span><input type="tel" inputMode="tel" autoComplete="tel" value="{{ f.phone }}" onBlur="{{ tb.phone }}" onChange="{{ setPhone }}" placeholder="(270) 000-0000" style="{{ fs.phone }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);"></label>
+        </div>
+        <label style="display:flex; gap:10px; align-items:flex-start; margin-top:12px; padding:11px 13px; background:#fff; border:1px solid #d7e6f2; border-radius:6px; cursor:pointer;">
+          <input type="checkbox" checked="{{ f.smsConsent }}" onChange="{{ setSmsConsent }}" style="margin:2px 0 0; width:16px; height:16px; flex:none; accent-color:#2f80bd; cursor:pointer;">
+          <span style="font-size:11.5px; line-height:1.55; color:#5c616b;"><strong style="display:block; font-size:13.5px; color:#15161a; margin-bottom:3px;">Yes, text me updates (optional).</strong>By checking this box, I agree to receive SMS text messages from A&amp;R United Construction, LLC about my estimate, appointments, and project updates. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not a condition of purchase. We will not share your mobile information with third parties or affiliates for marketing or promotional purposes. See our <a href="/privacy" style="color:#2f80bd; font-weight:600;">Privacy Policy</a> and <a href="/sms-consent" style="color:#2f80bd; font-weight:600;">SMS Terms</a>.</span>
+        </label>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:14px;">
+      <div style="flex:none; width:32px; display:flex; flex-direction:column; align-items:center;"><span style="{{ b3 }}">3</span><span style="flex:1; width:2px; background:#cfe1f0; margin-top:6px;"></span></div>
+      <div style="flex:1; min-width:0; background:#dcebf7; border:1px solid #c3d9ec; border-radius:10px; padding:16px 16px 18px; margin-bottom:14px;">
+        <div style="font-weight:700; font-size:15.5px; margin-bottom:12px;">A little about you</div>
+        <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">Have we worked with you before?</span>
+        <div class="ar-keep2" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <sc-for list="{{ clientOpts }}" as="o" hint-placeholder-count="2"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+        </div>
+        <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:14px 0 6px;">Tell us about the property</span>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <sc-for list="{{ ownerOpts }}" as="o" hint-placeholder-count="4"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+        </div>
+        <sc-if value="{{ isRental }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:arStepIn .25s ease both;">
+          <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:14px 0 6px;">Is the rental in your name or under a company?</span>
+          <div class="ar-keep2" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <sc-for list="{{ rentalOpts }}" as="o" hint-placeholder-count="2"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+          </div>
+          <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:14px 0 6px;">Is someone living there right now?</span>
+          <div class="ar-keep2" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <sc-for list="{{ occOpts }}" as="o" hint-placeholder-count="2"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+          </div>
+          <sc-if value="{{ isTenant }}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px; color:#1d5f92; margin-top:8px;">We&rsquo;ll coordinate access with you before we visit.</div></sc-if>
+        </div>
+        </sc-if>
+        <sc-if value="{{ needsCompany }}" hint-placeholder-val="{{ false }}">
+        <label style="display:block; margin-top:14px; animation:arStepIn .25s ease both;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">{{ companyLabel }}</span><input value="{{ f.businessName }}" onBlur="{{ tb.businessName }}" onChange="{{ setBusinessName }}" placeholder="{{ companyPlaceholder }}" autoComplete="organization" style="{{ fs.businessName }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);"></label>
+        </sc-if>
+        <sc-if value="{{ isManager }}" hint-placeholder-val="{{ false }}">
+        <label style="display:block; margin-top:12px; animation:arStepIn .25s ease both;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">Property owner&rsquo;s name <span style="color:#9a958c; font-weight:500;">(optional)</span></span><input value="{{ f.ownerName }}" onBlur="{{ tb.ownerName }}" onChange="{{ setOwnerName }}" placeholder="Owner or client name" style="{{ fs.ownerName }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);"></label>
+        </sc-if>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:14px;">
+      <div style="flex:none; width:32px; display:flex; flex-direction:column; align-items:center;"><span style="{{ b4 }}">4</span></div>
+      <div style="flex:1; min-width:0; background:#dcebf7; border:1px solid #c3d9ec; border-radius:10px; padding:16px 16px 18px;">
+        <div style="font-weight:700; font-size:15.5px; margin-bottom:12px;">Where is the property?</div>
+        <input ref="{{ addrRef }}" value="{{ f.address }}" onBlur="{{ tb.address }}" onChange="{{ setAddress }}" placeholder="Start typing your address&hellip;" autoComplete="off" style="{{ fs.address }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);">
+        <span style="display:block; font-size:11.5px; color:#6b6f78; margin-top:6px;">Pick from the suggestions, we&rsquo;ll fill in the rest.</span>
+      </div>
+    </div>
+
+    <sc-if value="{{ hasErr }}" hint-placeholder-val="{{ false }}"><div style="margin-top:14px; padding:10px 13px; background:#fdf3f2; border:1px solid #f2c9c4; border-radius:6px; color:#b3352b; font-size:13px; font-weight:600;">{{ err }}</div></sc-if>
+    <button type="button" onClick="{{ next1 }}" style="width:100%; margin-top:20px; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:14px; letter-spacing:.08em; text-transform:uppercase; padding:16px; border-radius:6px;" style-hover="filter:brightness(1.08);">{{ next1Label }}</button>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ onStep2 }}" hint-placeholder-val="{{ false }}">
+  <div style="animation:arStepIn .3s ease both;">
+    <div style="font-family:'Archivo'; font-weight:800; font-size:18px; margin:0 0 4px;">{{ step2Title }}</div>
+    <p style="font-size:13px; line-height:1.55; color:#6b6f78; margin:0 0 18px;">The more we know, the better we can reach out with the right support. Check all that apply and we&rsquo;ll take it from there!</p>
+
+    <div style="display:flex; gap:14px;">
+      <div style="flex:none; width:32px; display:flex; flex-direction:column; align-items:center;"><span style="{{ c1 }}">1</span><span style="flex:1; width:2px; background:#cfe1f0; margin-top:6px;"></span></div>
+      <div style="flex:1; min-width:0; background:#dcebf7; border:1px solid #c3d9ec; border-radius:10px; padding:16px 16px 18px; margin-bottom:14px;">
+        <div style="font-weight:700; font-size:15.5px; margin-bottom:4px;">What type of work are you needing?</div>
+        <div style="font-size:12.5px; color:#6b6f78; margin-bottom:12px;">Select all that apply</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <sc-for list="{{ workOpts }}" as="o" hint-placeholder-count="8"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:14px;">
+      <div style="flex:none; width:32px; display:flex; flex-direction:column; align-items:center;"><span style="{{ c2 }}">2</span><span style="flex:1; width:2px; background:#cfe1f0; margin-top:6px;"></span></div>
+      <div style="flex:1; min-width:0; background:#dcebf7; border:1px solid #c3d9ec; border-radius:10px; padding:16px 16px 18px; margin-bottom:14px;">
+        <div style="font-weight:700; font-size:15.5px; margin-bottom:4px;">What are you looking to have done?</div>
+        <div style="font-size:12.5px; color:#6b6f78; margin-bottom:12px;">Select all that apply</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <sc-for list="{{ scopeOpts }}" as="o" hint-placeholder-count="7"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:14px;">
+      <div style="flex:none; width:32px; display:flex; flex-direction:column; align-items:center;"><span style="{{ c3 }}">3</span><span style="flex:1; width:2px; background:#cfe1f0; margin-top:6px;"></span></div>
+      <div style="flex:1; min-width:0; background:#dcebf7; border:1px solid #c3d9ec; border-radius:10px; padding:16px 16px 18px; margin-bottom:14px;">
+        <div style="font-weight:700; font-size:15.5px; margin-bottom:12px;">When works for your estimate?</div>
+        <div class="ar-keep2" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <label style="display:block; min-width:0;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">Best day</span><input type="date" min="{{ today }}" value="{{ f.preferredDay }}" onBlur="{{ tb.preferredDay }}" onChange="{{ setPreferredDay }}" style="{{ fs.preferredDay }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);"></label>
+          <label style="display:block; min-width:0;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">Another day that works</span><input type="date" min="{{ today }}" value="{{ f.altDay }}" onBlur="{{ tb.altDay }}" onChange="{{ setAltDay }}" style="{{ fs.altDay }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);"></label>
+        </div>
+        <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:14px 0 6px;">Preferred arrival times <span style="color:#9a958c; font-weight:500;">(select all that apply)</span></span>
+        <div class="ar-keep2" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <sc-for list="{{ arrivalOpts }}" as="o" hint-placeholder-count="5"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:14px;">
+      <div style="flex:none; width:32px; display:flex; flex-direction:column; align-items:center;"><span style="{{ c4 }}">4</span><span style="flex:1; width:2px; background:#cfe1f0; margin-top:6px;"></span></div>
+      <div style="flex:1; min-width:0; background:#dcebf7; border:1px solid #c3d9ec; border-radius:10px; padding:16px 16px 18px; margin-bottom:14px;">
+        <div style="font-weight:700; font-size:15.5px; margin-bottom:4px;">Anything else we should know?</div>
+        <div style="font-size:12.5px; color:#6b6f78; margin-bottom:12px;">Optional</div>
+        <textarea value="{{ f.message }}" onBlur="{{ tb.message }}" onChange="{{ setMessage }}" rows="3" placeholder="Leaks, insurance claim, material preferences&hellip;" style="{{ fs.message }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);"></textarea>
+        <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:12px 0 6px;">Upload images regarding request <span style="color:#9a958c; font-weight:500;">(Optional, up to 4)</span></span>
+        <sc-if value="{{ canAddPhoto }}" hint-placeholder-val="{{ true }}">
+        <label style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; border:1.5px dashed #b9d2e6; border-radius:8px; padding:18px 14px; cursor:pointer; background:#fff; text-align:center;" style-hover="border-color:#2f80bd;">
+          <span style="font-size:13.5px; font-weight:600; color:#1d5f92;">{{ photoCta }}</span>
+          <span style="font-size:11.5px; color:#6b6f78;">JPG, PNG or HEIC &middot; we&rsquo;ll compress them for you</span>
+          <input type="file" accept="image/*" multiple="{{ true }}" onChange="{{ setPhoto }}" style="display:none;">
+        </label>
+        </sc-if>
+        <sc-if value="{{ hasPhoto }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; margin-bottom:8px;">
+          <sc-for list="{{ photoList }}" as="p" hint-placeholder-count="0">
+            <div style="position:relative; aspect-ratio:1; border-radius:6px; overflow:hidden; border:1px solid #c3d9ec; background:#e3eff9;">
+              <div role="img" aria-label="{{ p.name }}" style="{{ p.style }}"></div>
+              <button type="button" onClick="{{ p.remove }}" aria-label="Remove photo" style="position:absolute; top:4px; right:4px; width:26px; height:26px; border-radius:50%; border:none; background:rgba(21,22,26,.75); color:#fff; font-size:15px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;">&times;</button>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+        PHOTO_A
+      </div>
+    </div>
+
+    <div style="display:flex; gap:14px;">
+      <div style="flex:none; width:32px; display:flex; flex-direction:column; align-items:center;"><span style="{{ c5 }}">5</span></div>
+      <div style="flex:1; min-width:0; background:#dcebf7; border:1px solid #c3d9ec; border-radius:10px; padding:16px 16px 18px;">
+        <div style="font-weight:700; font-size:15.5px; margin-bottom:4px;">Would you like to answer a few optional questions to help us better tailor your quote?</div>
+        <div style="font-size:12.5px; color:#6b6f78; margin-bottom:12px;">Optional, but helps us give you the best service and quote possible!</div>
+        <div class="ar-keep2" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <sc-for list="{{ moreOpts }}" as="o" hint-placeholder-count="2"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+        </div>
+        <sc-if value="{{ yesMore }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:arStepIn .3s ease both;">
+          <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:16px 0 6px;">What best describes your project needs? <span style="color:#9a958c; font-weight:500;">(select all that apply)</span></span>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <sc-for list="{{ needsOpts }}" as="o" hint-placeholder-count="10"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+          </div>
+          <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:16px 0 6px;">Are there any preferences you&rsquo;d like us to consider for your estimate? <span style="color:#9a958c; font-weight:500;">(select all that apply)</span></span>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <sc-for list="{{ prefsOpts }}" as="o" hint-placeholder-count="6"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+          </div>
+          <span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin:16px 0 6px;">Project timeline</span>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <sc-for list="{{ timelineOpts }}" as="o" hint-placeholder-count="4"><button type="button" onClick="{{ o.tap }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="color:#2a8c53; font-weight:800;">{{ o.mark }}</span></button></sc-for>
+          </div>
+          <label style="display:block; margin-top:16px;"><span style="display:block; font-size:12.5px; font-weight:600; color:#3c4048; margin-bottom:6px;">How did you hear about us?</span>
+            <select value="{{ f.heardFrom }}" onBlur="{{ tb.heardFrom }}" onChange="{{ setHeardFrom }}" style="{{ fs.heardFrom }}" style-focus="border-color:#2f80bd; box-shadow:0 0 0 4px rgba(47,128,189,.2);">
+              <option value="">Select one&hellip;</option>
+              <option>Google Search</option>
+              <option>Facebook</option>
+              <option>Referral / Word of Mouth</option>
+              <option>Repeat Customer</option>
+              <option>Yard Sign / Job Site</option>
+              <option>Company Truck</option>
+              <option>Other</option>
+            </select>
+          </label>
+        </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <sc-if value="{{ hasErr }}" hint-placeholder-val="{{ false }}"><div style="margin-top:14px; padding:10px 13px; background:#fdf3f2; border:1px solid #f2c9c4; border-radius:6px; color:#b3352b; font-size:13px; font-weight:600;">{{ err }}</div></sc-if>
+    <div style="display:flex; gap:12px; margin-top:20px;">
+      <button type="button" onClick="{{ back1 }}" style="flex:0 0 auto; background:#fff; color:#3c4048; border:1.5px solid #cddbe8; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; padding:15px 18px; border-radius:6px;" style-hover="border-color:#2f80bd;">&larr; Back</button>
+      <button type="button" onClick="{{ next2 }}" style="flex:1; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:14px; letter-spacing:.08em; text-transform:uppercase; padding:15px; border-radius:6px;" style-hover="filter:brightness(1.08);">Review My Request &rarr;</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ onStep3 }}" hint-placeholder-val="{{ false }}">
+  <div style="animation:arStepIn .3s ease both;">
+    <div style="font-family:'Archivo'; font-weight:800; font-size:18px; margin:0 0 4px;">{{ step3Title }}</div>
+    <p style="font-size:13px; line-height:1.55; color:#6b6f78; margin:0 0 16px;">Check everything looks right, then send. Need to change something? Tap Back.</p>
+    <div style="background:#f0f6fb; border:1px solid #c3d9ec; border-radius:10px; padding:22px 22px 24px;">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:16px;">
+        <div style="font-family:'Archivo'; font-weight:800; font-size:17px;">Your request</div>
+        <div style="font-size:12.5px; color:#6b6f78;">{{ reviewCount }}</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <sc-for list="{{ review }}" as="r" hint-placeholder-count="6">
+          <div style="display:flex; align-items:flex-start; gap:14px; border-left:3px solid #2f80bd; padding-left:12px;">
+            <div style="flex:1; min-width:0;">
+              <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#5c616b;">{{ r.label }}</div>
+              <div style="font-size:14.5px; font-weight:600; color:#15161a; line-height:1.45; overflow-wrap:anywhere;">{{ r.value }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ hasPhoto }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+        <sc-for list="{{ photoList }}" as="p" hint-placeholder-count="0"><div role="img" aria-label="{{ p.name }}" style="{{ p.thumb }}"></div></sc-for>
+      </div>
+      </sc-if>
+    </div>
+    <div style="display:flex; gap:12px; margin-top:20px;">
+      <button type="button" onClick="{{ back2 }}" style="flex:0 0 auto; background:#fff; color:#3c4048; border:1.5px solid #cddbe8; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.06em; text-transform:uppercase; padding:15px 18px; border-radius:6px;" style-hover="border-color:#2f80bd;">&larr; Back</button>
+      <button type="submit" style="flex:1; background:#2f80bd; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:14px; letter-spacing:.08em; text-transform:uppercase; padding:15px; border-radius:6px;" style-hover="filter:brightness(1.08);">Request My Free Estimate</button>
+    </div>
+    <p style="font-size:12px; color:#6b6f78; text-align:center; margin:12px 0 0;">By submitting, you agree to our <a href="/terms" style="color:#5c616b; font-weight:600; text-decoration:underline;">Terms</a> and <a href="/privacy" style="color:#5c616b; font-weight:600; text-decoration:underline;">Privacy Policy</a>.</p>
+  </div>
+  </sc-if>
+</form>
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ false }}">
+<aside style="flex:none; width:290px; position:sticky; top:110px; background:#f0f6fb; border:1px solid #c3d9ec; border-radius:10px; padding:20px 20px 22px; font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a;">
+  <div style="font-family:'Archivo'; font-weight:800; font-size:17px; margin-bottom:3px;">Your request</div>
+  <div style="font-size:12.5px; color:#6b6f78; margin-bottom:14px;">Updates as you fill out the form.</div>
+  <sc-if value="{{ liveEmpty }}" hint-placeholder-val="{{ true }}"><div style="font-size:13.5px; line-height:1.55; color:#5c616b; background:#fff; border:1px dashed #b9d2e6; border-radius:8px; padding:14px;">Your answers will show up here.</div></sc-if>
+  <div style="display:flex; flex-direction:column; gap:12px;">
+    <sc-for list="{{ live }}" as="r" hint-placeholder-count="0">
+      <div style="border-left:3px solid #2f80bd; padding-left:11px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#5c616b;">{{ r.label }}</div>
+        <div style="font-size:14px; font-weight:600; line-height:1.45; overflow-wrap:anywhere;">{{ r.value }}</div>
+      </div>
+    </sc-for>
+  </div>
+</aside>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+<div style="text-align:center; padding:50px 16px; font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a;">
+  <div style="width:68px; height:68px; margin:0 auto 22px; border-radius:50%; background:#2f80bd; color:#fff; display:flex; align-items:center; justify-content:center; font-size:32px; box-shadow:0 0 0 8px #e3eff9;">&#10003;</div>
+  <h3 style="font-family:'Archivo'; font-weight:800; font-size:26px; margin:0 0 12px;">{{ thanksTitle }}</h3>
+  <p style="font-size:16px; line-height:1.6; color:#5c616b; margin:0 auto 26px; max-width:360px;">We&rsquo;ve received your request and will be in touch shortly to confirm your estimate day. Need us sooner? Call <a href="tel:2708443355" style="color:#2f80bd; font-weight:600;">(270) 844-3355</a>.</p>
+  <button type="button" onClick="{{ again }}" style="background:#15161a; color:#fff; border:none; cursor:pointer; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; padding:14px 26px; border-radius:5px;">Submit Another Request</button>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:820,&quot;height&quot;:1400},&quot;source&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Contact page — Request a Quote&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  blankForm(){ return { first:'', last:'', email:'', phone:'', address:'', clientType:'', ownerType:'', rentalOwner:'personal', occupancy:'', businessName:'', ownerName:'', workTypes:[], scope:[], needs:[], preferences:[], timeline:'', message:'', preferredDay:'', altDay:'', arrival:[], heardFrom:'', photos:[], smsConsent:false }; }
+  state = { step:1, err:'', sent:false, moreInfo:'no', greetName:'', touched:{}, fromReview:false, wide:false, form:this.blankForm() };
+  addrRef = React.createRef();
+  set(k){ const instant = ['preferredDay','altDay','heardFrom'].includes(k); return (e)=>{ const v = e.target.value; this.setState(s=>({ form:{ ...s.form, [k]:v }, touched: instant ? { ...s.touched, [k]:true } : s.touched })); }; }
+  touch(k){ this.setState(s=>({ touched:{ ...s.touched, [k]:true }, greetName: k === 'first' ? s.form.first.replace(/\s+/g,' ').trim() : s.greetName })); }
+  onResize = ()=>{ const w = window.innerWidth >= 1080; if (w !== this.state.wide) this.setState({ wide:w }); };
+  setF(k, v){ this.setState(s=>({ form:{ ...s.form, [k]:v } })); }
+  fmtPhone(v){ const d = v.replace(/\D/g,'').replace(/^1(?=\d{10})/,'').slice(0,10); if (d.length < 4) return d; if (d.length < 7) return '(' + d.slice(0,3) + ') ' + d.slice(3); return '(' + d.slice(0,3) + ') ' + d.slice(3,6) + '-' + d.slice(6); }
+  fmtDay(v){ if (!v) return ''; const d = new Date(v + 'T00:00'); return isNaN(d) ? v : d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' }); }
+  chipStyle(on){ return { display:'flex', alignItems:'center', justifyContent:'space-between', gap:'8px', width:'100%', minHeight:'46px', textAlign:'left', border:'1.5px solid ' + (on ? '#34a364' : '#cddbe8'), background: on ? '#e5f5ea' : '#fff', boxShadow: on ? '0 0 0 3px rgba(52,163,100,.16)' : 'none', color: on ? '#1b6a3c' : '#3c4048', borderRadius:'6px', padding:'10px 13px', fontSize:'14px', fontWeight:600, cursor:'pointer', fontFamily:'inherit', transition:'border-color .15s, box-shadow .15s' }; }
+  fieldStyle(ok, extra){ return Object.assign({ width:'100%', padding:'12px 13px', fontSize:'15px', border:'1px solid ' + (ok ? '#2f80bd' : '#cddbe8'), boxShadow: ok ? 'inset 0 0 0 1px #2f80bd' : 'none', borderRadius:'6px', background: ok ? '#f4f9fd' : '#fff', color:'#15161a', outline:'none', fontFamily:'inherit', transition:'border-color .15s, box-shadow .15s, background .15s' }, extra || {}); }
+  clean(v){ return typeof v === 'string' ? v.replace(/\s+/g, ' ').trim() : v; }
+  badge(done){ return { width:'32px', height:'32px', flex:'none', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:'14px', background: done ? '#2f80bd' : '#fff', color: done ? '#fff' : '#2f80bd', border:'2px solid #2f80bd', boxShadow: done ? '0 0 0 5px #e3eff9' : 'none', transition:'background .25s, color .25s, box-shadow .25s' }; }
+  needsCompany(f){ return f.ownerType === 'Business / LLC' || f.ownerType === 'Property manager' || (f.ownerType === 'Rental / investment' && f.rentalOwner === 'llc'); }
+  propertyType(f){
+    if (f.ownerType === 'Rental / investment') return 'Rental / investment property (' + (f.rentalOwner === 'llc' ? 'owned by LLC / company' : 'in owner\u2019s personal name') + ')';
+    if (f.ownerType === 'My home') return 'Homeowner';
+    if (!f.ownerType) return '';
+    return f.ownerType;
+  }
+  check1(f){
+    if (!f.first.trim() || !f.last.trim()) return 'Please enter your first and last name.';
+    if (!/.+@.+\..+/.test(f.email)) return 'Please enter a valid email address.';
+    if (f.phone.replace(/\D/g,'').length < 10) return 'Please enter a valid phone number.';
+    if (!f.clientType) return 'Please let us know if you are a new or existing client.';
+    if (!f.ownerType) return 'Please tell us about the property.';
+    if (this.needsCompany(f) && !f.businessName.trim()) return f.ownerType === 'Property manager' ? 'Please enter your management company name.' : 'Please enter the business or LLC name.';
+    if (!f.address.trim()) return 'Please enter the property or service address.';
+    return '';
+  }
+  arFormTop(){ var el=document.getElementById('quote-form'); if(!el) return; var h=document.querySelector('header'); var off=(h?h.offsetHeight:0)+14; var top=el.getBoundingClientRect().top; if(top<off||top>window.innerHeight*0.5) window.scrollTo({top:top+window.pageYOffset-off, behavior:'smooth'}); }
+  attachAC(){
+    const el = this.addrRef.current;
+    if (!el || el === this.acEl) return;
+    if (!(window.google && google.maps && google.maps.places)) return;
+    this.acEl = el;
+    const ac = new google.maps.places.Autocomplete(el, { componentRestrictions:{ country:'us' }, fields:['formatted_address'] });
+    ac.addListener('place_changed', ()=>{ const p = ac.getPlace(); this.setF('address', (p && p.formatted_address) || el.value); this.touch('address'); });
+  }
+  componentDidMount(){
+    if (!(window.google && window.google.maps && window.google.maps.places) && !document.getElementById('gmaps-sdk')) {
+      const s = document.createElement('script');
+      s.id = 'gmaps-sdk'; s.async = true;
+      s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDuCxKIqfCmpJPsiT299jUe-pi3mE5NfnI&libraries=places&loading=async';
+      document.head.appendChild(s);
+    }
+    this._poll = setInterval(()=>{ if (window.google && google.maps && google.maps.places) { clearInterval(this._poll); this.attachAC(); } }, 250);
+    setTimeout(()=>clearInterval(this._poll), 15000);
+    this.attachAC();
+    this.onResize(); window.addEventListener('resize', this.onResize);
+    this._fk = this.state.step + '|' + this.state.sent;
+  }
+  componentDidUpdate(){
+    this.attachAC();
+    const k = this.state.step + '|' + this.state.sent;
+    if (this._fk !== k) setTimeout(()=>this.arFormTop(), 30);
+    this._fk = k;
+  }
+  componentWillUnmount(){ clearInterval(this._poll); window.removeEventListener('resize', this.onResize); }
+  renderVals(){
+    const st = this.state, f = st.form, t = st.touched || {};
+    const multi = (list, key) => list.map(label=>{ const on = f[key].includes(label); return { label, mark: on ? '\u2713' : '', style: this.chipStyle(on), tap: ()=> this.setF(key, on ? f[key].filter(x=>x!==label) : [...f[key], label]) }; });
+    const single = (list, key, keep) => list.map(o=>{ const label = o.label || o, val = o.val || o; const on = f[key] === val; return { label, mark: on ? '\u2713' : '', style: this.chipStyle(on), tap: ()=> this.setF(key, (on && !keep) ? '' : val) }; });
+    const first = f.first.trim();
+    const steps = [ {n:1, label:'Contact'}, {n:2, label:'Service'}, {n:3, label:'Review'} ].map(s=>{
+      const reached = st.step >= s.n;
+      return { n:String(s.n), label:s.label, go:()=>{ if (s.n < st.step) this.setState({ step:s.n, err:'' }); },
+        wrapStyle:{ display:'flex', alignItems:'center', gap:'7px', cursor: s.n < st.step ? 'pointer' : 'default' },
+        dotStyle:{ width:'22px', height:'22px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'11.5px', fontWeight:700, background: reached ? '#2f80bd' : '#e3eff9', color: reached ? '#fff' : '#5c7d99', transition:'background .3s' },
+        labelStyle:{ fontSize:'12px', fontWeight:700, letterSpacing:'.08em', textTransform:'uppercase', color: st.step === s.n ? '#15161a' : '#8a8f98' } };
+    });
+    const nc = this.needsCompany(f);
+    const companyLabel = f.ownerType === 'Property manager' ? 'Management company name' : f.ownerType === 'Business / LLC' ? 'Business / LLC name' : 'LLC or company name';
+    const toStep = n => ()=> this.setState({ step:n, err:'', fromReview:false });
+    const editStep = n => ()=> this.setState({ step:n, err:'', fromReview:true });
+    const rows = [
+      { label:'Name', value:(f.first + ' ' + f.last).trim(), s:1 },
+      { label:'Contact', value:[f.email, f.phone].filter(Boolean).join(' \u00b7 ') + (f.smsConsent ? ' \u00b7 Text updates OK' : ''), s:1 },
+      { label:'You & the property', value:[f.clientType === 'existing' ? 'Existing client' : f.clientType === 'new' ? 'New client' : '', this.propertyType(f), nc ? f.businessName : '', f.ownerName ? 'Owner: ' + f.ownerName : '', f.occupancy].filter(Boolean).join(' \u00b7 '), s:1 },
+      { label:'Property address', value:f.address, s:1 },
+      { label:'Type of work', value:f.workTypes.join(', ') || 'Not specified', s:2 },
+      { label:'What you need done', value:f.scope.join(', ') || 'Not specified', s:2 },
+      { label:'Estimate availability', value:[this.fmtDay(f.preferredDay), this.fmtDay(f.altDay)].filter(Boolean).join(' or ') + (f.arrival.length ? ' \u00b7 ' + f.arrival.join(', ') : '') || 'Flexible', s:2 },
+      { label:'Notes', value:[f.message.trim(), f.photos.length ? f.photos.length + (f.photos.length === 1 ? ' photo' : ' photos') : ''].filter(Boolean).join(' \u00b7 '), s:2 },
+      { label:'Project needs', value:st.moreInfo === 'yes' ? f.needs.join(', ') : '', s:2 },
+      { label:'Preferences', value:st.moreInfo === 'yes' ? f.preferences.join(', ') : '', s:2 },
+      { label:'Timeline', value:st.moreInfo === 'yes' ? f.timeline : '', s:2 },
+      { label:'Heard about us from', value:st.moreInfo === 'yes' ? f.heardFrom : '', s:2 },
+    ].filter(r => r.value).map((r, i) => ({ n:String(i + 1), label:r.label, value:r.value, edit:editStep(r.s) }));
+    const doneBy = {
+      'Name': !!(t.first && t.last && f.first.trim() && f.last.trim()),
+      'Contact': !!(t.email && t.phone && /.+@.+\..+/.test(f.email) && f.phone.replace(/\D/g,'').length >= 10),
+      'You & the property': !!(f.clientType && f.ownerType && (!nc || (t.businessName && f.businessName.trim()))),
+      'Property address': !!(t.address && f.address.trim()),
+      'Notes': !!(t.message || f.photos.length)
+    };
+    const liveRows = rows.filter(r => r.value !== 'Not specified' && r.value !== 'Flexible' && r.value.trim() && (r.label in doneBy ? doneBy[r.label] : true));
+    return {
+      sent: st.sent, notSent: !st.sent, f, steps,
+      onStep1: st.step === 1, onStep2: st.step === 2, onStep3: st.step === 3,
+      progStyle: { height:'100%', width: ['33.3%','66.6%','100%'][st.step-1], background:'#2f80bd', borderRadius:'99px', transition:'width .35s ease' },
+      hasGreeting: st.greetName.length > 1, greeting: 'Nice to meet you, ' + st.greetName + '!',
+      blurFirst: ()=> this.setState({ greetName: f.first.trim() }),
+      step2Title: first ? 'Thanks, ' + first + '. How can we help?' : 'Service Details \u2013 How Can We Help?',
+      step3Title: first ? 'Almost done, ' + first + '.' : 'Review your request',
+      thanksTitle: first ? 'Thanks for reaching out, ' + first + '!' : 'Thanks for reaching out!',
+      b1: this.badge(!!(f.first.trim() && f.last.trim())),
+      b2: this.badge(/.+@.+\..+/.test(f.email) && f.phone.replace(/\D/g,'').length >= 10),
+      b3: this.badge(!!f.clientType && !!f.ownerType && (!nc || !!f.businessName.trim())),
+      b4: this.badge(!!f.address.trim()),
+      c1: this.badge(f.workTypes.length > 0), c2: this.badge(f.scope.length > 0),
+      c3: this.badge(!!(f.preferredDay || f.arrival.length)), c4: this.badge(!!(f.message.trim() || f.photos.length)),
+      c5: this.badge(st.moreInfo === 'yes' ? !!(f.needs.length || f.preferences.length || f.timeline || f.heardFrom) : true),
+      clientOpts: single([{label:'New client', val:'new'}, {label:'Existing client', val:'existing'}], 'clientType', true),
+      ownerOpts: single([{label:'My home', val:'My home'}, {label:'Rental / investment property', val:'Rental / investment'}, {label:'Business or LLC', val:'Business / LLC'}, {label:'I manage it for the owner', val:'Property manager'}], 'ownerType', true),
+      rentalOpts: single([{label:'In my name', val:'personal'}, {label:'Under an LLC / company', val:'llc'}], 'rentalOwner', true),
+      occOpts: single([{label:'Tenant lives there', val:'Tenant-occupied'}, {label:'Vacant', val:'Vacant'}], 'occupancy'),
+      isRental: f.ownerType === 'Rental / investment', isTenant: f.ownerType === 'Rental / investment' && f.occupancy === 'Tenant-occupied',
+      isManager: f.ownerType === 'Property manager',
+      needsCompany: nc, companyLabel, companyPlaceholder: f.ownerType === 'Property manager' ? 'Management company' : 'Company name as registered',
+      moreOpts: [{k:'no', label:'No, that\u2019s everything'}, {k:'yes', label:'Yes, a few more details'}].map(o=>({ label:o.label, mark: st.moreInfo === o.k ? '\u2713' : '', style:this.chipStyle(st.moreInfo === o.k), tap:()=>this.setState({ moreInfo:o.k }) })),
+      yesMore: st.moreInfo === 'yes',
+      workOpts: multi(['Roofing','Siding','Gutters','Soffit & Fascia','Tarp Service','Foundation / Support','Insurance Claim','Other / Not Sure'], 'workTypes'),
+      scopeOpts: multi(['Repair','Full Tear-Off & Replacement','Layover (over existing)','New / First-Time Install','Repair + Replace','Maintenance','Not Sure Yet'], 'scope'),
+      needsOpts: multi(['Active Leak or Emergency Need','Insurance Claim Involved','Storm-Related Damage','Time-Sensitive Project','Planning (Ballpark Pricing)','Comparing Quotes Before Deciding','Buying/Selling Property','Inspection Only','Investment or Rental Property','Maintenance / Annual Check-Up'], 'needs'),
+      prefsOpts: multi(['Most Economical Option','Balanced Price & Quality','Long-Term Quality Focus','Financing Options','Show Me Multiple Options','Open to Your Recommendation'], 'preferences'),
+      timelineOpts: single(['As soon as possible','Within the next month','3\u20136 months','Just exploring right now'], 'timeline'),
+      arrivalOpts: multi(['Morning (8\u201311am)','Midday (11am\u20132pm)','Afternoon (2\u20135pm)','Evening (after 6pm)','Any time'], 'arrival'),
+      review: rows,
+      tb: ['first','last','email','phone','businessName','ownerName','address','preferredDay','altDay','message','heardFrom'].reduce((o,k)=>{ o[k] = ()=>this.touch(k); return o; }, {}),
+      wide: st.wide && st.step !== 3,
+      live: liveRows, liveEmpty: liveRows.length === 0,
+      fs: {
+        first: this.fieldStyle(!!t.first && !!f.first.trim()), last: this.fieldStyle(!!t.last && !!f.last.trim()),
+        email: this.fieldStyle(!!t.email && /.+@.+\..+/.test(f.email)), phone: this.fieldStyle(!!t.phone && f.phone.replace(/\D/g,'').length >= 10),
+        businessName: this.fieldStyle(!!t.businessName && !!f.businessName.trim()), ownerName: this.fieldStyle(!!t.ownerName && !!f.ownerName.trim()),
+        address: this.fieldStyle(!!t.address && !!f.address.trim()),
+        preferredDay: this.fieldStyle(!!t.preferredDay && !!f.preferredDay, { padding:'11px 12px' }), altDay: this.fieldStyle(!!t.altDay && !!f.altDay, { padding:'11px 12px' }),
+        message: this.fieldStyle(!!t.message && !!f.message.trim(), { resize:'vertical' }), heardFrom: this.fieldStyle(!!t.heardFrom && !!f.heardFrom)
+      },
+      next1: ()=>{ const e = this.check1(f); if (e) return this.setState({ err:e }); this.setState({ step: st.fromReview ? 3 : 2, err:'', fromReview:false }); },
+      next1Label: st.fromReview ? 'Save & Back to Review \u2192' : 'Next: Service Details \u2192',
+      reviewCount: rows.length + ' answers',
+      next2: ()=> this.setState({ step:3, err:'', fromReview:false }),
+      back1: toStep(1), back2: toStep(2),
+      hasErr: !!st.err, err: st.err,
+      today: new Date().toISOString().slice(0,10),
+      addrRef: this.addrRef,
+      setFirst:this.set('first'), setLast:this.set('last'), setEmail:this.set('email'), setAddress:this.set('address'), setMessage:this.set('message'), setPreferredDay:this.set('preferredDay'), setAltDay:this.set('altDay'), setHeardFrom:this.set('heardFrom'), setBusinessName:this.set('businessName'), setOwnerName:this.set('ownerName'),
+      setPhone: (e)=> this.setF('phone', this.fmtPhone(e.target.value)),
+      setSmsConsent: (e)=> this.setF('smsConsent', e.target.checked),
+      hasPhoto: f.photos.length > 0, canAddPhoto: f.photos.length < 4,
+      photoCta: f.photos.length ? 'Add another photo (' + (4 - f.photos.length) + ' left)' : 'Choose up to 4 photos of the issue or area',
+      photoList: f.photos.map((p, i) => ({ name:p.name,
+        style:{ position:'absolute', inset:0, backgroundImage:'url(' + p.dataUrl + ')', backgroundSize:'cover', backgroundPosition:'center' },
+        thumb:{ width:'64px', height:'64px', borderRadius:'6px', border:'1px solid #c3d9ec', backgroundImage:'url(' + p.dataUrl + ')', backgroundSize:'cover', backgroundPosition:'center' },
+        remove:()=> this.setState(s2=>({ form:{ ...s2.form, photos:s2.form.photos.filter((_, j)=> j !== i) } })) })),
+      setPhoto: (e)=>{
+        const files = Array.from(e.target.files || []);
+        e.target.value = '';
+        files.slice(0, Math.max(0, 4 - this.state.form.photos.length)).forEach(file=>{
+          const img = new Image(), url = URL.createObjectURL(file);
+          img.onload = ()=>{
+            const max = 1400, sc = Math.min(1, max / Math.max(img.width, img.height));
+            const c = document.createElement('canvas');
+            c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            const dataUrl = c.toDataURL('image/jpeg', .78);
+            URL.revokeObjectURL(url);
+            this.setState(s2=> s2.form.photos.length >= 4 ? null : ({ form:{ ...s2.form, photos:[...s2.form.photos, { name: file.name.replace(/\.[^.]+$/, '') + '.jpg', dataUrl }] } }));
+          };
+          img.src = url;
+        });
+      },
+      submit: (e)=>{
+        e.preventDefault();
+        if (st.step !== 3) return;
+        const err = this.check1(f);
+        if (err) return this.setState({ step:1, err });
+        if (window.ARIntake) {
+          window.ARIntake.submit({
+            source: this.props.source || 'Contact page \u2014 Request a Quote',
+            name:this.clean(f.first+' '+f.last), firstName:this.clean(f.first), lastName:this.clean(f.last), email:this.clean(f.email).toLowerCase().replace(/ /g,''), phone:f.phone, address:this.clean(f.address),
+            clientType:f.clientType, business: nc ? 'Yes' : 'No',
+            company: nc ? this.clean(f.businessName) : '',
+            propertyType: this.propertyType(f), occupancy: f.occupancy, ownerName: this.clean(f.ownerName),
+            service: f.workTypes.join(', ') || 'Not specified', scope:f.scope.join(', '),
+            projectNeeds: f.needs.join(', '), preferences: f.preferences.join(', '), timeline:f.timeline,
+            preferredDay:f.preferredDay, altDay:f.altDay, arrival: f.arrival.join(', '), heardFrom:f.heardFrom,
+            photos: f.photos.map((p, i)=>({ name: (i + 1) + '-' + p.name, content: p.dataUrl.split(',')[1] })),
+            details:f.message, smsConsent:!!f.smsConsent, smsConsentText: f.smsConsent ? 'Yes \u2014 opted in to SMS texts' : 'No \u2014 did not opt in to SMS texts', submittedAt:new Date().toISOString()
+          });
+        }
+        this.setState({ sent:true, err:'' });
+      },
+      again: ()=> this.setState({ sent:false, step:1, err:'', moreInfo:'no', greetName:'', touched:{}, fromReview:false, form: this.blankForm() }),
+    };
+  }
+}
+</script>
+</body>
+</html>
