@@ -49,12 +49,12 @@
     </div>
   </section>
 
-  <section style="padding:84px 0; background:#f6f4f1;">
+  <section style="padding:64px 0 84px; background:#f6f4f1;">
     <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
-      <div style="display:grid; grid-template-columns:1fr 1.05fr; gap:60px; align-items:start;">
-        <div>
+      <div style="display:flex; flex-direction:column; gap:56px; max-width:920px; margin:0 auto;">
+        <div style="order:2;">
           <h2 style="font-family:'Archivo'; font-weight:800; font-size:clamp(26px,3vw,38px); line-height:1.08; letter-spacing:-.015em; margin:0 0 28px;">Reach us directly</h2>
-          <div style="display:flex; flex-direction:column; gap:22px; margin-bottom:32px;">
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; margin-bottom:32px;">
             <a href="tel:2708443355" style="display:flex; align-items:center; gap:16px;">
               <span style="width:48px; height:48px; flex:none; border-radius:50%; background:#2f80bd; color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px;">&#9742;</span>
               <span><span style="display:block; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:#8a8f98;">Call</span><span style="font-family:'Archivo'; font-weight:700; font-size:20px; color:#15161a;">(270) 844-3355</span></span>
@@ -81,7 +81,7 @@
           </div>
         </div>
 
-        <div style="background:#fff; border:1px solid #dfe9f2; border-top:5px solid #2f80bd; border-radius:12px; padding:30px 34px 30px; box-shadow:0 30px 80px rgba(21,42,60,.16);">
+        <div id="quote-form" style="order:1; scroll-margin-top:100px; background:#fff; border:1px solid #dfe9f2; border-top:5px solid #2f80bd; border-radius:12px; padding:38px 44px 42px; box-shadow:0 30px 80px rgba(21,42,60,.16);">
           <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
           <form onSubmit="{{ submit }}">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 12px;">
@@ -264,6 +264,8 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
+  arHashScroll(){ if(location.hash!=='#quote-form') return; var moved=false; var stop=function(){moved=true;}; window.addEventListener('touchstart',stop,{once:true,passive:true}); window.addEventListener('wheel',stop,{once:true,passive:true}); var go=function(){ if(moved) return; var el=document.getElementById('quote-form'); if(!el) return; var h=document.querySelector('header'); var off=(h?h.offsetHeight:80)+14; document.documentElement.style.scrollBehavior='auto'; window.scrollTo(0, el.getBoundingClientRect().top+window.pageYOffset-off); document.documentElement.style.scrollBehavior=''; }; [30,300,800,1500].forEach(function(t){ setTimeout(go,t); }); }
+  
   blankForm(){ return { first:'', last:'', email:'', phone:'', address:'', clientType:'new', business:'no', businessName:'', workTypes:[], scope:'', needs:[], preferences:[], timeline:'', message:'', preferredDay:'', altDay:'', arrival:[], heardFrom:'', photo:null, smsConsent:false }; }
   state = { step:1, err:'', sent:false, moreInfo:'no', form:{ first:'', last:'', email:'', phone:'', address:'', clientType:'new', business:'no', businessName:'', workTypes:[], scope:'', needs:[], preferences:[], timeline:'', message:'', preferredDay:'', altDay:'', arrival:[], heardFrom:'', photo:null, smsConsent:false } };
   addrRef = React.createRef();
@@ -282,7 +284,7 @@ class Component extends DCLogic {
       this.setF('address', v);
     });
   }
-  componentDidMount(){
+  componentDidMount(){ this.arHashScroll();
     if (!(window.google && window.google.maps && window.google.maps.places) && !document.getElementById('gmaps-sdk')) {
       const s = document.createElement('script');
       s.id = 'gmaps-sdk'; s.async = true;
