@@ -68,6 +68,10 @@
     {
       "source": "/service-detail",
       "destination": "/ServiceDetail.dc.html"
+    },
+    {
+      "source": "/measurement-sheet",
+      "destination": "/Measurement-Sheet.dc.html"
     }
   ],
   "redirects": [

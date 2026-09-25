@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="robots" content="noindex, nofollow">
+<title>Measurement Sheet — A&amp;R United Construction</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;} body{margin:0; background:#e9e6e1;} a{color:#2f80bd;} a:hover{color:#1d5f92;}
+@page{ size:letter; margin:0.4in; }
+@media print{ body{background:#fff;} [data-noprint]{display:none !important;} [data-sheet]{box-shadow:none !important; margin:0 !important; padding:0 !important; max-width:none !important;} [data-avoid]{break-inside:avoid;} }
+</style>
+</helmet>
+<div style="font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a; padding:28px 16px 60px;">
+  <div data-noprint="1" style="max-width:816px; margin:0 auto 16px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+    <div style="font-size:13.5px; color:#5c616b;">Measurement sheet generated from a website bid request.</div>
+    <button type="button" onClick="{{ print }}" style="background:#2f80bd; color:#fff; border:none; border-radius:6px; padding:12px 22px; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; font-family:inherit;">Print Sheet</button>
+  </div>
+
+  <div data-sheet="1" style="max-width:816px; margin:0 auto; background:#fff; box-shadow:0 20px 60px rgba(20,22,26,.12); padding:40px 44px 44px;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; border-bottom:3px solid #2f80bd; padding-bottom:14px; margin-bottom:16px;">
+      <div>
+        <img src="/assets/logo-2026.png" alt="A&amp;R United Construction, LLC" style="height:44px; width:auto; display:block; margin-bottom:8px;">
+        <div style="font-size:11px; color:#5c616b;">(270) 844-3355 &middot; office@arunitedconstruction.com</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Archivo'; font-weight:800; font-size:24px; letter-spacing:-.01em;">Measurement Sheet</div>
+        <div style="font-size:11.5px; color:#5c616b; margin-top:4px;">Request received {{ received }}</div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid #c9d3dc; border-radius:4px; overflow:hidden; margin-bottom:14px;">
+      <sc-for list="{{ info }}" as="r" hint-placeholder-count="10">
+        <div style="display:flex; gap:8px; padding:7px 10px; border-bottom:1px solid #e2e8ee; font-size:12px; line-height:1.4; min-width:0;">
+          <span style="flex:none; width:96px; font-weight:700; color:#5c616b; text-transform:uppercase; font-size:10px; letter-spacing:.06em; padding-top:1px;">{{ r.k }}</span>
+          <span style="flex:1; min-width:0; font-weight:600; overflow-wrap:anywhere;">{{ r.v }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ hasNotes }}" hint-placeholder-val="{{ false }}">
+      <div style="font-size:12px; line-height:1.5; background:#f3f7fb; border:1px solid #d7e3ee; border-radius:4px; padding:8px 10px; margin-bottom:14px;"><strong>Client notes:</strong> {{ notes }}</div>
+    </sc-if>
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-bottom:18px; font-size:11.5px;">
+      <div style="border-bottom:1px solid #15161a; padding-bottom:3px; color:#5c616b;">Measured by:</div>
+      <div style="border-bottom:1px solid #15161a; padding-bottom:3px; color:#5c616b;">Date:</div>
+      <div style="border-bottom:1px solid #15161a; padding-bottom:3px; color:#5c616b;">Stories:</div>
+    </div>
+
+    <sc-if value="{{ showRoof }}" hint-placeholder-val="{{ true }}">
+    <div data-avoid="1" style="margin-bottom:18px;">
+      <div style="background:#15161a; color:#fff; font-family:'Archivo'; font-weight:800; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:6px 10px;">Roofing</div>
+      <div style="display:grid; grid-template-columns:1.1fr 1fr 1fr 1fr 1fr; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#5c616b; border-left:1px solid #c9d3dc;">
+        <div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Facet</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Length</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Width</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Pitch</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Sq ft</div>
+      </div>
+      <sc-for list="{{ rows6 }}" as="x" hint-placeholder-count="6">
+        <div style="display:grid; grid-template-columns:1.1fr 1fr 1fr 1fr 1fr; border-left:1px solid #c9d3dc;"><div style="height:24px; border:1px solid #c9d3dc; border-left:none; border-top:none; font-size:10px; color:#9aa3ad; padding:4px 8px;">{{ x.n }}</div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div></div>
+      </sc-for>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px 14px; margin-top:10px;">
+        <sc-for list="{{ roofItems }}" as="i" hint-placeholder-count="16"><div style="display:flex; gap:6px; align-items:flex-end; font-size:11px;"><span style="flex:none; color:#3c4048;">{{ i }}</span><span style="flex:1; border-bottom:1px solid #9aa3ad; height:14px;"></span></div></sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ showSiding }}" hint-placeholder-val="{{ true }}">
+    <div data-avoid="1" style="margin-bottom:18px;">
+      <div style="background:#15161a; color:#fff; font-family:'Archivo'; font-weight:800; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:6px 10px;">Siding</div>
+      <div style="display:grid; grid-template-columns:1.1fr repeat(6, 1fr); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#5c616b; border-left:1px solid #c9d3dc;">
+        <div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Elevation</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Width</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Height</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Gable</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Wall sq ft</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Windows</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Doors</div>
+      </div>
+      <sc-for list="{{ elevations }}" as="x" hint-placeholder-count="5">
+        <div style="display:grid; grid-template-columns:1.1fr repeat(6, 1fr); border-left:1px solid #c9d3dc;"><div style="height:24px; border:1px solid #c9d3dc; border-left:none; border-top:none; font-size:11px; font-weight:600; padding:4px 8px;">{{ x }}</div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div></div>
+      </sc-for>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px 14px; margin-top:10px;">
+        <sc-for list="{{ sidingItems }}" as="i" hint-placeholder-count="8"><div style="display:flex; gap:6px; align-items:flex-end; font-size:11px;"><span style="flex:none; color:#3c4048;">{{ i }}</span><span style="flex:1; border-bottom:1px solid #9aa3ad; height:14px;"></span></div></sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ showGutters }}" hint-placeholder-val="{{ true }}">
+    <div data-avoid="1" style="margin-bottom:18px;">
+      <div style="background:#15161a; color:#fff; font-family:'Archivo'; font-weight:800; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:6px 10px;">Gutters</div>
+      <div style="display:grid; grid-template-columns:1.4fr repeat(4, 1fr); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#5c616b; border-left:1px solid #c9d3dc;">
+        <div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Run / location</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Gutter LF</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Downspouts</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Downspout LF</div><div style="padding:5px 8px; border:1px solid #c9d3dc; border-left:none; border-top:none;">Corners</div>
+      </div>
+      <sc-for list="{{ rows5 }}" as="x" hint-placeholder-count="5">
+        <div style="display:grid; grid-template-columns:1.4fr repeat(4, 1fr); border-left:1px solid #c9d3dc;"><div style="height:24px; border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div><div style="border:1px solid #c9d3dc; border-left:none; border-top:none;"></div></div>
+      </sc-for>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px 14px; margin-top:10px;">
+        <sc-for list="{{ gutterItems }}" as="i" hint-placeholder-count="4"><div style="display:flex; gap:6px; align-items:flex-end; font-size:11px;"><span style="flex:none; color:#3c4048;">{{ i }}</span><span style="flex:1; border-bottom:1px solid #9aa3ad; height:14px;"></span></div></sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ showSoffit }}" hint-placeholder-val="{{ true }}">
+    <div data-avoid="1" style="margin-bottom:18px;">
+      <div style="background:#15161a; color:#fff; font-family:'Archivo'; font-weight:800; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:6px 10px;">Soffit &amp; Fascia</div>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px 14px; margin-top:10px;">
+        <sc-for list="{{ soffitItems }}" as="i" hint-placeholder-count="8"><div style="display:flex; gap:6px; align-items:flex-end; font-size:11px;"><span style="flex:none; color:#3c4048;">{{ i }}</span><span style="flex:1; border-bottom:1px solid #9aa3ad; height:14px;"></span></div></sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <div data-avoid="1">
+      <div style="background:#15161a; color:#fff; font-family:'Archivo'; font-weight:800; font-size:13px; letter-spacing:.1em; text-transform:uppercase; padding:6px 10px;">Sketch &amp; Notes</div>
+      <div style="height:230px; border:1px solid #c9d3dc; border-top:none; background-image:linear-gradient(#e6ecf2 1px, transparent 1px), linear-gradient(90deg, #e6ecf2 1px, transparent 1px); background-size:18px 18px;"></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  data = (()=>{ try { const q = new URLSearchParams(location.search).get('d'); if (!q) return {}; const b = q.replace(/-/g,'+').replace(/_/g,'/'); const bin = atob(b + '==='.slice((b.length + 3) % 4)); const bytes = Uint8Array.from(bin, c => c.charCodeAt(0)); return JSON.parse(new TextDecoder().decode(bytes)); } catch (e) { return {}; } })();
+  fmtDay(v){ if (!v) return ''; const d = new Date(v + 'T00:00'); return isNaN(d) ? v : d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' }); }
+  renderVals(){
+    const d = this.data, sv = (d.sv || '').toLowerCase();
+    const known = /roof|sid|gutter|soffit|fascia/.test(sv);
+    const info = [
+      ['Client', d.n], ['Phone', d.p], ['Email', d.e], ['Address', d.a],
+      ['Company', d.co], ['Client type', d.ct === 'existing' ? 'Existing client' : d.ct === 'new' ? 'New client' : d.ct],
+      ['Property', [d.pt, d.oc].filter(Boolean).join(' \u00b7 ')], ['Service', d.sv], ['Scope', d.sc], ['Timeline', d.tl],
+      ['Estimate day', [this.fmtDay(d.dy), this.fmtDay(d.ad)].filter(Boolean).join(' or ')], ['Arrival', d.ar],
+      ['Roof area', d.ra ? d.ra + ' sq ft' : ''], ['Roof system', d.rs]
+    ].filter(r => r[1]).map(r => ({ k:r[0], v:r[1] }));
+    if (!info.length) info.push({ k:'Client', v:'' }, { k:'Phone', v:'' }, { k:'Email', v:'' }, { k:'Address', v:'' });
+    if (info.length % 2) info.push({ k:'', v:'' });
+    let received = '';
+    try { received = d.at ? new Date(d.at).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' }) : ''; } catch (e) {}
+    return {
+      info, received: received || '\u2014', notes: d.nt || '', hasNotes: !!d.nt,
+      showRoof: !known || /roof/.test(sv), showSiding: !known || /sid/.test(sv),
+      showGutters: !known || /gutter/.test(sv), showSoffit: !known || /soffit|fascia/.test(sv),
+      rows6: [1,2,3,4,5,6].map(n => ({ n:'#' + n })), rows5: [1,2,3,4,5],
+      elevations: ['Front','Back','Left','Right','Other'],
+      roofItems: ['Total squares','Layers','Ridge LF','Hip LF','Valley LF','Eave LF','Rake LF','Drip edge LF','Pipe boots','Box vents','Ridge vent LF','Skylights','Chimneys','Decking (sheets)','Shingle / color','Gutter apron LF'],
+      sidingItems: ['Outside corners','Inside corners','J-channel LF','Starter LF','Window wraps','Profile','Color','Housewrap sq ft'],
+      gutterItems: ['Size (5"/6")','Color','Guards (Y/N)','End caps'],
+      soffitItems: ['Soffit LF','Soffit depth','Vented / solid','Fascia LF','Fascia width','Color','Rotted wood LF','Porch ceilings'],
+      print: ()=> window.print()
+    };
+  }
+}
+</script>
+</body>
+</html>

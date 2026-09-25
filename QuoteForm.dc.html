@@ -317,8 +317,8 @@ class Component extends DCLogic {
     if (!el || el === this.acEl) return;
     if (!(window.google && google.maps && google.maps.places)) return;
     this.acEl = el;
-    const ac = new google.maps.places.Autocomplete(el, { componentRestrictions:{ country:'us' }, fields:['formatted_address'] });
-    ac.addListener('place_changed', ()=>{ const p = ac.getPlace(); this.setF('address', (p && p.formatted_address) || el.value); this.touch('address'); });
+    const ac = new google.maps.places.Autocomplete(el, { componentRestrictions:{ country:'us' }, fields:['formatted_address','geometry'] });
+    ac.addListener('place_changed', ()=>{ const p = ac.getPlace(); const g = p && p.geometry && p.geometry.location; this.setState(s=>({ form:{ ...s.form, lat: g ? g.lat() : null, lng: g ? g.lng() : null } })); this.setF('address', (p && p.formatted_address) || el.value); this.touch('address'); });
   }
   componentDidMount(){
     if (!(window.google && window.google.maps && window.google.maps.places) && !document.getElementById('gmaps-sdk')) {
@@ -430,7 +430,7 @@ class Component extends DCLogic {
       hasErr: !!st.err, err: st.err,
       today: new Date().toISOString().slice(0,10),
       addrRef: this.addrRef,
-      setFirst:this.set('first'), setLast:this.set('last'), setEmail:this.set('email'), setAddress:this.set('address'), setMessage:this.set('message'), setPreferredDay:this.set('preferredDay'), setAltDay:this.set('altDay'), setHeardFrom:this.set('heardFrom'), setBusinessName:this.set('businessName'), setOwnerName:this.set('ownerName'),
+      setFirst:this.set('first'), setLast:this.set('last'), setEmail:this.set('email'), setAddress:(e)=>{ const v = e.target.value; this.setState(s=>({ form:{ ...s.form, address:v, lat:null, lng:null } })); }, setMessage:this.set('message'), setPreferredDay:this.set('preferredDay'), setAltDay:this.set('altDay'), setHeardFrom:this.set('heardFrom'), setBusinessName:this.set('businessName'), setOwnerName:this.set('ownerName'),
       setPhone: (e)=> this.setF('phone', this.fmtPhone(e.target.value)),
       setSmsConsent: (e)=> this.setF('smsConsent', e.target.checked),
       hasPhoto: f.photos.length > 0, canAddPhoto: f.photos.length < 4,
@@ -464,7 +464,7 @@ class Component extends DCLogic {
         if (window.ARIntake) {
           window.ARIntake.submit({
             source: this.props.source || 'Contact page \u2014 Request a Quote',
-            name:this.clean(f.first+' '+f.last), firstName:this.clean(f.first), lastName:this.clean(f.last), email:this.clean(f.email).toLowerCase().replace(/ /g,''), phone:f.phone, address:this.clean(f.address),
+            name:this.clean(f.first+' '+f.last), firstName:this.clean(f.first), lastName:this.clean(f.last), email:this.clean(f.email).toLowerCase().replace(/ /g,''), phone:f.phone, address:this.clean(f.address), lat:f.lat || undefined, lng:f.lng || undefined,
             clientType:f.clientType, business: nc ? 'Yes' : 'No',
             company: nc ? this.clean(f.businessName) : '',
             propertyType: this.propertyType(f), occupancy: f.occupancy, ownerName: this.clean(f.ownerName),
