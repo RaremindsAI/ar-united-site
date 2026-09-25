@@ -22,8 +22,45 @@
 const DEFAULTS = {
   LEAD_WEBHOOK_URL: 'https://rareminds-webhooks.vercel.app/api/ar-lead',
   NOTIFY_EMAIL: 'office@arunitedconstruction.com',
-  FROM_EMAIL: 'office@arunitedconstruction.com'
+  FROM_EMAIL: 'office@arunitedconstruction.com',
+  SITE_URL: 'https://www.arunitedconstruction.com'
 };
+
+// ClickUp "Bid Requests" list custom field IDs (list 901114146582)
+const CF = {
+  email: 'c374365e-a1b8-4033-a72a-891f953a1afc',
+  phone: '424ef137-5201-4969-a961-12ec23c25efb',
+  address: 'a536a73d-a75b-4498-8a46-38cffef83b90',
+  sheet: '0191f2fe-9cc4-4724-84a6-9e2f162e66fb',
+  type: 'f3c9023b-d51c-4f6b-8a2d-635f40331e4d'
+};
+const TYPE_LABELS = {
+  roofing: 'bc516851-9a6b-40cf-950c-a5b3779b9d69', siding: '6edcb544-6a66-4169-97ff-a288b614497a',
+  gutter: 'd502d29e-7452-46f5-83df-d72ff5923a53', repair: 'b8c6905c-343c-415a-95fd-a66d2d6f3286',
+  replacement: '7bef234f-0f66-439b-9ed9-1341b1322de2', planning: 'caf11f9d-bb01-4d04-9113-4bad15d94d9b',
+  repairReplace: 'f90309b4-f5ae-4369-ae6d-3652b6bafe39'
+};
+function clickupFields(d, sheetUrl) {
+  const out = [];
+  if (d.email) out.push({ id: CF.email, value: d.email });
+  const digits = String(d.phone || '').replace(/\D/g, '').replace(/^1(?=\d{10}$)/, '');
+  if (digits.length === 10) out.push({ id: CF.phone, value: '+1 ' + digits.slice(0, 3) + ' ' + digits.slice(3, 6) + ' ' + digits.slice(6) });
+  if (d.address && typeof d.lat === 'number' && typeof d.lng === 'number') out.push({ id: CF.address, value: { location: { lat: d.lat, lng: d.lng }, formatted_address: d.address } });
+  if (sheetUrl) out.push({ id: CF.sheet, value: sheetUrl });
+  const sv = String(d.service || '').toLowerCase(), sc = String(d.scope || '').toLowerCase(), nd = String(d.projectNeeds || '').toLowerCase();
+  const labels = [];
+  if (/roof/.test(sv)) labels.push(TYPE_LABELS.roofing);
+  if (/siding/.test(sv)) labels.push(TYPE_LABELS.siding);
+  if (/gutter/.test(sv)) labels.push(TYPE_LABELS.gutter);
+  const rep = /repair/.test(sc), repl = /replace|tear-off|layover|install/.test(sc);
+  if (/repair \+ replace/.test(sc) || (rep && repl)) labels.push(TYPE_LABELS.repairReplace);
+  else if (rep) labels.push(TYPE_LABELS.repair);
+  else if (repl) labels.push(TYPE_LABELS.replacement);
+  if (/planning/.test(nd)) labels.push(TYPE_LABELS.planning);
+  if (labels.length) out.push({ id: CF.type, value: labels });
+  return out;
+}
+
 
 // ballpark pricing model (server-side only; never exposed on the site)
 function ballpark(roof) {
@@ -83,11 +120,13 @@ export default async function handler(req, res) {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     LEAD_WEBHOOK_URL: process.env.LEAD_WEBHOOK_URL || DEFAULTS.LEAD_WEBHOOK_URL,
     NOTIFY_EMAIL: process.env.NOTIFY_EMAIL || DEFAULTS.NOTIFY_EMAIL,
-    FROM_EMAIL: process.env.FROM_EMAIL || DEFAULTS.FROM_EMAIL
+    FROM_EMAIL: process.env.FROM_EMAIL || DEFAULTS.FROM_EMAIL,
+    SITE_URL: process.env.SITE_URL || DEFAULTS.SITE_URL
   };
 
   const roof = d.roof || {};
   const bp = roof.areaSqft ? ballpark(roof) : null;
+  let sheetUrl = '';
   const row = (k, v) => (v || v === 0) ? `${k}: ${v}\n` : '';
   const title = `[Bid] ${d.name || d.company || 'New lead'}${d.service ? ' \u2014 ' + d.service : ''}`;
   const details =
@@ -116,16 +155,17 @@ export default async function handler(req, res) {
       const r = await fetch(cfg.LEAD_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...d, title, summary: details, ballpark: bp ? bp.text : undefined })
+        body: JSON.stringify({ ...d, photos: undefined, photo: undefined, title, summary: details, ballpark: bp ? bp.text : undefined, custom_fields: clickupFields(d) })
       });
       result.webhook = r.status;
+      try { const j = await r.json(); if (j && j.sheetUrl) sheetUrl = j.sheetUrl; if (j && j.taskId) result.taskId = j.taskId; } catch (e) {}
     } catch (e) { result.webhook = 'error:' + e; }
   }
 
   // 2) Team notification email (with customer photo attached, if provided)
   try {
     const atts = photoList.length ? photoList.map((p, i) => ({ filename: p.name || ('photo-' + (i + 1) + '.jpg'), content: p.content })) : null;
-    result.teamEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, cfg.NOTIFY_EMAIL, title, details, d.email || null, atts);
+    result.teamEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, cfg.NOTIFY_EMAIL, title, (sheetUrl ? 'Open measurement sheet: ' + sheetUrl + '\n\n' : '') + details, d.email || null, atts);
   } catch (e) { result.teamEmail = 'error:' + e; }
 
   // 3) Customer ballpark email (estimator only, when we have a price + their email)
