@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>A&amp;R Field Measurement Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --ink:#18222D; --ink2:#4A5866; --rule:#9AA9B7; --hair:#CCD6DF; --fill:#EDF3F8;
+  --blue:#3D9FD6; --blue-d:#1F6E9E; --orange:#EF8531; --paper:#FFFFFF;
+  --ground:#DDE4EA; --bar:#FFFFFF; --bar-ink:#18222D; --bar-line:#C3CDD6; --chip:#EDF3F8;
+  --sans:"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ color-scheme:dark; --ground:#141B22; --bar:#1D2630; --bar-ink:#E6EDF3; --bar-line:#34414E; --chip:#27333F; }
+}
+:root[data-theme="dark"]{ color-scheme:dark; --ground:#141B22; --bar:#1D2630; --bar-ink:#E6EDF3; --bar-line:#34414E; --chip:#27333F; }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--ground);font-family:var(--sans);color:var(--ink);padding-inline:16px;padding-block:0 32px}
+
+/* Toolbar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar);color:var(--bar-ink);border-bottom:1px solid var(--bar-line);margin-inline:-16px;padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.seg{display:flex;border:1px solid var(--bar-line);border-radius:6px;overflow:hidden}
+.seg button{font:600 13px var(--sans);background:transparent;color:var(--bar-ink);border:0;padding:7px 12px;cursor:pointer;letter-spacing:.02em}
+.seg button+button{border-left:1px solid var(--bar-line)}
+.seg button[aria-pressed="true"]{background:var(--blue-d);color:#fff}
+.act{font:600 13px var(--sans);background:var(--chip);color:var(--bar-ink);border:1px solid var(--bar-line);border-radius:6px;padding:7px 12px;cursor:pointer}
+.act.primary{background:var(--orange);border-color:var(--orange);color:#1B1206}
+button:focus-visible,input:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.note{width:100%;text-align:center;font-size:12px;color:var(--bar-ink);opacity:.75}
+
+/* Sheets */
+.stack{display:flex;flex-direction:column;align-items:center;gap:24px;padding-top:24px}
+.fit{transform-origin:top center}
+.page{width:8.5in;height:11in;background:var(--paper);color:var(--ink);padding:.38in .4in .32in;display:flex;flex-direction:column;gap:.09in;box-shadow:0 2px 14px rgba(20,30,40,.18);font-size:8.6pt;line-height:1.2;overflow:hidden;position:relative}
+.page *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* Header */
+.hd{display:grid;grid-template-columns:1fr auto auto;gap:.14in;align-items:stretch;border-bottom:2.5px solid var(--blue);padding-bottom:.08in}
+.brand .logo{display:block;height:.52in;width:auto;max-width:2.4in}
+.brand .addr{color:var(--ink2);font-size:7.8pt;margin-top:4px;line-height:1.3}
+.brand .ttl{margin-top:6px;font-weight:700;font-size:10pt;letter-spacing:.14em;color:var(--blue-d)}
+.brand .ttl .tag{display:inline-block;margin-left:6px;background:var(--orange);color:#fff;padding:1px 6px;border-radius:3px;letter-spacing:.1em;font-size:8pt;vertical-align:1px}
+.ids{border:1px solid var(--rule);min-width:2.25in;display:grid;grid-template-columns:auto 1fr;font-size:8pt}
+.ids div{padding:2px 6px;border-bottom:1px solid var(--hair)}
+.ids div:nth-child(odd){color:var(--ink2);background:var(--fill);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:7pt;display:flex;align-items:center}
+.ids div:nth-last-child(-n+2){border-bottom:0}
+.ids .v{font-family:var(--mono);font-size:8pt}
+.qr{width:.82in;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:6.5pt;color:var(--ink2);text-align:center}
+.qr .code{width:.78in;height:.78in}
+.qr .code img,.qr .code canvas{width:100%!important;height:100%!important}
+
+/* Generic boxes */
+.box{border:1px solid var(--rule)}
+.sec{display:flex;flex-direction:column}
+.sh{background:var(--blue-d);color:#fff;font-weight:700;font-size:8pt;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px;display:flex;justify-content:space-between;align-items:center}
+.sh small{font-weight:500;letter-spacing:.04em;text-transform:none;opacity:.9}
+.lbl{color:var(--ink2);font-weight:600;font-size:7pt;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.fill{font:500 9.2pt var(--sans);color:var(--ink);border:0;background:transparent;width:100%;padding:0;min-width:0}
+.cells{display:grid;border-top:1px solid var(--rule);border-left:1px solid var(--rule)}
+.cell{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:3px 6px;display:flex;flex-direction:column;gap:1px;min-width:0}
+.c2{grid-column:span 2}.c3{grid-column:span 3}.c4{grid-column:span 4}
+.notes{min-height:.46in;white-space:pre-wrap;font-size:8.8pt;outline:none}
+
+/* Checkbox marks */
+.ck{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;margin-right:9px}
+.ck::before{content:"";width:9px;height:9px;border:1.1px solid var(--ink);flex:none;background:#fff}
+.ck.on::before{background:var(--ink);box-shadow:inset 0 0 0 1.5px #fff}
+.ln{display:flex;gap:5px;align-items:baseline;white-space:nowrap}
+.ln i{flex:1;border-bottom:1px solid var(--rule);min-width:.3in;height:.15in;font-style:normal}
+.ln i.s{flex:none;width:.45in}
+.col{display:flex;flex-direction:column;gap:5px;padding:5px 7px;min-width:0}
+.tri{display:grid;grid-template-columns:1.05fr 1fr 1fr;border:1px solid var(--rule);border-top:0}
+.tri>.col+.col{border-left:1px solid var(--hair)}
+.chips{display:flex;flex-wrap:wrap;row-gap:4px}
+
+/* Tables */
+table{border-collapse:collapse;width:100%;font-size:8pt}
+th,td{border:1px solid var(--rule);padding:1px 5px;height:.2in;text-align:left;vertical-align:middle}
+th{background:var(--fill);font-weight:700;font-size:7pt;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+td.q{width:.5in}td.m{width:.62in}
+td.money::before{content:"$";color:var(--ink2)}
+.mat td:first-child{width:auto}
+.hv td:nth-child(n+2){width:.55in}
+.tot td{font-weight:700;background:var(--fill)}
+
+/* Quick estimate */
+.qe{border:1.5px solid var(--ink);display:flex;flex-direction:column}
+.qe .sh{background:var(--ink)}
+.qe table td,.qe table th{height:.27in;border-color:var(--rule)}
+.qe table{font-size:8.6pt}
+.qe .n{width:.32in;text-align:center;font-weight:700}
+.qe .cost{width:1.45in}
+.qe .cost::before{content:"$ ";color:var(--ink2)}
+.qe .pay{padding:4px 7px;border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;align-items:center;gap:2px 0}
+.qe .pay .lbl{margin-right:8px}
+.clause{padding:5px 7px;font-weight:600;font-size:8.4pt;line-height:1.3;border-bottom:1px solid var(--rule)}
+.sig{display:grid;grid-template-columns:1fr 1.6in;min-height:.5in}
+.sig>div{padding:3px 7px;display:flex;flex-direction:column;justify-content:space-between}
+.sig>div+div{border-left:1px solid var(--rule)}
+.sig .x{font-size:13pt;color:var(--ink2);line-height:1}
+
+/* Grid sketch */
+.sketch{flex:1;min-height:2.4in;display:flex;flex-direction:column}
+.grid{flex:1;border:1px solid var(--ink2);
+  background-color:#fff;
+  background-image:
+    linear-gradient(to right, #8FA0AF 1px, transparent 1px),
+    linear-gradient(to bottom, #8FA0AF 1px, transparent 1px),
+    linear-gradient(to right, #D3DCE4 1px, transparent 1px),
+    linear-gradient(to bottom, #D3DCE4 1px, transparent 1px);
+  background-size:1in 1in,1in 1in,.2in .2in,.2in .2in;background-position:-1px -1px}
+.gridcap{display:flex;justify-content:space-between;font-size:7pt;color:var(--ink2);padding-top:2px}
+.row{display:grid;gap:.09in;align-items:start}
+.r4{grid-template-columns:1fr 1fr 1.25fr 1.25fr}
+.r2{grid-template-columns:1fr 1fr}
+.subhd{display:grid;grid-template-columns:1.4fr 2.2fr 1fr 1fr;border:1px solid var(--rule)}
+.subhd>div{padding:3px 6px;display:flex;flex-direction:column}
+.subhd>div+div{border-left:1px solid var(--hair)}
+.subhd .v{font-weight:600;font-size:9pt;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.subhd .v.mono{font-family:var(--mono);font-size:8.4pt}
+
+.ft{margin-top:auto;display:flex;justify-content:space-between;font-size:7pt;color:var(--ink2);border-top:1px solid var(--hair);padding-top:3px}
+.ft b{color:var(--ink)}
+
+/* Cover */
+.cover{padding:.6in .6in .5in;align-items:flex-end;text-align:right;gap:.12in}
+.rings{display:flex;gap:.12in}
+.rings span{width:.72in;height:.72in;border:3px solid var(--ink);border-radius:50%}
+.cv-name{font-size:40pt;font-weight:700;line-height:1.02;text-wrap:balance;margin-top:.1in}
+.cv-line{font-size:22pt;line-height:1.15}
+.cv-type{font-size:18pt;font-weight:600;color:var(--blue-d);margin-top:.2in;text-transform:uppercase;letter-spacing:.08em}
+.cv-qr{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;width:100%;gap:.2in}
+.cv-qr .code{width:1.3in;height:1.3in}
+.cv-qr .code img,.cv-qr .code canvas{width:100%!important;height:100%!important}
+.cv-foot{font-size:9pt;font-weight:600;letter-spacing:.06em;color:var(--ink2);text-transform:uppercase;text-align:left;max-width:4.6in;line-height:1.35}
+
+@media print{
+  @page{size:letter;margin:0}
+  body{background:#fff;padding:0}
+  .bar{display:none}
+  .stack{display:block;padding:0}
+  .fit{transform:none!important;height:auto!important;width:auto!important}
+  .page{box-shadow:none;break-after:page;margin:0;transform:none!important}
+  #back,#cover{break-after:auto}
+  .cover{display:none}
+  body.print-cover .cover{display:flex}
+  body.print-cover .sheet{display:none}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="bar" role="toolbar" aria-label="Sheet controls">
+  <div class="seg" id="typeSeg" aria-label="Estimate type">
+    <button data-type="roof" data-es="Techo">Roof</button>
+    <button data-type="siding" data-es="Siding">Siding</button>
+    <button data-type="gutters" data-es="Canales">Gutters</button>
+    <button data-type="other" data-es="Otro">Other</button>
+    <button data-type="all" data-es="Todo">All</button>
+  </div>
+  <div class="seg" id="langSeg" aria-label="Language">
+    <button data-lang="en">English</button>
+    <button data-lang="es">Español</button>
+  </div>
+  <button class="act primary" id="printSheet">Print sheet (front + back)</button>
+  <button class="act" id="printCover">Print spinner cover</button>
+  <p class="note" id="previewNote" hidden>Sample client shown. Links from ClickUp and the online bid form fill these fields in automatically.</p>
+</div>
+
+<div class="stack" id="stack">
+
+<!-- ===================== FRONT ===================== -->
+<div class="fit"><section class="page sheet" id="front" aria-label="Front page">
+  <header class="hd">
+    <div class="brand">
+      <img class="logo" id="logo" src="https://www.arunitedconstruction.com/assets/logo-2026.png" alt="A&amp;R United Construction" onerror="this.onerror=null;this.src='data:image/png;base64,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'">
+      <div class="addr"><span class="js-office"></span><br>(270) 844-3355 &nbsp;|&nbsp; office@arunitedconstruction.com</div>
+      <div class="ttl"><span data-en="FIELD MEASUREMENT SHEET" data-es="HOJA DE MEDIDAS">FIELD MEASUREMENT SHEET</span><span class="tag js-type">ROOF</span></div>
+    </div>
+    <div class="ids">
+      <div data-es="Tarea">Task</div><div class="v js-task"></div>
+      <div data-es="Cliente ID">Client ID</div><div class="v js-cid"></div>
+      <div data-es="Propiedad ID">Property ID</div><div class="v js-pid"></div>
+      <div data-es="Fecha">Date</div><div class="v js-date"></div>
+    </div>
+    <div class="qr"><div class="code js-qr"></div><span class="js-qrlabel">Scan to open in ClickUp</span></div>
+  </header>
+
+  <div class="cells" style="grid-template-columns:1.25fr 1.9fr 1fr 1fr">
+    <label class="cell"><span class="lbl" data-es="Cliente">Client</span><input class="fill" id="f-client"></label>
+    <label class="cell"><span class="lbl" data-es="Dirección">Service address</span><input class="fill" id="f-address"></label>
+    <label class="cell"><span class="lbl" data-es="Teléfono">Phone</span><input class="fill" id="f-phone"></label>
+    <label class="cell"><span class="lbl" data-es="Disponibilidad">Availability</span><input class="fill" id="f-avail"></label>
+    <label class="cell"><span class="lbl">Email</span><input class="fill" id="f-email"></label>
+    <label class="cell"><span class="lbl" data-es="Tipo de solicitud">Request type</span><input class="fill" id="f-category"></label>
+    <label class="cell"><span class="lbl" data-es="Estimador">Estimator</span><input class="fill" id="f-estimator"></label>
+    <label class="cell"><span class="lbl" data-es="Oficina">Office rep</span><input class="fill" id="f-rep"></label>
+    <div class="cell c4"><span class="lbl" data-es="Solicitud / notas">Request / notes</span><div class="notes" id="f-notes" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Request notes"></div></div>
+  </div>
+
+  <!-- ROOF FRONT -->
+  <div class="sec" data-show="roof all">
+    <div class="sh"><span data-es="Techo">Roof</span><small data-es="Marque lo que tiene y lo que quiere">Check what they have and what they want</small></div>
+    <div class="tri">
+      <div class="col" style="padding:0">
+        <table class="hv" style="border:0">
+          <tr><th style="border-top:0;border-left:0" data-es="Material">Material</th><th style="border-top:0">Tiene</th><th style="border-top:0;border-right:0">Quiere</th></tr>
+          <tr><td style="border-left:0" data-es="Tejas (shingles)">Shingles</td><td><span class="ck"></span></td><td style="border-right:0"><span class="ck"></span></td></tr>
+          <tr><td style="border-left:0">Mule Hide</td><td><span class="ck"></span></td><td style="border-right:0"><span class="ck"></span></td></tr>
+          <tr><td style="border-left:0" data-es="Metal">Metal</td><td><span class="ck"></span></td><td style="border-right:0"><span class="ck"></span></td></tr>
+          <tr><td style="border-left:0" data-es="Hule (rubber)">Rubber</td><td><span class="ck"></span></td><td style="border-right:0"><span class="ck"></span></td></tr>
+          <tr><td style="border-left:0;border-bottom:0" data-es="Otro:">Other:</td><td style="border-bottom:0"><span class="ck"></span></td><td style="border-right:0;border-bottom:0"><span class="ck"></span></td></tr>
+        </table>
+      </div>
+      <div class="col">
+        <div class="ln"><span class="lbl" data-es="Capas">Layers</span><i></i><span class="lbl" data-es="Pisos">Stories</span><i></i></div>
+        <div class="ln"><span class="lbl" data-es="Inclinación">Pitch</span><i></i><span class="lbl" data-es="Edad">Roof age</span><i></i></div>
+        <div class="ln"><span class="lbl" data-es="Color drip edge">Drip edge color</span><i></i></div>
+        <div class="ln"><span class="lbl" data-es="Color de teja">Shingle color</span><i></i></div>
+        <div class="ln"><span class="lbl" data-es="Decking">Decking</span><span class="ck" data-es="Bueno">Good</span><span class="ck" data-es="Reemplazar">Replace</span></div>
+      </div>
+      <div class="col">
+        <span class="lbl" data-es="Alcance">Scope</span>
+        <div class="chips"><span class="ck" data-es="Reparación">Repair</span><span class="ck" data-es="Reemplazo">Replacement</span><span class="ck" data-es="Gotera activa">Active leak</span><span class="ck" data-es="Inspección">Inspection</span><span class="ck" data-es="Seguro">Insurance claim</span></div>
+        <div class="ln"><span class="lbl" data-es="Lugar de gotera">Leak location</span><i></i></div>
+        <div class="ln"><i></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDING FRONT -->
+  <div class="sec" data-show="siding all">
+    <div class="sh"><span>Siding</span><small data-es="Marque lo que tiene y lo que quiere">Check what they have and what they want</small></div>
+    <div class="tri">
+      <div class="col">
+        <span class="lbl" data-es="Solicitud">Request</span>
+        <div class="chips"><span class="ck" data-es="Reparación">Repair</span><span class="ck" data-es="Reemplazo">Replacement</span><span class="ck" data-es="Soffit / fascia">Soffit / fascia</span><span class="ck" data-es="Wrap de ventanas">Window wrap</span></div>
+        <div class="ln"><span class="lbl" data-es="Pisos">Stories</span><i></i><span class="lbl" data-es="Paredes">Walls</span><i></i></div>
+      </div>
+      <div class="col">
+        <span class="lbl" data-es="Material actual">Existing material</span>
+        <div class="chips"><span class="ck">Vinyl</span><span class="ck" data-es="Aluminio">Aluminum</span><span class="ck" data-es="Madera">Wood</span><span class="ck">Fiber cement</span></div>
+        <span class="lbl" data-es="Perfil">Profile</span>
+        <div class="chips"><span class="ck">D4</span><span class="ck">D5</span><span class="ck">Dutch lap</span><span class="ck">Board &amp; batten</span></div>
+      </div>
+      <div class="col">
+        <div class="ln"><span class="lbl" data-es="Color actual">Current color</span><i></i></div>
+        <div class="ln"><span class="lbl" data-es="Tamaño actual">Current size</span><i></i></div>
+        <div class="ln"><span class="lbl" data-es="Color deseado">Color requested</span><i></i></div>
+        <div class="ln"><span class="lbl" data-es="Quiere">Wants</span><i></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GUTTERS FRONT -->
+  <div class="sec" data-show="gutters all">
+    <div class="sh"><span data-es="Canales">Gutters</span><small data-es="Marque lo que tiene y lo que quiere">Check what they have and what they want</small></div>
+    <div class="tri">
+      <div class="col">
+        <span class="lbl" data-es="Solicitud">Request</span>
+        <div class="chips"><span class="ck" data-es="Canales sin costura">Seamless gutters</span><span class="ck" data-es="Limpieza">Cleaning</span><span class="ck" data-es="Reparación">Repair</span><span class="ck" data-es="Protectores">Guards</span></div>
+      </div>
+      <div class="col">
+        <div class="ln"><span class="lbl" data-es="Tamaño actual">Current size</span><span class="ck">5"</span><span class="ck">6"</span></div>
+        <div class="ln"><span class="lbl" data-es="Tamaño deseado">Size wanted</span><span class="ck">5"</span><span class="ck">6"</span></div>
+        <div class="ln"><span class="lbl" data-es="Bajantes">Downspouts</span><span class="ck">2x3</span><span class="ck">3x4</span></div>
+      </div>
+      <div class="col">
+        <div class="ln"><span class="lbl" data-es="Color actual">Current color</span><i></i></div>
+        <div class="ln"><span class="lbl" data-es="Color deseado">Color requested</span><i></i></div>
+        <div class="ln"><span class="lbl">Fascia</span><span class="ck" data-es="Buena">Good</span><span class="ck" data-es="Reparar">Needs repair</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTHER FRONT -->
+  <div class="sec" data-show="other">
+    <div class="sh"><span data-es="Otro trabajo">Other work</span><small data-es="Describa el trabajo">Describe the work</small></div>
+    <div class="tri" style="grid-template-columns:1fr 1.6fr">
+      <div class="col">
+        <span class="lbl" data-es="Tipo">Trade</span>
+        <div class="chips"><span class="ck" data-es="Cimientos">Foundation</span><span class="ck" data-es="Ventanas / puertas">Windows / doors</span><span class="ck" data-es="Carpintería">Carpentry</span><span class="ck" data-es="Pintura">Painting</span><span class="ck" data-es="Otro">Other</span></div>
+        <span class="lbl" data-es="Alcance">Scope</span>
+        <div class="chips"><span class="ck" data-es="Reparación">Repair</span><span class="ck" data-es="Reemplazo">Replace</span><span class="ck" data-es="Nuevo">New install</span><span class="ck" data-es="Inspección">Inspection</span></div>
+      </div>
+      <div class="col">
+        <span class="lbl" data-es="Descripción">Description</span>
+        <div class="ln"><i></i></div><div class="ln"><i></i></div><div class="ln"><i></i></div><div class="ln"><i></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITE CONDITIONS -->
+  <div class="sec">
+    <div class="sh"><span data-es="Condiciones del sitio">Site conditions</span></div>
+    <div class="tri" style="grid-template-columns:1fr">
+      <div class="col"><div class="chips">
+        <span class="ck" data-es="Muy inclinado">Steep pitch</span><span class="ck" data-es="Cables eléctricos">Power lines</span><span class="ck" data-es="Cerca / portón">Fence / gate</span><span class="ck" data-es="Perro">Dog</span><span class="ck" data-es="Jardín a proteger">Landscaping to protect</span><span class="ck">HOA</span><span class="ck" data-es="Andamio">Scaffolding</span><span class="ck" data-es="Cliente presente">Client home required</span>
+        <span class="ln"><span class="lbl" data-es="Contenedor">Dumpster</span><span class="ck" data-es="Entrada">Driveway</span><span class="ck" data-es="Calle">Street</span><span class="ck" data-es="Patio">Yard</span></span>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="box" data-show="roof siding gutters other" style="flex:1;min-height:.3in;display:flex;flex-direction:column"><span class="lbl" style="padding:3px 6px" data-es="Notas de campo / daños observados">Field notes / damage observed</span><div style="flex:1;margin:0 6px;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(.26in - 1px),var(--hair) calc(.26in - 1px),var(--hair) .26in)"></div></div>
+
+  <!-- QUICK ESTIMATE + SIGNATURE -->
+  <div data-show="all" style="flex:1"></div>
+  <div class="qe">
+    <div class="sh"><span data-es="Estimado rápido">Quick estimate</span></div>
+    <table>
+      <tr><th class="n">#</th><th data-es="Descripción del trabajo">Description of work</th><th class="cost" style="text-align:left">Cost</th></tr>
+      <tr><td class="n">1</td><td></td><td class="cost"></td></tr>
+      <tr><td class="n">2</td><td></td><td class="cost"></td></tr>
+      <tr class="js-qe3"><td class="n">3</td><td></td><td class="cost"></td></tr>
+    </table>
+    <div class="pay"><span class="lbl" data-es="Pago">Payment</span><span class="ck" data-es="Efectivo">Cash</span><span class="ck" data-es="Cheque">Check</span><span class="ck" data-es="Tarjeta">Card</span><span class="ck" data-es="Financiamiento">In-house financing</span><span class="ck" data-es="Seguro">Insurance</span></div>
+    <div class="clause" data-es="A&amp;R United Construction LLC proveerá toda la mano de obra, materiales, herramientas y equipo necesarios para completar el trabajo aprobado. El pago se debe al terminar el trabajo. Al firmar abajo, acepto y apruebo el estimado #______ y su costo.">A&amp;R United Construction LLC will provide all labor, materials, tools, and equipment needed to complete the approved work. Payment is due upon completion. By signing below, I accept and approve estimate #______ and its related cost.</div>
+    <div class="sig">
+      <div><span class="lbl" data-es="Firma del cliente">Client signature</span><span class="x">X</span></div>
+      <div><span class="lbl" data-es="Fecha">Date</span><span></span></div>
+    </div>
+  </div>
+
+  <div class="ft"><span>A&amp;R United Construction LLC &nbsp;|&nbsp; <b class="js-foot-client"></b></span><span data-es="Página 1 de 2 &nbsp;|&nbsp; Frente">Page 1 of 2 &nbsp;|&nbsp; Front</span></div>
+</section></div>
+
+<!-- ===================== BACK ===================== -->
+<div class="fit"><section class="page sheet" id="back" aria-label="Back page">
+  <div class="subhd">
+    <div><span class="lbl" data-es="Cliente">Client</span><span class="v js-client"></span></div>
+    <div><span class="lbl" data-es="Dirección">Address</span><span class="v js-address"></span></div>
+    <div><span class="lbl" data-es="Tarea">Task</span><span class="v mono js-task"></span></div>
+    <div><span class="lbl" data-es="Tipo">Type</span><span class="v js-type"></span></div>
+  </div>
+
+  <div class="sketch">
+    <div class="grid" aria-label="Sketch grid"></div>
+    <div class="gridcap"><span data-es="Dibujo / medidas. Cuadro chico = 1 pie aprox. Cuadro grande = 5 pies.">Sketch and measurements. Small square about 1 ft. Large square 5 ft.</span><span data-es="Marque el norte ↑">Mark north ↑</span></div>
+  </div>
+
+  <!-- ROOF BACK -->
+  <div class="row r4" data-show="roof all">
+    <table class="mat">
+      <tr><th data-es="Ventilación">Ventilation</th><th>Qty</th></tr>
+      <tr><td>Box vent</td><td class="q"></td></tr>
+      <tr><td>Ridge vent (LF)</td><td class="q"></td></tr>
+      <tr><td data-es="Turbina">Turbine</td><td class="q"></td></tr>
+      <tr><td>Power vent</td><td class="q"></td></tr>
+      <tr><td data-es="Otro">Other</td><td class="q"></td></tr>
+      <tr data-show="roof"><td></td><td class="q"></td></tr>
+    </table>
+    <table class="mat">
+      <tr><th data-es="Tubos">Pipe boots</th><th>Qty</th></tr>
+      <tr><td>1"</td><td class="q"></td></tr>
+      <tr><td>2"</td><td class="q"></td></tr>
+      <tr><td>3"</td><td class="q"></td></tr>
+      <tr><td>4"</td><td class="q"></td></tr>
+      <tr><td>Split boot</td><td class="q"></td></tr>
+      <tr data-show="roof"><td></td><td class="q"></td></tr>
+    </table>
+    <table class="mat">
+      <tr><th data-es="Adicional">Additional</th><th>Qty</th><th>$</th></tr>
+      <tr><td data-es="Chimenea">Chimney</td><td class="q"></td><td class="m money"></td></tr>
+      <tr><td>Step flash</td><td class="q"></td><td class="m money"></td></tr>
+      <tr><td>Wall flash</td><td class="q"></td><td class="m money"></td></tr>
+      <tr><td data-es="Tragaluz">Skylights</td><td class="q"></td><td class="m money"></td></tr>
+      <tr><td data-es="Costo de basura">Dumpster</td><td class="q"></td><td class="m money"></td></tr>
+      <tr><td data-es="Días / Extra">Days / Extra</td><td class="q"></td><td class="m money"></td></tr>
+    </table>
+    <table class="mat">
+      <tr><th data-es="Materiales">Materials</th><th>Qty</th><th>$</th></tr>
+      <tr><td data-es="Escuadras">Squares</td><td class="q"></td><td class="m money"></td></tr>
+      <tr><td>H&amp;R</td><td class="q"></td><td class="m money"></td></tr>
+      <tr><td>Felt</td><td class="q"></td><td class="m money"></td></tr>
+      <tr><td>Drip edge</td><td class="q"></td><td class="m money"></td></tr>
+      <tr><td>Ice &amp; water</td><td class="q"></td><td class="m money"></td></tr>
+      <tr><td>Starter</td><td class="q"></td><td class="m money"></td></tr>
+    </table>
+  </div>
+
+  <!-- SIDING BACK -->
+  <div class="row r2" data-show="siding all">
+    <table>
+      <tr><th data-es="Pared">Elevation</th><th data-es="Alto">Height</th><th data-es="Ancho">Width</th><th>SF</th><th data-es="Aberturas">Openings</th></tr>
+      <tr><td data-es="Frente">Front</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td data-es="Atrás">Back</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td data-es="Izquierda">Left</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td data-es="Derecha">Right</td><td></td><td></td><td></td><td></td></tr>
+      <tr data-show="siding"><td data-es="Garaje / otro">Garage / other</td><td></td><td></td><td></td><td></td></tr>
+      <tr class="tot"><td>Total SF</td><td></td><td></td><td></td><td></td></tr>
+    </table>
+    <table class="mat">
+      <tr><th data-es="Componentes de siding">Siding components</th><th>Qty</th><th data-es="Notas">Notes</th></tr>
+      <tr><td data-es="Quitar y tirar siding">Remove &amp; dispose existing</td><td class="q"></td><td></td></tr>
+      <tr><td data-es="Esquinas interiores / exteriores">Inside / outside corners</td><td class="q"></td><td></td></tr>
+      <tr><td>J-channel / starter</td><td class="q"></td><td></td></tr>
+      <tr><td>Soffit SF / Fascia LF</td><td class="q"></td><td></td></tr>
+      <tr data-show="siding"><td data-es="Trim de ventanas / puertas">Window / door trim</td><td class="q"></td><td></td></tr>
+      <tr><td>House wrap / vents</td><td class="q"></td><td></td></tr>
+    </table>
+  </div>
+
+  <!-- GUTTERS BACK -->
+  <div class="row" style="grid-template-columns:1.6fr 1fr" data-show="gutters all">
+    <table class="mat">
+      <tr><th data-es="Componentes de canales">Gutter components</th><th>Qty</th><th>Cost</th><th>Total</th></tr>
+      <tr><td data-es="Quitar y tirar canales">Remove &amp; dispose existing</td><td class="q"></td><td class="m money"></td><td class="m money"></td></tr>
+      <tr><td data-es="Instalar canal (pies)">Install gutter LF &nbsp;<span class="ck">5"</span><span class="ck">6"</span></td><td class="q"></td><td class="m money"></td><td class="m money"></td></tr>
+      <tr><td data-es="Esquinas interiores / exteriores">Inside / outside corners</td><td class="q"></td><td class="m money"></td><td class="m money"></td></tr>
+      <tr><td data-es="Bajantes 1 piso / 2 pisos">Downspouts 1 story / 2 story</td><td class="q"></td><td class="m money"></td><td class="m money"></td></tr>
+      <tr><td data-es="Protectores (pies)">Guards LF</td><td class="q"></td><td class="m money"></td><td class="m money"></td></tr>
+      <tr><td data-es="Extensiones / bloques">Extensions / splash blocks</td><td class="q"></td><td class="m money"></td><td class="m money"></td></tr>
+    </table>
+    <div class="box" style="align-self:stretch;padding:3px 6px"><span class="lbl" data-es="Notas de canales">Gutter notes</span></div>
+  </div>
+
+  <!-- OTHER BACK -->
+  <div class="row" data-show="other">
+    <table>
+      <tr><th data-es="Artículo / área">Item / area</th><th data-es="Medida">Measurement</th><th>Qty</th><th>Material</th><th data-es="Notas">Notes</th></tr>
+      <tr><td></td><td></td><td class="q"></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td class="q"></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td class="q"></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td class="q"></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td class="q"></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td class="q"></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td class="q"></td><td></td><td></td></tr>
+    </table>
+  </div>
+
+  <div class="box" style="padding:3px 6px;min-height:.42in"><span class="lbl" data-es="Notas para la oficina">Notes for office</span></div>
+
+  <div class="ft"><span>A&amp;R United Construction LLC &nbsp;|&nbsp; <b class="js-foot-client"></b></span><span data-es="Página 2 de 2 &nbsp;|&nbsp; Atrás">Page 2 of 2 &nbsp;|&nbsp; Back</span></div>
+</section></div>
+
+<!-- ===================== SPINNER COVER ===================== -->
+<div class="fit"><section class="page cover" id="cover" aria-label="Spinner cover">
+  <div class="rings" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="cv-name js-client"></div>
+  <div class="cv-line js-street"></div>
+  <div class="cv-line">Prop. ID (<span class="js-pid"></span>)</div>
+  <div class="cv-line js-date"></div>
+  <div class="cv-type js-category"></div>
+  <div class="cv-qr">
+    <div></div>
+    <div class="code js-qr"></div>
+  </div>
+</section></div>
+
+</div>
+
+<script>
+(function(){
+  /* Office address printed in the header. Change here if needed. */
+  var OFFICE = "1970 Barret Ct, Suite 123, Henderson, KY 42420";
+
+  var TYPE_LABEL = {
+    en:{roof:"ROOF",siding:"SIDING",gutters:"GUTTERS",other:"OTHER",all:"ALL"},
+    es:{roof:"TECHO",siding:"SIDING",gutters:"CANALES",other:"OTRO",all:"TODO"}
+  };
+  var CAT_DEFAULT = {roof:"Roof",siding:"Siding",gutters:"Gutters",other:"Other",all:"Roof, siding, gutters"};
+
+  var qs = new URLSearchParams(location.search);
+  var hasData = qs.has("client") || qs.has("task_id") || qs.has("blank");
+  var SAMPLE = {
+    client:"Kara Lorenzana", address:"610 Wilson Ln, Corydon, KY 42406, USA", phone:"+1 270 748 4517",
+    email:"", type:"roof", task_id:"868kdryah", client_id:"KALO-83724", property_id:"KALO-83724-01",
+    notes:"Client needs a repair estimate for an active leak. Interested in in-house financing. Wants both repair and replacement pricing since the roof is near replacement age.",
+    availability:"Weekdays after 3 PM", category:"Roof repair / replacement", rep:"Abbie", estimator:"Albert"
+  };
+  function p(k, d){ if(!hasData) return SAMPLE[k] != null ? SAMPLE[k] : (d||""); var v = qs.get(k); return v == null || v === "" ? (d||"") : v; }
+
+  var state = {
+    type: (function(){ var t=(p("type","roof")||"roof").toLowerCase(); return /^(roof|siding|gutters|other|all)$/.test(t)?t:(t==="gutter"?"gutters":"roof"); })(),
+    lang: (p("lang","en")==="es")?"es":"en"
+  };
+
+  function today(){ var d=new Date(); return (d.getMonth()+1)+"/"+d.getDate()+"/"+d.getFullYear(); }
+  var dateStr = p("date", today());
+  var address = p("address");
+  var street = address.split(",")[0];
+
+  function setAll(sel, val){ document.querySelectorAll(sel).forEach(function(el){ el.textContent = val; }); }
+  function setVal(id, val){ var el=document.getElementById(id); if(el) el.value = val; }
+
+  document.querySelectorAll(".js-office").forEach(function(el){ el.textContent = OFFICE; });
+  setAll(".js-task", p("task_id")); setAll(".js-cid", p("client_id")); setAll(".js-pid", p("property_id"));
+  setAll(".js-date", dateStr); setAll(".js-street", street); setAll(".js-address", address);
+
+  setVal("f-client", p("client")); setVal("f-address", address); setVal("f-phone", p("phone"));
+  setVal("f-email", p("email")); setVal("f-avail", p("availability"));
+  setVal("f-estimator", p("estimator","Albert")); setVal("f-rep", p("rep"));
+  document.getElementById("f-notes").textContent = p("notes");
+
+  function syncFromInputs(){
+    var c = document.getElementById("f-client").value;
+    setAll(".js-client", c); setAll(".js-foot-client", c);
+    var a = document.getElementById("f-address").value;
+    setAll(".js-address", a); setAll(".js-street", a.split(",")[0]);
+    setAll(".js-category", document.getElementById("f-category").value);
+  }
+  ["f-client","f-address","f-category"].forEach(function(id){ document.getElementById(id).addEventListener("input", syncFromInputs); });
+
+  /* QR code: CompanyCam project if the link includes one, otherwise the ClickUp task */
+  var tid = p("task_id");
+  var ccUrl = p("companycam_url"), ccId = p("companycam_id");
+  if (!ccUrl && ccId) ccUrl = "https://app.companycam.com/projects/" + encodeURIComponent(ccId);
+  var qrTarget = ccUrl || (tid ? "https://app.clickup.com/t/" + encodeURIComponent(tid) : "");
+  var qrWhere = ccUrl ? "CompanyCam" : "ClickUp";
+  if (qrTarget && window.QRCode){
+    document.querySelectorAll(".js-qr").forEach(function(el){
+      new QRCode(el, {text:qrTarget, width:256, height:256, correctLevel:QRCode.CorrectLevel.M});
+    });
+  } else {
+    document.querySelectorAll(".qr").forEach(function(el){ el.hidden = true; });
+  }
+  function qrLabel(){ setAll(".js-qrlabel", state.lang==="es" ? "Escanear para abrir en "+qrWhere : "Scan to open in "+qrWhere); }
+
+  /* Language */
+  document.querySelectorAll("[data-es]").forEach(function(el){ el.setAttribute("data-en", el.innerHTML); });
+  function applyLang(){
+    document.querySelectorAll("[data-es]").forEach(function(el){
+      el.innerHTML = state.lang==="es" ? el.getAttribute("data-es") : el.getAttribute("data-en");
+    });
+    document.documentElement.lang = state.lang;
+    qrLabel();
+    document.querySelectorAll("#langSeg button").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.lang===state.lang); });
+    applyType();
+  }
+
+  /* Type */
+  function applyType(){
+    var t = state.type;
+    document.querySelectorAll("[data-show]").forEach(function(el){
+      el.hidden = el.getAttribute("data-show").split(" ").indexOf(t) === -1;
+    });
+    document.querySelectorAll(".js-qe3").forEach(function(el){ el.hidden = (t !== "all"); });
+    setAll(".js-type", TYPE_LABEL[state.lang][t]);
+    var catEl = document.getElementById("f-category");
+    if (!catEl.dataset.touched) catEl.value = p("category", CAT_DEFAULT[t]);
+    document.querySelectorAll("#typeSeg button").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.type===t); });
+    syncFromInputs();
+  }
+  document.getElementById("f-category").addEventListener("input", function(){ this.dataset.touched = "1"; });
+
+  document.getElementById("typeSeg").addEventListener("click", function(e){ var b=e.target.closest("button"); if(!b) return; state.type=b.dataset.type; applyType(); });
+  document.getElementById("langSeg").addEventListener("click", function(e){ var b=e.target.closest("button"); if(!b) return; state.lang=b.dataset.lang; applyLang(); });
+
+  /* Printing works on the hosted Netlify page. Hidden in sample preview. */
+  function doPrint(mode){ document.body.classList.remove("print-sheet","print-cover"); document.body.classList.add(mode); window.print(); }
+  document.getElementById("printSheet").addEventListener("click", function(){ doPrint("print-sheet"); });
+  document.getElementById("printCover").addEventListener("click", function(){ doPrint("print-cover"); });
+  window.addEventListener("afterprint", function(){ document.body.classList.remove("print-sheet","print-cover"); });
+  if (!hasData){
+    document.getElementById("printSheet").hidden = true;
+    document.getElementById("printCover").hidden = true;
+    document.getElementById("previewNote").hidden = false;
+  }
+
+  /* Blank sheet mode: ?blank=1 clears all client fields */
+  if (qs.has("blank")){
+    ["f-client","f-address","f-phone","f-email","f-avail","f-rep"].forEach(function(id){ setVal(id,""); });
+    document.getElementById("f-notes").textContent = "";
+  }
+
+  /* Scale letter pages to fit narrow screens */
+  function fit(){
+    var avail = document.getElementById("stack").clientWidth;
+    document.querySelectorAll(".fit").forEach(function(w){
+      var pg = w.firstElementChild, W = pg.offsetWidth, H = pg.offsetHeight;
+      var s = Math.min(1, avail / W);
+      w.style.width = (W*s)+"px"; w.style.height = (H*s)+"px";
+      pg.style.transformOrigin = "top left";
+      pg.style.transform = s<1 ? "scale("+s+")" : "";
+    });
+  }
+  window.addEventListener("resize", fit);
+  window.addEventListener("beforeprint", function(){ document.querySelectorAll(".page").forEach(function(pg){ pg.style.transform=""; }); });
+  window.addEventListener("afterprint", fit);
+
+  applyLang();
+  fit();
+})();
+</script>
+</body>
+</html>

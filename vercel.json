@@ -71,7 +71,7 @@
     },
     {
       "source": "/measurement-sheet",
-      "destination": "/Measurement-Sheet.dc.html"
+      "destination": "/Measurement-Sheet.html"
     }
   ],
   "redirects": [
