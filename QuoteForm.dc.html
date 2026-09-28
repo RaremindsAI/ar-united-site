@@ -317,7 +317,7 @@ class Component extends DCLogic {
     if (!el || el === this.acEl) return;
     if (!(window.google && google.maps && google.maps.places)) return;
     this.acEl = el;
-    const ac = new google.maps.places.Autocomplete(el, { componentRestrictions:{ country:'us' }, fields:['formatted_address','geometry'] });
+    const ac = new (window.ARPlacesAC || google.maps.places.Autocomplete)(el, { componentRestrictions:{ country:'us' }, fields:['formatted_address','geometry'] });
     ac.addListener('place_changed', ()=>{ const p = ac.getPlace(); const g = p && p.geometry && p.geometry.location; this.setState(s=>({ form:{ ...s.form, lat: g ? g.lat() : null, lng: g ? g.lng() : null } })); this.setF('address', (p && p.formatted_address) || el.value); this.touch('address'); });
   }
   componentDidMount(){

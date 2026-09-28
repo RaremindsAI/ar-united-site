@@ -184,6 +184,18 @@ export default async function handler(req, res) {
     try {
       result.customerEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, d.email, 'Your commercial roof coating ballpark', msg, cfg.NOTIFY_EMAIL);
     } catch (e) { result.customerEmail = 'error:' + e; }
+  } else if (d.email && /estimator/i.test(d.source || '')) {
+    // Estimator submitted without a measured area: still confirm receipt to the customer
+    const name = (d.name || '').trim().split(' ')[0] || 'there';
+    const msg =
+      `Hi ${name},\n\n` +
+      `Thanks for using our commercial roof coating estimator. We received your request` +
+      `${d.address ? ' for ' + d.address : ''} and our team will follow up with your ballpark shortly.\n\n` +
+      `Need it sooner? Call or text (270) 844-3355 or just reply to this email.\n\n` +
+      `A&R United Construction\nCommercial Roof Coatings & Restoration`;
+    try {
+      result.customerEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, d.email, 'We received your roof coating estimate request', msg, cfg.NOTIFY_EMAIL);
+    } catch (e) { result.customerEmail = 'error:' + e; }
   }
 
   return res.status(200).json({ ok: true, ...result });

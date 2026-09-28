@@ -12,7 +12,7 @@
 <meta property="og:title" content="Our Work — Recent Projects | A&amp;R United Construction">
 <meta property="og:description" content="See recent roofing, coating and siding projects completed by A&amp;R United Construction across Henderson, Evansville and the Tri-State.">
 <meta property="og:url" content="https://www.arunitedconstruction.com/projects">
-<meta property="og:image" content="https://www.arunitedconstruction.com/assets/hero-aerial.jpg">
+<meta property="og:image" content="https://www.arunitedconstruction.com/assets/siding-aerial-opt.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png">
@@ -55,7 +55,7 @@
       <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;">
         <sc-for list="{{ filtered }}" as="p" hint-placeholder-count="9">
           <div onClick="{{ p.open }}" data-tilt="5" style="position:relative; border-radius:8px; overflow:hidden; aspect-ratio:4/3; cursor:zoom-in;">
-            <img src="{{ p.img }}" alt="{{ p.title }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s;" style-hover="transform:scale(1.06);">
+            <img loading="lazy" decoding="async" src="{{ p.img }}" alt="{{ p.title }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s;" style-hover="transform:scale(1.06);">
             <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(8,9,12,.85), rgba(8,9,12,0) 55%);"></div>
             <div style="position:absolute; left:0; bottom:0; padding:22px;">
               <div style="color:#5cb3ea; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:6px;">{{ p.tag }}</div>
@@ -113,7 +113,7 @@ class Component extends DCLogic {
   renderVals(){
     const active = this.state.cat;
     const cats = [
-      { key:'all', label:'All Projects' },
+      { key:'all', label:'Featured Work' },
       { key:'roofing', label:'Roofing' },
       { key:'siding', label:'Siding' },
       { key:'gutters', label:'Gutters' },
@@ -121,16 +121,16 @@ class Component extends DCLogic {
     ];
     const projects = [
       { cat:'siding', tag:'Siding & Gutters', title:'Craftsman Exterior', loc:'Henderson, KY', img:'assets/hero.jpg' },
-      { cat:'siding', tag:'Siding', title:'Full Exterior Replacement', loc:'Newburgh, IN', img:'assets/siding-aerial.jpg' },
-      { cat:'roofing', tag:'Roofing', title:'Architectural Shingles', loc:'Henderson, KY', img:'assets/roof-detail.jpg' },
+      { cat:'siding', tag:'Siding', title:'Full Exterior Replacement', loc:'Newburgh, IN', img:'assets/siding-aerial-opt.jpg' },
+      { cat:'roofing', tag:'Roofing', title:'Architectural Shingles', loc:'Henderson, KY', img:'assets/roof-detail-opt.jpg' },
       { cat:'roofing', tag:'Roofing', title:'Full Roof Replacement', loc:'Evansville, IN', img:'assets/roof-truck.jpg' },
       { cat:'siding', tag:'Siding', title:'Exterior Remodel', loc:'Henderson, KY', img:'assets/siding-sunset.jpg' },
       { cat:'commercial', tag:'Commercial', title:'Commercial Metal Roof', loc:'Tri-State', img:'assets/commercial-metal.avif' },
-      { cat:'roofing', tag:'Roofing', title:'Storm Restoration', loc:'Henderson, KY', img:'assets/roof-ranch.jpg' },
+      { cat:'roofing', tag:'Roofing', title:'Storm Restoration', loc:'Henderson, KY', img:'assets/roof-ranch-opt.jpg' },
       { cat:'siding', tag:'Siding', title:'Board & Batten Accent', loc:'Corydon, KY', img:'assets/siding-red.jpg' },
       { cat:'gutters', tag:'Gutters', title:'Seamless Gutter Install', loc:'Henderson, KY', img:'assets/gutters.jpg' },
       { cat:'commercial', tag:'Commercial', title:'Storage Facility Exterior', loc:'Tri-State', img:'assets/commercial-storage.avif' },
-      { cat:'roofing', tag:'Roofing', title:'Shingle Roof on Brick', loc:'Henderson, KY', img:'assets/roof-brick.jpg' },
+      { cat:'roofing', tag:'Roofing', title:'Shingle Roof on Brick', loc:'Henderson, KY', img:'assets/roof-brick-opt.jpg' },
       { cat:'siding', tag:'Siding', title:'Gable & Trim Detail', loc:'Newburgh, IN', img:'assets/siding-gable.jpg' },
     ];
     const base = active === 'all' ? projects : projects.filter(p => p.cat === active);

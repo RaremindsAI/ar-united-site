@@ -12,7 +12,7 @@
 <meta property="og:title" content="Customer Reviews | A&amp;R United Construction">
 <meta property="og:description" content="Read what homeowners and businesses say about A&amp;R United Construction — roofing, coatings and siding across the Tri-State.">
 <meta property="og:url" content="https://www.arunitedconstruction.com/reviews">
-<meta property="og:image" content="https://www.arunitedconstruction.com/assets/hero-aerial.jpg">
+<meta property="og:image" content="https://www.arunitedconstruction.com/assets/hero-aerial-opt.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-96.png">
@@ -62,6 +62,22 @@
     </div>
   </section>
 
+  <sc-if value="{{ gLoading }}" hint-placeholder-val="{{ true }}">
+  <section style="padding:80px 0 90px; background:#f6f4f1;">
+    <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:26px;">
+        <span style="width:48px; height:48px; flex:none; border-radius:10px; background:#fff; border:1px solid #e7e3dd; display:flex; align-items:center; justify-content:center; font-family:'Archivo'; font-weight:800; font-size:24px; color:#4285F4;">G</span>
+        <div style="font-family:'Archivo'; font-weight:800; font-size:22px;">Loading our latest Google reviews&hellip;</div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px;">
+        <div style="background:#fff; border:1px solid #e7e3dd; border-radius:10px; padding:24px; display:flex; flex-direction:column; gap:14px;"><div style="display:flex; align-items:center; gap:12px;"><span style="width:40px; height:40px; border-radius:50%; background:#eee9e2;"></span><span style="width:120px; height:12px; border-radius:6px; background:#eee9e2;"></span></div><span style="width:90px; height:10px; border-radius:5px; background:#f1ede7;"></span><span style="height:10px; border-radius:5px; background:#f1ede7;"></span><span style="height:10px; border-radius:5px; background:#f1ede7; width:80%;"></span></div>
+        <div style="background:#fff; border:1px solid #e7e3dd; border-radius:10px; padding:24px; display:flex; flex-direction:column; gap:14px;"><div style="display:flex; align-items:center; gap:12px;"><span style="width:40px; height:40px; border-radius:50%; background:#eee9e2;"></span><span style="width:120px; height:12px; border-radius:6px; background:#eee9e2;"></span></div><span style="width:90px; height:10px; border-radius:5px; background:#f1ede7;"></span><span style="height:10px; border-radius:5px; background:#f1ede7;"></span><span style="height:10px; border-radius:5px; background:#f1ede7; width:80%;"></span></div>
+        <div style="background:#fff; border:1px solid #e7e3dd; border-radius:10px; padding:24px; display:flex; flex-direction:column; gap:14px;"><div style="display:flex; align-items:center; gap:12px;"><span style="width:40px; height:40px; border-radius:50%; background:#eee9e2;"></span><span style="width:120px; height:12px; border-radius:6px; background:#eee9e2;"></span></div><span style="width:90px; height:10px; border-radius:5px; background:#f1ede7;"></span><span style="height:10px; border-radius:5px; background:#f1ede7;"></span><span style="height:10px; border-radius:5px; background:#f1ede7; width:80%;"></span></div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
   <sc-if value="{{ gOk }}" hint-placeholder-val="{{ false }}">
   <section style="padding:80px 0 0; background:#f6f4f1;">
     <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
@@ -95,6 +111,7 @@
   </section>
   </sc-if>
 
+  <sc-if value="{{ gFailed }}" hint-placeholder-val="{{ false }}">
   <section style="padding:90px 0; background:#f6f4f1;">
     <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
       <div style="columns:3; column-gap:24px;">
@@ -114,6 +131,7 @@
       </div>
     </div>
   </section>
+  </sc-if>
 
   <section style="padding:84px 0; background:#fff;">
     <div style="max-width:1240px; margin:0 auto; padding:0 40px; text-align:center;">
@@ -141,8 +159,10 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { g: null };
+  state = { g: null, gFailed: false };
+  failG(){ if (!this.state.g) this.setState({ gFailed: true }); }
   componentDidMount(){
+    this._gTimeout = setTimeout(()=>this.failG(), 8000);
     if (window.google && window.google.maps && window.google.maps.places) return this.fetchG();
     if (!document.getElementById('gmaps-sdk')) {
       const s = document.createElement('script');
@@ -153,30 +173,31 @@ class Component extends DCLogic {
     this._poll = setInterval(()=>{ if (window.google && google.maps && google.maps.places) { clearInterval(this._poll); this.fetchG(); } }, 300);
     setTimeout(()=>clearInterval(this._poll), 15000);
   }
-  componentWillUnmount(){ clearInterval(this._poll); }
+  componentWillUnmount(){ clearInterval(this._poll); clearTimeout(this._gTimeout); }
   fetchG(){
     try {
       const svc = new google.maps.places.PlacesService(document.createElement('div'));
       svc.findPlaceFromQuery({ query: 'A&R United Construction Henderson KY', fields: ['place_id'], locationBias: new google.maps.LatLng(37.8361, -87.59) }, (res, status) => {
-        if (status !== 'OK' || !res || !res[0]) return;
+        if (status !== 'OK' || !res || !res[0]) return this.failG();
         svc.getDetails({ placeId: res[0].place_id, fields: ['reviews', 'rating', 'user_ratings_total'] }, (place, st2) => {
-          if (st2 !== 'OK' || !place) return;
+          if (st2 !== 'OK' || !place) return this.failG();
           const revs = (place.reviews || []).filter(r => r.text && r.rating >= 4).slice(0, 6);
-          if (!revs.length && !place.rating) return;
-          this.setState({ g: { rating: place.rating || 5, total: place.user_ratings_total || 0, reviews: revs } });
+          if (!revs.length && !place.rating) return this.failG();
+          clearTimeout(this._gTimeout);
+          this.setState({ gFailed: false, g: { rating: place.rating || 5, total: place.user_ratings_total || 0, reviews: revs } });
         });
       });
-    } catch (e) {}
+    } catch (e) { this.failG(); }
   }
   renderVals(){
-    const g = this.state.g;
+    const g = this.state.g, failed = this.state.gFailed && !g;
     const star = (n) => '\u2605'.repeat(Math.max(1, Math.round(n)));
     const gVals = {
-      gOk: !!(g && g.reviews.length),
-      gRating: g ? (Math.round(g.rating * 10) / 10).toFixed(1) : '5.0',
-      gStars: g ? star(g.rating) : '\u2605\u2605\u2605\u2605\u2605',
+      gOk: !!(g && g.reviews.length), gLoading: !g && !failed, gFailed: failed,
+      gRating: g ? (Math.round(g.rating * 10) / 10).toFixed(1) : 'Google',
+      gStars: g ? star(g.rating) : '\u00a0',
       gTotalTxt: g && g.total ? 'from ' + g.total + ' Google reviews' : 'Google rating',
-      gRatingCaption: g && g.total ? 'Google Rating \u00b7 ' + g.total + ' reviews' : 'Google Rating',
+      gRatingCaption: g && g.total ? 'Google Rating \u00b7 ' + g.total + ' reviews' : (failed ? 'See our reviews on Google' : 'Loading rating\u2026'),
       gReviews: g ? g.reviews.map(r => ({
         name: r.author_name || 'Google user',
         initial: (r.author_name || 'G').trim().charAt(0).toUpperCase(),
