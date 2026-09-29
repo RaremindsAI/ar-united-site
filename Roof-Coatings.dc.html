@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- seo:start -->
-<title>Commercial Roof Coatings — Silicone &amp; Acrylic | A&amp;R United Construction</title>
-<meta name="description" content="Restore your commercial flat or metal roof for a fraction of replacement cost. Silicone &amp; acrylic coating systems with warranties up to 20 years. Henderson, KY.">
+<title>Commercial Roof Coatings | Silicone &amp; Acrylic | A&amp;R</title>
+<meta name="description" content="Restore your commercial flat or metal roof for a fraction of replacement cost. Silicone &amp; acrylic coatings with up to 20-year warranties.">
 <link rel="canonical" href="https://www.arunitedconstruction.com/roof-coatings">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="A&amp;R United Construction">
-<meta property="og:title" content="Commercial Roof Coatings — Silicone &amp; Acrylic | A&amp;R United Construction">
-<meta property="og:description" content="Restore your commercial flat or metal roof for a fraction of replacement cost. Silicone &amp; acrylic coating systems with warranties up to 20 years. Henderson, KY.">
+<meta property="og:title" content="Commercial Roof Coatings | Silicone &amp; Acrylic | A&amp;R">
+<meta property="og:description" content="Restore your commercial flat or metal roof for a fraction of replacement cost. Silicone &amp; acrylic coatings with up to 20-year warranties.">
 <meta property="og:url" content="https://www.arunitedconstruction.com/roof-coatings">
 <meta property="og:image" content="https://www.arunitedconstruction.com/assets/coating-metal-after-1.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -65,7 +65,7 @@
           <div style="display:inline-flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:#3c4048;"><span style="display:inline-flex; width:30px; height:30px; border-radius:50%; background:#f0f6fb; color:#2f80bd; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></span>Drag the slider to compare<span style="display:inline-flex; width:30px; height:30px; border-radius:50%; background:#f0f6fb; color:#2f80bd; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span></div>
         </div>
         <div ref="{{ baRef }}" onPointerDown="{{ baDown }}" onPointerMove="{{ baMove }}" onPointerUp="{{ baUp }}" onPointerCancel="{{ baUp }}" style="position:relative; aspect-ratio:4/3; border-radius:12px; overflow:hidden; cursor:ew-resize; user-select:none; touch-action:pan-y; box-shadow:0 26px 60px rgba(20,22,26,.18); background:#1c1e24;">
-          <img src="assets/coating-ba-after.jpg" alt="After: metal roof with a seamless white coating, valley sealed" draggable="false" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none;">
+          <img src="assets/coating-ba-after.webp" alt="After: metal roof with a seamless white coating, valley sealed" draggable="false" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none;">
           <img src="assets/coating-ba-before.jpg" alt="Before: weathered metal roof with rust and an open valley" draggable="false" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; clip-path:inset(0 {{ baClipRight }} 0 0);">
           <span style="position:absolute; top:16px; left:16px; background:rgba(12,13,16,.78); color:#fff; font-weight:700; font-size:12px; letter-spacing:.12em; text-transform:uppercase; padding:7px 12px; border-radius:99px; pointer-events:none;">Before</span>
           <span style="position:absolute; top:16px; right:16px; background:#2f80bd; color:#fff; font-weight:700; font-size:12px; letter-spacing:.12em; text-transform:uppercase; padding:7px 12px; border-radius:99px; pointer-events:none;">After</span>
@@ -174,7 +174,7 @@ class Component extends DCLogic {
     const ba = this.state.ba;
     return { baPos: ba.toFixed(2) + '%', baClipRight: (100 - ba).toFixed(2) + '%', baVal: Math.round(ba), baRef: this.baRef, baDown: this.baDown, baMove: this.baMove, baUp: this.baUp, baInput: (e) => this.setState({ ba: Number(e.target.value) }), d: {
       eyebrow: 'Roof Coatings',
-      title: 'Commercial Roof Coatings & Restoration',
+      title: 'Commercial Roof Coatings in Henderson, KY & the Tri-State',
       hero: 'assets/coating-job2-wide.jpg',
       intro: 'We help building owners get 10 to 20 more years out of a structurally sound roof, at a fraction of replacement cost and with zero interruption to the business below. Restoration, not replacement.',
       aboutEyebrow: 'Restoration Over Replacement',

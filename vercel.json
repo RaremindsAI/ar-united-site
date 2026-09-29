@@ -30,6 +30,10 @@
       "destination": "/Soffit-Fascia.dc.html"
     },
     {
+      "source": "/structural-repair",
+      "destination": "/Structural-Repair.dc.html"
+    },
+    {
       "source": "/services",
       "destination": "/Services.dc.html"
     },
