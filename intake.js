@@ -62,6 +62,42 @@ function clickupFields(d, sheetUrl) {
 }
 
 
+// Spam screen: scores contractor-scam patterns (email-only contact, "send plans via Google Drive",
+// out-of-area phone/state). Score >= SPAM_THRESHOLD: no ClickUp task, no Airtable, no customer email;
+// office still gets the email with a "[Possible spam]" subject so nothing is lost.
+const SPAM_THRESHOLD = 5;
+const LOCAL_AREA_CODES = new Set(['270','364','502','606','859','812','930','317','463','765','574','219','260','618','217','309','447','730','731','615','629','931','423']);
+const LOCAL_STATES = /\b(KY|IN|IL|TN|kentucky|indiana|illinois|tennessee)\b/i;
+function spamCheck(d) {
+  const reasons = [];
+  let score = 0;
+  const add = (n, why) => { score += n; reasons.push(why + ' (+' + n + ')'); };
+  const text = [d.details, d.message, d.notes].filter(Boolean).join(' ').toLowerCase();
+  const strong = [
+    [/google ?drive|dropbox|wetransfer/, 'offers files via Google Drive/Dropbox'],
+    [/(building|house|project|the) plans|blueprints?|drawings/, 'offers to send plans/drawings'],
+    [/financing (is )?(secured|approved|in place)|funds? (is |are )?(available|ready)/, 'says financing is secured'],
+    [/(contact|reach|respond|reply)[^.]{0,25}(through|via|by) (e-?mail|mail) only|e-?mail only|text only/, 'asks for email-only contact'],
+  ];
+  const weak = [
+    [/reach me (via|by|through) e-?mail|contact me (via|by|through) e-?mail|prefer e-?mail/, 'prefers email over phone'],
+    [/i was referred to your company|awaiting (a|your) (quick|prompt|urgent)|quick respond/, 'scam boilerplate wording'],
+    [/custom project|new residential .* project|qualified contractor/, 'vague project wording'],
+  ];
+  for (const [re, why] of strong) if (re.test(text)) add(3, why);
+  for (const [re, why] of weak) if (re.test(text)) add(2, why);
+  const digits = String(d.phone || '').replace(/\D/g, '').replace(/^1(?=\d{10}$)/, '');
+  if (digits.length === 10 && !LOCAL_AREA_CODES.has(digits.slice(0, 3))) add(2, 'out-of-area phone (' + digits.slice(0, 3) + ')');
+  const addr = String(d.address || '');
+  const st = addr.match(/,\s*([A-Z]{2})\s*\d{5}/);
+  if (st && !LOCAL_STATES.test(st[1])) add(3, 'property outside service area (' + st[1] + ')');
+  else if (addr && !/\d{5}/.test(addr) && !LOCAL_STATES.test(addr)) add(1, 'address has no city/state/ZIP');
+  if (/^[a-z]+\d{3,}@gmail\.com$/.test(String(d.email || ''))) add(1, 'gmail name+digits');
+  const svcCount = String(d.service || '').split(',').filter(x => x.trim()).length;
+  if (svcCount >= 3 && /new|first-time/i.test(d.scope || '')) add(1, '3+ unrelated services as new install');
+  return { score, reasons, spam: score >= SPAM_THRESHOLD };
+}
+
 // ballpark pricing model (server-side only; never exposed on the site)
 function ballpark(roof) {
   const area = Number(roof.areaSqft) || 0;
@@ -148,6 +184,14 @@ export default async function handler(req, res) {
     row('SMS consent', d.smsConsentText) + row('Details', d.details) + row('Submitted', d.submittedAt);
 
   const result = { webhook: 'skipped', teamEmail: 'skipped', customerEmail: 'skipped' };
+  const sc = spamCheck(d);
+  result.spamScore = sc.score;
+  if (sc.spam && !/estimator/i.test(d.source || '')) {
+    const note = 'POSSIBLE SPAM (score ' + sc.score + '). Not sent to ClickUp or Airtable.\n' + sc.reasons.map(r => '- ' + r).join('\n') +
+      '\nIf this is a real customer, add them manually.\n\n';
+    try { result.teamEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, cfg.NOTIFY_EMAIL, '[Possible spam] ' + title, note + details, null); } catch (e) { result.teamEmail = 'error:' + e; }
+    return res.status(200).json({ ok: true, ...result });
+  }
 
   // 1) Forward form data to the lead webhook (handles ClickUp)
   if (cfg.LEAD_WEBHOOK_URL) {
@@ -183,6 +227,18 @@ export default async function handler(req, res) {
       `A&R United Construction\nCommercial Roof Coatings & Restoration`;
     try {
       result.customerEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, d.email, 'Your commercial roof coating ballpark', msg, cfg.NOTIFY_EMAIL);
+    } catch (e) { result.customerEmail = 'error:' + e; }
+  } else if (d.email && /estimator/i.test(d.source || '')) {
+    // Estimator submitted without a measured area: still confirm receipt to the customer
+    const name = (d.name || '').trim().split(' ')[0] || 'there';
+    const msg =
+      `Hi ${name},\n\n` +
+      `Thanks for using our commercial roof coating estimator. We received your request` +
+      `${d.address ? ' for ' + d.address : ''} and our team will follow up with your ballpark shortly.\n\n` +
+      `Need it sooner? Call or text (270) 844-3355 or just reply to this email.\n\n` +
+      `A&R United Construction\nCommercial Roof Coatings & Restoration`;
+    try {
+      result.customerEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, d.email, 'We received your roof coating estimate request', msg, cfg.NOTIFY_EMAIL);
     } catch (e) { result.customerEmail = 'error:' + e; }
   }
 
