@@ -68,7 +68,7 @@
     <div style="max-width:1240px; margin:0 auto; padding:0 40px;">
       <div style="display:flex; align-items:center; gap:14px; margin-bottom:26px;">
         <span style="width:48px; height:48px; flex:none; border-radius:10px; background:#fff; border:1px solid #e7e3dd; display:flex; align-items:center; justify-content:center; font-family:'Archivo'; font-weight:800; font-size:24px; color:#4285F4;">G</span>
-        <div style="font-family:'Archivo'; font-weight:800; font-size:22px;">Loading our latest Google reviews&hellip;</div>
+        <div style="font-family:'Archivo'; font-weight:800; font-size:22px;">Loading our Google reviews&hellip;</div>
       </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px;">
         <div style="background:#fff; border:1px solid #e7e3dd; border-radius:10px; padding:24px; display:flex; flex-direction:column; gap:14px;"><div style="display:flex; align-items:center; gap:12px;"><span style="width:40px; height:40px; border-radius:50%; background:#eee9e2;"></span><span style="width:120px; height:12px; border-radius:6px; background:#eee9e2;"></span></div><span style="width:90px; height:10px; border-radius:5px; background:#f1ede7;"></span><span style="height:10px; border-radius:5px; background:#f1ede7;"></span><span style="height:10px; border-radius:5px; background:#f1ede7; width:80%;"></span></div>
@@ -86,7 +86,7 @@
         <div style="display:flex; align-items:center; gap:14px;">
           <span style="width:48px; height:48px; flex:none; border-radius:10px; background:#fff; border:1px solid #e7e3dd; display:flex; align-items:center; justify-content:center; font-family:'Archivo'; font-weight:800; font-size:24px; color:#4285F4;">G</span>
           <div>
-            <div style="font-family:'Archivo'; font-weight:800; font-size:22px;">Latest Google reviews</div>
+            <div style="font-family:'Archivo'; font-weight:800; font-size:22px;">Reviews on Google</div>
             <div style="display:flex; align-items:center; gap:8px; font-size:14px; color:#5c616b;"><span style="color:#f2b01e; letter-spacing:2px; font-size:15px;">{{ gStars }}</span><span style="font-weight:700; color:#15161a;">{{ gRating }}</span><span>{{ gTotalTxt }}</span></div>
           </div>
         </div>
@@ -180,9 +180,9 @@ class Component extends DCLogic {
       const svc = new google.maps.places.PlacesService(document.createElement('div'));
       svc.findPlaceFromQuery({ query: 'A&R United Construction Henderson KY', fields: ['place_id'], locationBias: new google.maps.LatLng(37.8361, -87.59) }, (res, status) => {
         if (status !== 'OK' || !res || !res[0]) return this.failG();
-        svc.getDetails({ placeId: res[0].place_id, fields: ['reviews', 'rating', 'user_ratings_total'] }, (place, st2) => {
+        svc.getDetails({ placeId: res[0].place_id, fields: ['reviews', 'rating', 'user_ratings_total'], reviews_sort: 'newest' }, (place, st2) => {
           if (st2 !== 'OK' || !place) return this.failG();
-          const revs = (place.reviews || []).filter(r => r.text && r.rating >= 4).slice(0, 6);
+          const revs = (place.reviews || []).filter(r => r.text && r.rating >= 4).sort((a, b) => (b.time || 0) - (a.time || 0)).slice(0, 6);
           if (!revs.length && !place.rating) return this.failG();
           clearTimeout(this._gTimeout);
           this.setState({ gFailed: false, g: { rating: place.rating || 5, total: place.user_ratings_total || 0, reviews: revs } });
