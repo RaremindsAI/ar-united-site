@@ -309,6 +309,8 @@ class Component extends DCLogic {
     if (!f.ownerType) return 'Please tell us about the property.';
     if (this.needsCompany(f) && !f.businessName.trim()) return f.ownerType === 'Property manager' ? 'Please enter your management company name.' : 'Please enter the business or LLC name.';
     if (!f.address.trim()) return 'Please enter the property or service address.';
+    const a = f.address.trim();
+    if (!/^\d+\s+\S/.test(a) || !/\b\d{5}\b/.test(a)) return 'Please enter the full address with street number, city, state and ZIP (or pick it from the list).';
     return '';
   }
   arFormTop(){ var el=document.getElementById('quote-form'); if(!el) return; var h=document.querySelector('header'); var off=(h?h.offsetHeight:0)+14; var top=el.getBoundingClientRect().top; if(top<off||top>window.innerHeight*0.5) window.scrollTo({top:top+window.pageYOffset-off, behavior:'smooth'}); }

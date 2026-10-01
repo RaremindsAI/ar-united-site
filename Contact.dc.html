@@ -159,6 +159,7 @@ class Component extends DCLogic {
         if (f.phone.replace(/\D/g,'').length < 10) return this.setState({ err:'Please enter a valid phone number.' });
         if (f.business === 'yes' && !f.businessName.trim()) return this.setState({ err:'Please enter your business or LLC name.' });
         if (!f.address.trim()) return this.setState({ err:'Please enter the property or service address.' });
+        { const a = f.address.trim(); if (!/^\d+\s+\S/.test(a) || !/\b\d{5}\b/.test(a)) return this.setState({ err:'Please enter the full address with street number, city, state and ZIP (or pick it from the list).' }); }
         this.setState({ step:2, err:'' });
       },
       back: ()=> this.setState({ step:1, err:'' }),
@@ -206,6 +207,7 @@ class Component extends DCLogic {
         if (f.phone.replace(/\D/g,'').length < 10) return this.setState({ err:'Please enter a valid phone number.' });
         if (f.business === 'yes' && !f.businessName.trim()) return this.setState({ err:'Please enter your business or LLC name.' });
         if (!f.address.trim()) return this.setState({ err:'Please enter the property or service address.' });
+        { const a = f.address.trim(); if (!/^\d+\s+\S/.test(a) || !/\b\d{5}\b/.test(a)) return this.setState({ err:'Please enter the full address with street number, city, state and ZIP (or pick it from the list).' }); }
         if (window.ARIntake) {
           window.ARIntake.submit({
             source:'Contact page \u2014 Request a Quote',
