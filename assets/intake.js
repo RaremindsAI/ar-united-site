@@ -50,6 +50,7 @@
       var o = { fields:['formatted_address','geometry'] };
       if (opts.componentRestrictions) o.componentRestrictions = opts.componentRestrictions;
       if (opts.types) o.types = opts.types;
+      o.bounds = new google.maps.LatLngBounds({ lat:36.49, lng:-89.58 }, { lat:41.77, lng:-81.96 });
       legacy = new google.maps.places.Autocomplete(input, o);
       legacy.addListener('place_changed', function(){ place = legacy.getPlace(); fire(); });
     }
@@ -95,6 +96,7 @@
       var req = { input:q, sessionToken:token };
       var cr = opts.componentRestrictions && opts.componentRestrictions.country;
       req.includedRegionCodes = [cr || 'us'];
+      req.locationBias = { south:36.49, west:-89.58, north:41.77, east:-81.96 };
       lib.AutocompleteSuggestion.fetchAutocompleteSuggestions(req).then(function(res){
         if (input.value.trim() !== q) return;
         items = (res.suggestions || []).filter(function(s){ return s.placePrediction; }).slice(0,5); active = -1; paint();
