@@ -195,8 +195,8 @@
     root.id = 'ar-bubble';
     root.style.cssText = 'position:fixed; right:22px; bottom:22px; z-index:9000; font-family:"IBM Plex Sans",system-ui,sans-serif; display:flex; flex-direction:column; align-items:flex-end; gap:12px; transition:opacity .25s, transform .25s;';
     var ico = {
-      chat:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
-      x:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
+      chat:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block; flex:none;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
+      x:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="display:block; flex:none;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
       form:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="13" y2="17"></line></svg>',
       phone:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>',
       mail:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="22 6 12 13 2 6"></polyline></svg>'
@@ -218,7 +218,7 @@
       + '</div>';
     var btn = document.createElement('button');
     btn.type = 'button'; btn.setAttribute('aria-label','Contact us'); btn.setAttribute('aria-expanded','false');
-    btn.style.cssText = 'display:flex; align-items:center; gap:10px; height:58px; padding:0 22px 0 18px; border:none; border-radius:999px; cursor:pointer; background:#2f80bd; color:#fff; font-family:inherit; font-weight:700; font-size:14.5px; letter-spacing:.01em; box-shadow:0 12px 30px rgba(47,128,189,.38), 0 2px 6px rgba(0,0,0,.12); transition:transform .18s, filter .18s;';
+    btn.style.cssText = 'display:flex; align-items:center; justify-content:center; gap:10px; height:58px; padding:0 22px 0 18px; border:none; border-radius:999px; cursor:pointer; background:#ee7f1f; color:#fff; font-family:inherit; font-weight:700; font-size:14.5px; letter-spacing:.01em; box-shadow:0 12px 30px rgba(238,127,31,.4), 0 2px 6px rgba(0,0,0,.12); transition:transform .18s, filter .18s;';
     var label = '<span data-ar-lbl="1">Free estimate</span>';
     btn.innerHTML = ico.chat + label;
     btn.onmouseenter = function(){ btn.style.transform = 'translateY(-2px)'; btn.style.filter = 'brightness(1.06)'; };
@@ -238,7 +238,7 @@
       root.style.right = small ? '16px' : '22px'; root.style.bottom = small ? '16px' : '22px';
       var tt = document.querySelector('button[aria-label="Back to top"]');
       if (tt){ tt.style.right = small ? '20px' : '26px'; tt.style.bottom = small ? '86px' : '94px'; tt.style.visibility = open ? 'hidden' : ''; }
-      if (!open){ var l = btn.querySelector('[data-ar-lbl]'); if (l) l.style.display = small ? 'none' : ''; btn.style.width = small ? '58px' : ''; btn.style.padding = small ? '0' : '0 22px 0 18px'; }
+      if (!open){ var l = btn.querySelector('[data-ar-lbl]'); if (l) l.style.display = small ? 'none' : ''; btn.style.width = small ? '58px' : ''; btn.style.padding = small ? '0' : '0 22px 0 18px'; btn.style.gap = small ? '0' : '10px'; }
     }
     btn.addEventListener('click', function(e){ e.stopPropagation(); set(!open); });
     panel.addEventListener('click', function(e){
