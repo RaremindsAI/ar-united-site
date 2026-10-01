@@ -11,8 +11,10 @@
  *
  * SETUP — Vercel -> Project -> Settings -> Environment Variables, add:
  *     RESEND_API_KEY   Resend API key from resend.com  (free tier)                    [required for email]
+ *     LEAD_KEY_AR      shared secret; must match LEAD_KEY_AR in rareminds-webhooks    [security]
  *   Optional overrides (defaults baked in below):
  *     LEAD_WEBHOOK_URL, NOTIFY_EMAIL, FROM_EMAIL
+ *     EXTRA_ORIGINS    comma list of extra allowed origins (e.g. a Vercel preview URL)
  *   Then redeploy. No npm packages needed — this uses plain fetch.
  *
  * EMAIL: uses Resend. In Resend, verify your sending domain and use a FROM_EMAIL on it
@@ -133,21 +135,63 @@ async function sendEmail(apiKey, from, to, subject, text, replyTo, attachments) 
   return r.status;
 }
 
+// Security: only accept posts from our own site, and reject empty/invalid/oversized submissions.
+const ALLOWED_ORIGINS = ['https://www.arunitedconstruction.com', 'https://arunitedconstruction.com'];
+function allowedOrigins() {
+  return ALLOWED_ORIGINS.concat(String(process.env.EXTRA_ORIGINS || '').split(',').map(s => s.trim().replace(/\/$/, '')).filter(Boolean));
+}
+function originOk(req) {
+  const list = allowedOrigins();
+  const o = String(req.headers.origin || '').replace(/\/$/, '');
+  if (o) return list.includes(o);
+  const ref = String(req.headers.referer || '');
+  return list.some(a => ref === a || ref.startsWith(a + '/'));
+}
+const MAX_LEN = { details: 5000, notes: 5000, message: 5000, address: 300 };
+function validate(d) {
+  if (d.website || d.hp) return 'bot';
+  for (const k of Object.keys(d)) {
+    if (typeof d[k] === 'string' && d[k].length > (MAX_LEN[k] || 500)) return 'One of the fields is too long.';
+  }
+  const name = String(d.name || d.company || '').trim();
+  if (name.length < 2 || !/[a-z]/i.test(name)) return 'Please enter your name.';
+  if (/https?:\/\/|www\./i.test(name)) return 'Please enter your name.';
+  const digits = String(d.phone || '').replace(/\D/g, '').replace(/^1(?=\d{10}$)/, '');
+  const email = String(d.email || '');
+  const emailOk = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email);
+  if (email && !emailOk) return 'Please check your email address.';
+  if (d.phone && digits.length !== 10) return 'Please check your phone number.';
+  if (digits.length !== 10 && !emailOk) return 'Please enter a phone number or email so we can reach you.';
+  if (!/estimator/i.test(d.source || '')) {
+    const a = String(d.address || '');
+    if (!a) return 'Please enter the property or service address.';
+  }
+  const photos = Array.isArray(d.photos) ? d.photos : (d.photo ? [d.photo] : []);
+  if (photos.length > 4) return 'Please attach up to 4 photos.';
+  return '';
+}
+
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const origin = String(req.headers.origin || '').replace(/\/$/, '');
+  if (origin && allowedOrigins().includes(origin)) { res.setHeader('Access-Control-Allow-Origin', origin); res.setHeader('Vary', 'Origin'); }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
+  if (!originOk(req)) return res.status(403).json({ ok: false, error: 'forbidden' });
 
   let d = {};
-  try { d = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {}); } catch (e) {}
+  try { d = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {}); } catch (e) { return res.status(400).json({ ok: false, error: 'bad request' }); }
+  if (!d || typeof d !== 'object' || Array.isArray(d)) return res.status(400).json({ ok: false, error: 'bad request' });
   // normalize text: collapse repeated spaces, trim (keeps line breaks in free-text details)
   for (const k of Object.keys(d)) {
     if (typeof d[k] !== 'string') continue;
     d[k] = k === 'details' ? d[k].replace(/[ \t]+/g, ' ').replace(/ *\n */g, '\n').trim() : d[k].replace(/\s+/g, ' ').trim();
   }
   if (typeof d.email === 'string') d.email = d.email.replace(/ /g, '').toLowerCase();
+  const invalid = validate(d);
+  if (invalid === 'bot') return res.status(200).json({ ok: true });
+  if (invalid) return res.status(400).json({ ok: false, error: invalid });
   d.smsConsent = !!d.smsConsent;
   const photoList = (Array.isArray(d.photos) ? d.photos : (d.photo ? [d.photo] : [])).filter(p => p && p.content).slice(0, 4);
   d.smsConsentText = d.smsConsent ? 'Yes \u2014 opted in to SMS texts' : 'No \u2014 did not opt in to SMS texts';
@@ -185,6 +229,11 @@ export default async function handler(req, res) {
 
   const result = { webhook: 'skipped', teamEmail: 'skipped', customerEmail: 'skipped' };
   const sc = spamCheck(d);
+  // Service area is KY/IN only. Out-of-area addresses get the same quiet treatment as spam (office email only),
+  // and the visitor sees the normal thank-you, so the form never reveals which states pass.
+  const addrTxt = String(d.address || '');
+  const inArea = /\bky\b|kentucky|indiana/i.test(addrTxt) || /\bIN\b/.test(addrTxt) || /\bin\s+4[67]\d{3}\b/i.test(addrTxt);
+  if (!inArea && !/estimator/i.test(d.source || '')) { sc.spam = true; sc.reasons.unshift('address outside service area (KY/IN only)'); }
   result.spamScore = sc.score;
   if (sc.spam && !/estimator/i.test(d.source || '')) {
     const note = 'POSSIBLE SPAM (score ' + sc.score + '). Not sent to ClickUp or Airtable.\n' + sc.reasons.map(r => '- ' + r).join('\n') +
@@ -198,7 +247,7 @@ export default async function handler(req, res) {
     try {
       const r = await fetch(cfg.LEAD_WEBHOOK_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-lead-key': process.env.LEAD_KEY_AR || '' },
         body: JSON.stringify({ ...d, photos: undefined, photo: undefined, title, summary: details, ballpark: bp ? bp.text : undefined, custom_fields: clickupFields(d) })
       });
       result.webhook = r.status;
