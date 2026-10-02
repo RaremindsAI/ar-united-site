@@ -21,6 +21,8 @@
  * (e.g. office@arunitedconstruction.com). Prefer SendGrid/Postmark/SMTP? Swap sendEmail().
  */
 
+import { signToken, ballparkEmailHtml, ballparkEmailText } from './_ballpark.js';
+
 const DEFAULTS = {
   LEAD_WEBHOOK_URL: 'https://rareminds-webhooks.vercel.app/api/ar-lead',
   NOTIFY_EMAIL: 'office@arunitedconstruction.com',
@@ -104,27 +106,42 @@ function spamCheck(d) {
 function ballpark(roof) {
   const area = Number(roof.areaSqft) || 0;
   if (!area) return null;
-  const coat = roof.coating === 'acrylic' ? { lo: 1.2, hi: 2.15 } : { lo: 1.55, hi: 2.65 };
-  let lo = coat.lo, hi = coat.hi;
-  if (roof.system === 'Metal') { lo += 0.3; hi += 0.5; }
-  if (roof.system === 'BUR') { lo += 0.15; hi += 0.3; }
-  const cond = { good: 1.0, weathered: 1.12, leaking: 1.3 }[roof.condition] || 1;
-  if (/major/i.test(roof.leaks || '')) { lo += 0.1; hi += 0.15; }
-  if (/heavy/i.test(roof.rust || '')) { lo += 0.15; hi += 0.25; }
-  else if (/surface/i.test(roof.rust || '')) { lo += 0.05; hi += 0.1; }
-  const acc = { single: 1.0, mid: 1.05, high: 1.12 }[roof.access] || 1;
+  // Calibrated to A & R jobs (Oct 2026). Same price for all roof types.
+  const acrylic = roof.coating === 'acrylic';
+  const material = area * (acrylic ? 0.66 : 1.83);
+  // labor gets cheaper per sq ft as roofs get bigger: $3.57/sf up to 5k, $25,000 at 10k, $33,120 at 24k
+  let labor;
+  if (area <= 5000) labor = area * 3.57;
+  else if (area <= 10000) labor = 17850 + (area - 5000) * 1.43;
+  else if (area <= 24000) labor = 25000 + (area - 10000) * 0.58;
+  else labor = 33120 + (area - 24000) * 0.58;
+  let price = material + labor;
+  // active leaks on elastomeric jobs: silicone under the elastomeric on leak areas
+  const lk = String(roof.leaks || '');
+  if (acrylic) {
+    if (/major|multiple/i.test(lk)) price += area * 0.25 * 1.17;
+    else if (/minor|few/i.test(lk)) price += area * 0.10 * 1.17;
+  }
+  const rust = String(roof.rust || '');
+  if (/heavy/i.test(rust)) price += area * 0.25;
+  else if (/surface|some/i.test(rust)) price += area * 0.10;
+  // rooftop units / penetrations: a few are included; more need extra flashing with butter
   const units = Number(roof.units) || 0;
+  if (units > 10) price *= 1.10;
+  else if (units > 3) price *= 1.05;
+  price *= { single: 1.0, mid: 1.05, high: 1.12 }[roof.access] || 1;
   const r = (n) => Math.round(n / 100) * 100;
-  let low = r(area * lo * cond * acc + units * 35);
-  let high = r(area * hi * cond * acc + units * 70);
+  let low = r(price * 0.92);
+  let high = r(price * 1.10);
   if (high <= low) high = low + 100;
   const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
   return { low, high, text: money(low) + ' \u2013 ' + money(high) };
 }
 
-async function sendEmail(apiKey, from, to, subject, text, replyTo, attachments) {
+async function sendEmail(apiKey, from, to, subject, text, replyTo, attachments, html) {
   if (!apiKey) return 'no-key';
-  const body = { from: 'A&R United Construction <' + from + '>', to: to.split(',').map((e) => e.trim()), subject, text };
+  const body = { from: 'A & R United Construction LLC <' + from + '>', to: to.split(',').map((e) => e.trim()), subject, text };
+  if (html) body.html = html;
   if (replyTo) body.reply_to = replyTo;
   if (attachments && attachments.length) body.attachments = attachments;
   const r = await fetch('https://api.resend.com/emails', {
@@ -265,18 +282,31 @@ export default async function handler(req, res) {
   if (bp && d.email) {
     const name = (d.name || '').trim().split(' ')[0] || 'there';
     const area = Number(roof.areaSqft).toLocaleString('en-US');
-    const msg =
-      `Hi ${name},\n\n` +
-      `Thanks for using our commercial roof coating estimator. Based on your roughly ${area} sq ft ` +
-      `${roof.coating === 'acrylic' ? 'acrylic' : 'silicone'} coating project, your preliminary ballpark is:\n\n` +
-      `    ${bp.text}\n\n` +
-      `This is an estimate only, meant to give you a range to plan around. For an exact, itemized quote, ` +
-      `schedule a free onsite assessment and we'll verify the roof, prep needs, and details.\n\n` +
-      `Call or text (270) 844-3355 or just reply to this email and we'll get you on the schedule.\n\n` +
-      `A&R United Construction\nCommercial Roof Coatings & Restoration`;
+    const tok = signToken({ task: result.taskId || '', name: (d.name || d.company || '').trim(), first: name, email: d.email, phone: d.phone || '', address: d.address || '', range: bp.text, area });
+    const v = {
+      first: name, range: bp.text, area, coating: roof.coating, system: roof.system || '', leaks: roof.leaks || '',
+      units: roof.units === 0 || roof.units ? String(roof.units) : '', address: d.address || '',
+      scheduleUrl: tok ? cfg.SITE_URL + '/api/schedule?t=' + tok : cfg.SITE_URL + '/contact#quote-form'
+    };
     try {
-      result.customerEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, d.email, 'Your commercial roof coating ballpark', msg, cfg.NOTIFY_EMAIL);
+      result.customerEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, d.email, 'Your commercial roof coating ballpark', ballparkEmailText(v), cfg.NOTIFY_EMAIL, null, ballparkEmailHtml(v));
     } catch (e) { result.customerEmail = 'error:' + e; }
+    // Record the ballpark on the ClickUp task as a comment
+    if (result.taskId && cfg.LEAD_WEBHOOK_URL) {
+      const sent = result.customerEmail === 200;
+      const extras = [roof.leaks && 'Active leaks: ' + roof.leaks, roof.rust && 'Rust: ' + roof.rust, (roof.units || roof.units === 0) && 'Units / penetrations: ' + roof.units, roof.access && 'Access: ' + roof.access].filter(Boolean);
+      const text = 'BALLPARK ESTIMATE ' + (sent ? 'EMAILED TO CLIENT' : '(email to client did not send, follow up manually)') + '\n' +
+        'Price range: ' + bp.text + '\n' +
+        'Roof: ' + area + ' sq ft, ' + (roof.system || 'roof type not given') + '\n' +
+        'Coating: ' + (roof.coating === 'acrylic' ? 'Elastomeric' : '100% silicone') + '\n' +
+        (extras.length ? extras.join('\n') + '\n' : '') +
+        'Sent to: ' + d.email + '\n' +
+        'Sent: ' + new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }) + ' CT';
+      try {
+        await fetch(cfg.LEAD_WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-lead-key': process.env.LEAD_KEY_AR || '' }, body: JSON.stringify({ action: 'ballpark_comment', taskId: result.taskId, text }) });
+        result.ballparkComment = 'sent';
+      } catch (e) { result.ballparkComment = 'error:' + e; }
+    }
   } else if (d.email && /estimator/i.test(d.source || '')) {
     // Estimator submitted without a measured area: still confirm receipt to the customer
     const name = (d.name || '').trim().split(' ')[0] || 'there';
@@ -285,7 +315,7 @@ export default async function handler(req, res) {
       `Thanks for using our commercial roof coating estimator. We received your request` +
       `${d.address ? ' for ' + d.address : ''} and our team will follow up with your ballpark shortly.\n\n` +
       `Need it sooner? Call or text (270) 844-3355 or just reply to this email.\n\n` +
-      `A&R United Construction\nCommercial Roof Coatings & Restoration`;
+      `A & R United Construction LLC\nCommercial Roof Coatings & Restoration`;
     try {
       result.customerEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, d.email, 'We received your roof coating estimate request', msg, cfg.NOTIFY_EMAIL);
     } catch (e) { result.customerEmail = 'error:' + e; }
