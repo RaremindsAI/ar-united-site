@@ -15,6 +15,9 @@
  *   Optional overrides (defaults baked in below):
  *     LEAD_WEBHOOK_URL, NOTIFY_EMAIL, FROM_EMAIL
  *     EXTRA_ORIGINS    comma list of extra allowed origins (e.g. a Vercel preview URL)
+ *     APP_INTAKE_KEY   shared secret; must match INTAKE_KEY in the Contractor's Edge app. When set,
+ *                      every request (spam included, marked) is also copied to the app's Requests tab.
+ *     APP_INTAKE_URL   optional; defaults to https://app.arunitedconstruction.com/api/intake/website
  *   Then redeploy. No npm packages needed — this uses plain fetch.
  *
  * EMAIL: uses Resend. In Resend, verify your sending domain and use a FROM_EMAIL on it
@@ -27,8 +30,26 @@ const DEFAULTS = {
   LEAD_WEBHOOK_URL: 'https://rareminds-webhooks.vercel.app/api/ar-lead',
   NOTIFY_EMAIL: 'office@arunitedconstruction.com',
   FROM_EMAIL: 'office@arunitedconstruction.com',
-  SITE_URL: 'https://www.arunitedconstruction.com'
+  SITE_URL: 'https://www.arunitedconstruction.com',
+  APP_INTAKE_URL: 'https://app.arunitedconstruction.com/api/intake/website'
 };
+
+// Copies the request to the Contractor's Edge app (Requests tab), with the ids made by the
+// ClickUp/Airtable webhook so the app links to them instead of making new ones. Never blocks the lead.
+async function sendToApp(d, photoList, extra) {
+  const key = process.env.APP_INTAKE_KEY;
+  if (!key) return 'skipped';
+  try {
+    const r = await fetch(process.env.APP_INTAKE_URL || DEFAULTS.APP_INTAKE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-intake-key': key },
+      body: JSON.stringify({ ...d, photo: undefined, photos: photoList, ...extra }),
+      // Never hold up the office email: give the app 8 seconds at most.
+      signal: AbortSignal.timeout(8000)
+    });
+    return r.status;
+  } catch (e) { return 'error:' + e; }
+}
 
 // ClickUp "Bid Requests" list custom field IDs (list 901114146582)
 const CF = {
@@ -256,6 +277,7 @@ export default async function handler(req, res) {
     const note = 'POSSIBLE SPAM (score ' + sc.score + '). Not sent to ClickUp or Airtable.\n' + sc.reasons.map(r => '- ' + r).join('\n') +
       '\nIf this is a real customer, add them manually.\n\n';
     try { result.teamEmail = await sendEmail(cfg.RESEND_API_KEY, cfg.FROM_EMAIL, cfg.NOTIFY_EMAIL, '[Possible spam] ' + title, note + details, null); } catch (e) { result.teamEmail = 'error:' + e; }
+    result.app = await sendToApp(d, photoList, { spam: true, spamReasons: sc.reasons });
     return res.status(200).json({ ok: true, ...result });
   }
 
@@ -268,9 +290,13 @@ export default async function handler(req, res) {
         body: JSON.stringify({ ...d, photos: undefined, photo: undefined, title, summary: details, ballpark: bp ? bp.text : undefined, custom_fields: clickupFields(d) })
       });
       result.webhook = r.status;
-      try { const j = await r.json(); if (j && j.sheetUrl) sheetUrl = j.sheetUrl; if (j && j.taskId) result.taskId = j.taskId; } catch (e) {}
+      try { const j = await r.json(); if (j && j.sheetUrl) sheetUrl = j.sheetUrl; if (j && j.taskId) result.taskId = j.taskId; result.match = j ? { clientId: j.clientId, propertyId: j.propertyId, ccUrl: j.ccUrl, review: j.review } : {}; } catch (e) {}
     } catch (e) { result.webhook = 'error:' + e; }
   }
+
+  // 1b) Copy to the Contractor's Edge app (Requests tab)
+  result.app = await sendToApp(d, photoList, { ballpark: bp ? bp.text : undefined, links: { taskId: result.taskId, sheetUrl, ...(result.match || {}) } });
+  delete result.match;
 
   // 2) Team notification email (with customer photo attached, if provided)
   try {
