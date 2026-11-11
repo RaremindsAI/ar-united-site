@@ -236,7 +236,9 @@ export default async function handler(req, res) {
 
   const cfg = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
-    LEAD_WEBHOOK_URL: process.env.LEAD_WEBHOOK_URL || DEFAULTS.LEAD_WEBHOOK_URL,
+    // LEAD_WEBHOOK_OFF=1 (set in Vercel) stops the ClickUp / CompanyCam / Airtable step: requests then go
+    // only to the app named by APP_INTAKE_URL (GemLev) and to the office email. Remove it to turn the old path back on.
+    LEAD_WEBHOOK_URL: process.env.LEAD_WEBHOOK_OFF === '1' ? '' : (process.env.LEAD_WEBHOOK_URL || DEFAULTS.LEAD_WEBHOOK_URL),
     NOTIFY_EMAIL: process.env.NOTIFY_EMAIL || DEFAULTS.NOTIFY_EMAIL,
     FROM_EMAIL: process.env.FROM_EMAIL || DEFAULTS.FROM_EMAIL,
     SITE_URL: process.env.SITE_URL || DEFAULTS.SITE_URL
