@@ -463,7 +463,14 @@ class Component extends DCLogic {
     const pts = s.pts || [];
     if (pts.length >= 3) {
       const ring = pts.concat([pts[0]]).map((p) => p.lat.toFixed(6) + ',' + p.lng.toFixed(6)).join('|');
-      return 'https://maps.googleapis.com/maps/api/staticmap?maptype=satellite&scale=2&size=640x400&path=color:0x2f80bdff|weight:3|fillcolor:0x2f80bd55|' + ring + '&key=' + GKEY;
+      // Zoomed in on the outlined building: the closest zoom at which the outline still fits with some margin.
+      const lats = pts.map((p) => p.lat), lngs = pts.map((p) => p.lng);
+      const merc = (lat) => Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360));
+      const cLat = (Math.max.apply(null, lats) + Math.min.apply(null, lats)) / 2, cLng = (Math.max.apply(null, lngs) + Math.min.apply(null, lngs)) / 2;
+      const fx = (Math.max.apply(null, lngs) - Math.min.apply(null, lngs)) / 360, fy = (merc(Math.max.apply(null, lats)) - merc(Math.min.apply(null, lats))) / (2 * Math.PI);
+      const fit = (frac, px) => (frac > 0 ? Math.log2((px * 0.72) / (256 * frac)) : 21);
+      const zoom = Math.max(3, Math.min(20, Math.floor(Math.min(fit(fx, 640), fit(fy, 400)))));
+      return 'https://maps.googleapis.com/maps/api/staticmap?maptype=satellite&scale=2&size=640x400&center=' + cLat.toFixed(6) + ',' + cLng.toFixed(6) + '&zoom=' + zoom + '&path=color:0x2f80bdff|weight:3|fillcolor:0x2f80bd33|' + ring + '&key=' + GKEY;
     }
     if (s.solarUsed && s.measured && this._center) {
       return 'https://maps.googleapis.com/maps/api/staticmap?maptype=satellite&scale=2&size=640x400&center=' + this._center.lat.toFixed(6) + ',' + this._center.lng.toFixed(6) + '&zoom=19&key=' + GKEY;
