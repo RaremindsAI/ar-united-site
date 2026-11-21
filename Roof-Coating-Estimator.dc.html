@@ -35,7 +35,7 @@ input::placeholder,textarea::placeholder{color:#a39e95;}
 @keyframes arStepIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 </style>
 <script src="assets/fx.js"></script>
-<script src="assets/intake.js"></script>
+<script src="assets/intake.js?v=2"></script>
 </helmet>
 <div style="font-family:'IBM Plex Sans',system-ui,sans-serif; color:#15161a; background:#fff; -webkit-font-smoothing:antialiased;">
   <template id="__bundler_thumbnail">
@@ -604,7 +604,9 @@ class Component extends DCLogic {
           // If the picture can't be made within 4 seconds, the request is sent without it.
           // Sent once: with the picture when it's ready, or without it if the visitor leaves the page first.
           let gone = false;
-          const send = (pic) => { if (gone) return; gone = true; window.removeEventListener('pagehide', leave); if (pic) payload.photos = [pic]; window.ARIntake.submit(payload); };
+          const send = (pic) => { if (gone) return; gone = true; window.removeEventListener('pagehide', leave); if (pic) payload.photos = [pic];
+            // If the send with the picture doesn't go through, send again without it: the request matters more than the picture.
+            Promise.resolve(window.ARIntake.submit(payload)).then((r) => { if (pic && r && !r.ok && !r.status) { delete payload.photos; window.ARIntake.submit(payload); } }); };
           const leave = () => send(null);
           window.addEventListener('pagehide', leave);
           this.roofSnapshot(snapUrl).then(send, leave);
