@@ -470,6 +470,17 @@ class Component extends DCLogic {
     }
     return '';
   }
+  roofSnapshot(url) {
+    if (!url || !window.fetch || !window.createImageBitmap) return Promise.resolve(null);
+    const work = fetch(url).then((r) => (r.ok ? r.blob() : null)).then((b) => (b ? createImageBitmap(b) : null)).then((bmp) => {
+      if (!bmp) return null;
+      const cv = document.createElement('canvas'); cv.width = bmp.width; cv.height = bmp.height;
+      cv.getContext('2d').drawImage(bmp, 0, 0);
+      const data = cv.toDataURL('image/jpeg', 0.85).split(',')[1];
+      return data ? { name: 'Roof-measurement-aerial.jpg', content: data } : null;
+    }).catch(() => null);
+    return Promise.race([work, new Promise((done) => setTimeout(() => done(null), 4000))]);
+  }
   snapPolyPts() {
     const pts = this.state.pts || [];
     if (pts.length < 3) return '';
@@ -573,7 +584,8 @@ class Component extends DCLogic {
         const areaNow = Math.max(0, Math.round(st.mode === 'map' ? (st.measured || 0) : (st.mode === 'sqft' ? (Number(st.sqft) || 0) : (Number(st.length) || 0) * (Number(st.width) || 0))));
         const gl = { waterproof: 'Stop leaks / waterproofing', energy: 'Energy savings / cool roof', extend: 'Extend roof life', appearance: 'Appearance / aesthetics' };
         if (window.ARIntake) {
-          window.ARIntake.submit({
+          const snapUrl = this.snapshotUrl(), outline = st.mode === 'map' && (st.pts || []).length >= 3 ? st.pts.map((p) => [Number(p.lat.toFixed(6)), Number(p.lng.toFixed(6))]) : undefined;
+          const payload = {
             source: 'Roof Coating Estimator', name: c.name, company: c.company, email: c.email, phone: c.phone, address: c.address,
             service: 'Commercial Roof Coating', details: c.notes, consent: !!c.consent,
             roof: {
@@ -583,10 +595,19 @@ class Component extends DCLogic {
               leaks: tk.leaks ? { none: 'None', minor: 'A few minor', major: 'Multiple / major' }[st.leaks] : undefined,
               rust: st.system === 'Metal' && tk.rust ? ({ none: 'None', some: 'Some surface rust', heavy: 'Heavy rust' }[st.rust]) : undefined,
               goals: st.goals.map((g) => gl[g]).join(', ') || undefined,
-              method: st.solarUsed ? 'Solar auto-detect' : (st.mode === 'map' ? 'Map measure' : (st.mode === 'sqft' ? 'Manual sq ft' : 'Manual dimensions'))
+              method: st.solarUsed ? 'Solar auto-detect' : (st.mode === 'map' ? 'Map measure' : (st.mode === 'sqft' ? 'Manual sq ft' : 'Manual dimensions')),
+              outline: outline
             },
             submittedAt: new Date().toISOString()
-          });
+          };
+          // The aerial picture of the measured roof goes with the request (the office sees how it was measured).
+          // If the picture can't be made within 4 seconds, the request is sent without it.
+          // Sent once: with the picture when it's ready, or without it if the visitor leaves the page first.
+          let gone = false;
+          const send = (pic) => { if (gone) return; gone = true; window.removeEventListener('pagehide', leave); if (pic) payload.photos = [pic]; window.ARIntake.submit(payload); };
+          const leave = () => send(null);
+          window.addEventListener('pagehide', leave);
+          this.roofSnapshot(snapUrl).then(send, leave);
         }
         this.setState({ sent: true });
       },

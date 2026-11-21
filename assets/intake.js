@@ -13,11 +13,13 @@
         console.warn('[ARIntake] No endpoint configured yet — lead captured but not sent:', payload);
         return Promise.resolve({ ok: false, skipped: true });
       }
+      var body = JSON.stringify(payload);
       return fetch(this.endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        keepalive: true
+        body: body,
+        // keepalive lets a small send finish if the page closes, but browsers refuse it over 64 KB (requests with pictures)
+        keepalive: body.length < 60000
       })
         .then(function (r) { try { if (r.ok && window.gtag) gtag('event', 'generate_lead', { event_category: 'form', event_label: payload.source || 'unknown' }); } catch (e) {}
         return r.json().then(function (j) { console.log('[ARIntake] result', j); return Object.assign({ ok: r.ok, status: r.status }, j); }).catch(function () { console.log('[ARIntake] HTTP', r.status); return { ok: r.ok, status: r.status }; }); })
